@@ -30,7 +30,7 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
+            <div className="space-y-2">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
@@ -109,7 +109,7 @@ export default function RegisterPage() {
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
             <Link href="/login" className="text-blue-600 hover:underline">
-              Log in here
+              Login here
             </Link>
           </p>
         </CardFooter>

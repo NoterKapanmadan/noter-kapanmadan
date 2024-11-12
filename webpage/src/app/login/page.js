@@ -26,7 +26,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
+            <div className="space-y-2">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -51,7 +51,7 @@ export default function LoginPage() {
               </div>
             </div>
             <Button type="submit" className="w-full mt-6">
-              Log in
+              Login
             </Button>
           </form>
         </CardContent>
