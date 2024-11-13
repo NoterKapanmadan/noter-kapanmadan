@@ -1,7 +1,20 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Image from 'next/image'
-import { Button } from "@/components/ui/button"
-import { Heart, Share2, ChevronLeft, ChevronRight, HandCoins } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Heart,
+  Share2,
+  ChevronLeft,
+  ChevronRight,
+  HandCoins,
+  MessageCircle,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -10,10 +23,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function AdPage() {
   return (
@@ -59,7 +72,9 @@ export default function AdPage() {
                 <CardTitle>Mahalle abisinden temiz Tofaş</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-primary mb-4">300.000 TL</p>
+                <p className="text-2xl font-bold text-primary mb-4">
+                  300.000 TL
+                </p>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <p className="text-sm font-semibold">Brand</p>
@@ -100,6 +115,10 @@ export default function AdPage() {
                 <CardTitle>Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                <Button className="w-full" variant= "secondary">
+                  <MessageCircle className={`mr-2 h-4 w-4`} />
+                  Send Message
+                </Button>
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button className="w-full">
@@ -111,7 +130,8 @@ export default function AdPage() {
                     <DialogHeader>
                       <DialogTitle>Make an Offer</DialogTitle>
                       <DialogDescription>
-                        Enter your offer amount below. The offer will be sent to seller.
+                        Enter your offer amount below. The offer will be sent to
+                        seller.
                       </DialogDescription>
                     </DialogHeader>
                     <form>
@@ -143,7 +163,7 @@ export default function AdPage() {
                   // onClick={toggleFavorite}
                 >
                   <Heart className={`mr-2 h-4 w-4`} />
-                  {'Add to Favorites'}
+                  {"Add to Favorites"}
                 </Button>
               </CardContent>
             </Card>
@@ -165,5 +185,5 @@ export default function AdPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
