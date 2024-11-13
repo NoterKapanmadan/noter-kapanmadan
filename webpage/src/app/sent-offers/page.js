@@ -67,75 +67,81 @@ export default function Component() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Your Sent Offers</h1>
-      {sentOffers.length === 0 ? (
-        <p className="text-center text-gray-500">
-          You haven't sent any offers yet.
-        </p>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {sentOffers.map((offer) => (
-            <Card key={offer.id}>
-              <CardHeader>
-                <CardTitle>{offer.carModel}</CardTitle>
-                <CardDescription>Offer to {offer.sellerName}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-4 mb-4">
-                  <Avatar>
-                    <AvatarImage
-                      src={offer.sellerAvatar}
-                      alt={offer.sellerName}
-                    />
-                    <AvatarFallback>
-                      {offer.sellerName
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">{offer.sellerName}</p>
-                    <p className="text-sm text-muted-foreground">Car Seller</p>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center mb-2">
-                  <Badge variant="outline" className="mb-2">
-                    Your Offer
-                  </Badge>
-                  {getStatusBadge(offer.status)}
-                </div>
-                <p className="text-2xl font-bold">${offer.offeredPrice}</p>
-              </CardContent>
-              <CardFooter>
-                {offer.status === "pending" && (
-                  <Button
-                    onClick={() => handleCancelOffer(offer.id)}
-                    variant="outline"
-                    className="w-full"
-                  >
-                    <X className="mr-2 h-4 w-4" /> Cancel Offer
-                  </Button>
-                )}
-                {offer.status === "accepted" && (
-                  <Button
-                    onClick={() => handleBuy(offer.id)}
-                    className="w-full"
-                  >
-                    Buy Now
-                  </Button>
-                )}
-                {offer.status === "rejected" && (
-                  <p className="text-sm text-muted-foreground w-full text-center">
-                    Offer rejected. Browse more cars.
-                  </p>
-                )}
-              </CardFooter>
-            </Card>
-          ))}
+    <div className="bg-gray-50 min-h-screen">
+      <header className="bg-primary text-primary-foreground shadow">
+        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-xl font-bold">NoterKapanmadan</h1>
         </div>
-      )}
+      </header>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4 text-center">Sent Offers</h1>
+        {sentOffers.length === 0 ? (
+          <p className="text-center text-gray-500">
+            You haven't sent any offers yet.
+          </p>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {sentOffers.map((offer) => (
+              <Card key={offer.id}>
+                <CardHeader>
+                  <CardTitle>{offer.carModel}</CardTitle>
+                  <CardDescription>Offer to {offer.sellerName}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="flex gap-2 items-center">
+                      <Avatar className="border">
+                        <AvatarImage
+                          src="/avatar.avif"
+                          alt={offer.sellerName}
+                        />
+                        <AvatarFallback>
+                          {offer.sellerName
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </AvatarFallback>
+                      </Avatar>
+                      <p className="text-sm font-medium">{offer.sellerName}</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center mb-2">
+                    <Badge variant="outline" className="mb-2">
+                      Your Offer
+                    </Badge>
+                    {getStatusBadge(offer.status)}
+                  </div>
+                  <p className="text-2xl font-bold">${offer.offeredPrice}</p>
+                </CardContent>
+                <CardFooter>
+                  {offer.status === "pending" && (
+                    <Button
+                      onClick={() => handleCancelOffer(offer.id)}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <X className="mr-2 h-4 w-4" /> Cancel Offer
+                    </Button>
+                  )}
+                  {offer.status === "accepted" && (
+                    <Button
+                      onClick={() => handleBuy(offer.id)}
+                      className="w-full"
+                    >
+                      Complete Payment
+                    </Button>
+                  )}
+                  {offer.status === "rejected" && (
+                    <p className="text-sm text-muted-foreground w-full text-center">
+                      Offer rejected.
+                    </p>
+                  )}
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
