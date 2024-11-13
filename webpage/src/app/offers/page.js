@@ -9,9 +9,9 @@ import { Check, X } from 'lucide-react'
 
 export default function Component() {
   const [offers, setOffers] = useState([
-    { id: '1', carModel: '2018 Toyota Camry', offeredPrice: 15000, buyerName: 'John Doe', buyerAvatar: '/placeholder.svg?height=40&width=40' },
-    { id: '2', carModel: '2019 Honda Civic', offeredPrice: 16500, buyerName: 'Jane Smith', buyerAvatar: '/placeholder.svg?height=40&width=40' },
-    { id: '3', carModel: '2020 Ford Mustang', offeredPrice: 28000, buyerName: 'Mike Johnson', buyerAvatar: '/placeholder.svg?height=40&width=40' },
+    { id: '1', carModel: '2018 Toyota Camry', offeredPrice: 15000, buyerName: 'HTalks', buyerAvatar: '/placeholder.svg?height=40&width=40' },
+    { id: '2', carModel: '2019 Honda Civic', offeredPrice: 16500, buyerName: 'Enis Kirazoğlu', buyerAvatar: '/placeholder.svg?height=40&width=40' },
+    { id: '3', carModel: '2020 Ford Mustang', offeredPrice: 28000, buyerName: 'Fırat Sobutay', buyerAvatar: '/placeholder.svg?height=40&width=40' },
   ])
 
   const handleAccept = (id) => {

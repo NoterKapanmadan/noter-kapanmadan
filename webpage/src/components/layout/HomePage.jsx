@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider"
 import { Calendar } from 'lucide-react'
 import { getRandomCars } from '@/utils/placeholderCar'
+import Link from 'next/link'
 
 // Mock data for vehicle ads
 const vehicleAdss = [
@@ -227,7 +228,9 @@ const filteredAds = vehicleAds;
                     </div>
                   </CardContent>
                   <CardFooter className="p-3">
-                    <Button className="w-full">View Details</Button>
+                    <Button className="w-full" asChild>
+                      <Link href={`/ad_id`}>View Details</Link>
+                    </Button>
                   </CardFooter>
                 </Card>
               ))}
