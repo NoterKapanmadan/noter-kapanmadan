@@ -106,9 +106,7 @@ export default function Component() {
                   </Badge>
                   {getStatusBadge(offer.status)}
                 </div>
-                <p className="text-2xl font-bold">
-                  ${offer.offeredPrice.toLocaleString()}
-                </p>
+                <p className="text-2xl font-bold">${offer.offeredPrice}</p>
               </CardContent>
               <CardFooter>
                 {offer.status === "pending" && (
