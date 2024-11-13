@@ -30,7 +30,7 @@ export default function Component({ favorites: initialFavorites }) {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Your Favorite Cars</h1>
+      <h1 className="text-2xl font-bold mb-6">Your Favorite Ads</h1>
       {favorites.length === 0 ? (
         <p className="text-center text-gray-500">
           You haven't added any cars to your favorites yet.
