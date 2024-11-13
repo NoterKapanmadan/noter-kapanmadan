@@ -52,7 +52,7 @@ export default function Component() {
                     <AvatarFallback>{offer.buyerName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text font-medium">{offer.buyerName}</p>
+                    <p className="text-sm font-medium">{offer.buyerName}</p>
                   </div>
                 </div>
                 <Badge variant="secondary" className="mb-2">Offered Price</Badge>
