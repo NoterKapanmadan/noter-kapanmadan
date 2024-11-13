@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function AdPage() {
   return (
@@ -152,7 +152,11 @@ export default function AdPage() {
                 <CardTitle>Seller Information</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="font-semibold">Ekrem Polat</p>
+                <Avatar className="border">
+                  <AvatarImage src="/avatar.avif" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <p className="font-semibold">John Doe</p>
                 <p>Ankara - Mamak</p>
                 <p>Listed on: 12.11.2024</p>
               </CardContent>
