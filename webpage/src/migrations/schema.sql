@@ -7,7 +7,7 @@ BEGIN
 END;
 $$;
 
-CREATE TABLE IF NOT EXISTS "Account" (
+CREATE TABLE IF NOT EXISTS Account (
     account_ID UUID PRIMARY KEY UNIQUE NOT NULL,
     forename VARCHAR(50) NOT NULL,
     surname VARCHAR(50) NOT NULL,
@@ -17,16 +17,16 @@ CREATE TABLE IF NOT EXISTS "Account" (
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS "User" (
+CREATE TABLE IF NOT EXISTS Users (
     account_ID UUID PRIMARY KEY NOT NULL,
     profile_image VARCHAR(255),
     description TEXT,
     status user_status DEFAULT 'active',
     balance DECIMAL(10, 2) DEFAULT 0.00,
-    FOREIGN KEY (account_ID) REFERENCES "Account"(account_ID)
+    FOREIGN KEY (account_ID) REFERENCES Account(account_ID)
 );
 
-CREATE TABLE IF NOT EXISTS "Admin" (
+CREATE TABLE IF NOT EXISTS Admin (
     account_ID UUID PRIMARY KEY NOT NULL,
-    FOREIGN KEY (account_ID) REFERENCES "Account"(account_ID)
+    FOREIGN KEY (account_ID) REFERENCES Account(account_ID)
 );
