@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS "User" (
     description TEXT,
     status user_status DEFAULT 'active',
     balance DECIMAL(10, 2) DEFAULT 0.00,
-    FOREIGN KEY (account_ID) REFERENCES Account(account_ID)
+    FOREIGN KEY (account_ID) REFERENCES "Account"(account_ID)
 );
 
 CREATE TABLE IF NOT EXISTS "Admin" (
     account_ID UUID PRIMARY KEY NOT NULL,
-    FOREIGN KEY (account_ID) REFERENCES Account(account_ID)
+    FOREIGN KEY (account_ID) REFERENCES "Account"(account_ID)
 );
