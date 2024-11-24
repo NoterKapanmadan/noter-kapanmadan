@@ -2,10 +2,8 @@ import VehicleMarketplace from "@/components/layout/HomePage";
 import { getRandomCars } from "@/utils/placeholderCar";
 import { query } from "@/lib/db";
 
-
 export default async function HomePage() {
   let vehicleAds = await getRandomCars();
-  query
   console.log(vehicleAds);
   
   try {
