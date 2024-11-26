@@ -11,6 +11,7 @@ import { Slider } from "@/components/ui/slider"
 import { Calendar } from 'lucide-react'
 import { getRandomCars } from '@/utils/placeholderCar'
 import Link from 'next/link'
+import { logout } from '@/app/actions'
 
 // Mock data for vehicle ads
 const vehicleAdss = [
@@ -61,6 +62,14 @@ const filteredAds = vehicleAds;
       <header className="bg-primary text-primary-foreground shadow">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <h1 className="text-xl font-bold">NoterKapanmadan</h1>
+          <span 
+            className="text-red-400 cursor-pointer"
+            onClick={async () => {
+              await logout();
+            }}
+          >
+            Logout
+          </span>
         </div>
       </header>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
