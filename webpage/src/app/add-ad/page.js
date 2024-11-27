@@ -16,59 +16,13 @@ import { useToast } from "@/hooks/use-toast"
 export default function AddAd() {
   const { toast } = useToast()
   const router = useRouter()
-  const [formData, setFormData] = useState({
-    vehicleType: 'car',
-    title: '',
-    price: '',
-    brand: '',
-    model: '',
-    year: '',
-    km: '',
-    gear_type: '',
-    fuel_type: '',
-    description: '',
-    location: '',
-    images: [],
-    report: null,
-    // Additional fields for specific vehicle types
-    seatCount: '',
-    bodyType: '',
-    loadCapacity: '',
-    tractionType: '',
-    roofHeight: '',
-    bedCapacity: '',
-    engineCapacity: '',
-    cylinderCount: ''
-  })
+  const [vehicleType, setVehicleType] = useState('car')
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleSelectChange = (name) => (value) => {
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleImageUpload = (e) => {
-    if (e.target.files) {
-      setFormData(prev => ({ ...prev, images: [...prev.images, ...Array.from(e.target.files)] }))
-    }
-  }
-
-  const handleReportUpload = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, report: e.target.files[0] }))
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Here you would typically send the formData to your backend API
+  const handleSubmit = (formData) => {
     startTransition(async () => {
       const response = await fetch(`${SERVER_URL}/add-ad`, {
         method: 'POST',
-        body: new FormData(e.target),
+        body: formData,
       })
 
     const { msg, error } = await response.json();
@@ -86,10 +40,10 @@ export default function AddAd() {
         description: msg,
       });
 
-    router.push('/') // Redirect to home page or ad listing page
-    }
-  })
-}
+      router.push('/') // Redirect to home page or ad listing page
+      }
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -101,7 +55,7 @@ export default function AddAd() {
       <main className="max-w-3xl mx-auto py-4 sm:px-6 lg:px-8 space-y-2">
         <h2 className="font-bold text-3xl text-center">Add New Ad</h2>
         <Card>
-          <form onSubmit={handleSubmit}>
+          <form action={handleSubmit}>
             <CardHeader>
               <CardTitle>Vehicle Details</CardTitle>
             </CardHeader>
@@ -112,7 +66,7 @@ export default function AddAd() {
                   name="vehicleType"
                   id="vehicleType"
                   defaultValue="car"
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, vehicleType: value }))}
+                  onValueChange={(value) => setVehicleType(value)}
                   className="flex flex-wrap gap-4"
                 >
                   <div className="flex items-center space-x-2">
@@ -138,8 +92,6 @@ export default function AddAd() {
                 <Input
                   id="title"
                   name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -149,8 +101,6 @@ export default function AddAd() {
                   id="price"
                   name="price"
                   type="number"
-                  value={formData.price}
-                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -160,8 +110,6 @@ export default function AddAd() {
                   <Input
                     id="brand"
                     name="brand"
-                    value={formData.brand}
-                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -170,8 +118,6 @@ export default function AddAd() {
                   <Input
                     id="model"
                     name="model"
-                    value={formData.model}
-                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -183,8 +129,6 @@ export default function AddAd() {
                     id="year"
                     name="year"
                     type="number"
-                    value={formData.year}
-                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -194,8 +138,6 @@ export default function AddAd() {
                     id="km"
                     name="km"
                     type="number"
-                    value={formData.km}
-                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -203,7 +145,7 @@ export default function AddAd() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="gear_type">Transmission</Label>
-                  <Select onValueChange={handleSelectChange('gear_type')}>
+                  <Select name="transmission" >
                     <SelectTrigger id="gear_type">
                       <SelectValue placeholder="Select transmission" />
                     </SelectTrigger>
@@ -215,7 +157,7 @@ export default function AddAd() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="fuel_type">Fuel Type</Label>
-                  <Select onValueChange={handleSelectChange('fuel_type')}>
+                  <Select name="fuelType">
                     <SelectTrigger id="fuel_type">
                       <SelectValue placeholder="Select fuel type" />
                     </SelectTrigger>
@@ -228,7 +170,7 @@ export default function AddAd() {
                   </Select>
                 </div>
               </div>
-              {formData.vehicleType === 'car' && (
+              {vehicleType === 'car' && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="seatCount">Seat Count</Label>
@@ -236,8 +178,6 @@ export default function AddAd() {
                       id="seatCount"
                       name="seatCount"
                       type="number"
-                      value={formData.seatCount}
-                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -245,13 +185,11 @@ export default function AddAd() {
                     <Input
                       id="bodyType"
                       name="bodyType"
-                      value={formData.bodyType}
-                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
               )}
-              {formData.vehicleType === 'truck' && (
+              {vehicleType === 'truck' && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="loadCapacity">Load Capacity (kg)</Label>
@@ -259,8 +197,6 @@ export default function AddAd() {
                       id="loadCapacity"
                       name="loadCapacity"
                       type="number"
-                      value={formData.loadCapacity}
-                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -268,21 +204,17 @@ export default function AddAd() {
                     <Input
                       id="tractionType"
                       name="tractionType"
-                      value={formData.tractionType}
-                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
               )}
-              {formData.vehicleType === 'van' && (
+              {vehicleType === 'van' && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="roofHeight">Roof Height</Label>
                     <Input
                       id="roofHeight"
                       name="roofHeight"
-                      value={formData.roofHeight}
-                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -291,13 +223,11 @@ export default function AddAd() {
                       id="bedCapacity"
                       name="bedCapacity"
                       type="number"
-                      value={formData.bedCapacity}
-                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
               )}
-              {formData.vehicleType === 'motorcycle' && (
+              {vehicleType === 'motorcycle' && (
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="engineCapacity">Engine Capacity (cc)</Label>
@@ -305,8 +235,6 @@ export default function AddAd() {
                       id="engineCapacity"
                       name="engineCapacity"
                       type="number"
-                      value={formData.engineCapacity}
-                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -315,8 +243,6 @@ export default function AddAd() {
                       id="cylinderCount"
                       name="cylinderCount"
                       type="number"
-                      value={formData.cylinderCount}
-                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -326,8 +252,6 @@ export default function AddAd() {
                 <Textarea
                   id="description"
                   name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -336,8 +260,6 @@ export default function AddAd() {
                 <Input
                   id="location"
                   name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -347,7 +269,6 @@ export default function AddAd() {
                   id="images"
                   name="images"
                   type="file"
-                  onChange={handleImageUpload}
                   multiple
                   accept="image/*"
                 />
@@ -359,7 +280,6 @@ export default function AddAd() {
                   id="report"
                   name="report"
                   type="file"
-                  onChange={handleReportUpload}
                   accept=".pdf"
                   required
                 />
