@@ -58,11 +58,10 @@ export default function VehicleMarketplace({vehicleAds}) {
 */
 const filteredAds = vehicleAds;
   return (
-    (<div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <header className="bg-primary text-primary-foreground shadow">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-xl font-bold">NoterKapanmadan</h1>
-          <span 
+        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+          <span
             className="text-red-400 cursor-pointer"
             onClick={async () => {
               await logout();
@@ -70,6 +69,10 @@ const filteredAds = vehicleAds;
           >
             Logout
           </span>
+          <h1 className="text-xl font-bold">NoterKapanmadan</h1>
+          <Link href="/add-ad">
+            <Button variant = "primary">create-ad</Button>
+          </Link>
         </div>
       </header>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -250,6 +253,6 @@ const filteredAds = vehicleAds;
           </div>
         </div>
       </main>
-    </div>)
+    </div>
   );
 }

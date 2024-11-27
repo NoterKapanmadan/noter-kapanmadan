@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,8 +9,12 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { SERVER_URL } from "@/utils/constants"
+import { useToast } from "@/hooks/use-toast"
+
 
 export default function AddAd() {
+  const { toast } = useToast()
   const router = useRouter()
   const [formData, setFormData] = useState({
     vehicleType: 'car',
@@ -61,13 +65,31 @@ export default function AddAd() {
   const handleSubmit = (e) => {
     e.preventDefault()
     // Here you would typically send the formData to your backend API
-    console.log(formData)
-    toast({
-      title: "Ad submitted successfully",
-      description: "Your ad has been created and is pending approval.",
-    })
+    startTransition(async () => {
+      const response = await fetch(`${SERVER_URL}/add-ad`, {
+        method: 'POST',
+        body: new FormData(e.target),
+      })
+
+    const { msg, error } = await response.json();
+  
+    if (error) {
+      return toast({
+        title: 'Something went wrong!',
+        description: error,
+      });
+    }
+
+    if (msg) {
+      toast({
+        title: 'Success!',
+        description: msg,
+      });
+
     router.push('/') // Redirect to home page or ad listing page
-  }
+    }
+  })
+}
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -87,6 +109,8 @@ export default function AddAd() {
               <div className="space-y-2">
                 <Label>Vehicle Type</Label>
                 <RadioGroup
+                  name="vehicleType"
+                  id="vehicleType"
                   defaultValue="car"
                   onValueChange={(value) => setFormData(prev => ({ ...prev, vehicleType: value }))}
                   className="flex flex-wrap gap-4"
