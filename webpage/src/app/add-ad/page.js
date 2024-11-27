@@ -8,10 +8,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 export default function AddAd() {
   const router = useRouter()
   const [formData, setFormData] = useState({
+    vehicleType: 'car',
     title: '',
     price: '',
     brand: '',
@@ -22,7 +24,17 @@ export default function AddAd() {
     fuel_type: '',
     description: '',
     location: '',
-    images: []
+    images: [],
+    report: null,
+    // Additional fields for specific vehicle types
+    seatCount: '',
+    bodyType: '',
+    loadCapacity: '',
+    tractionType: '',
+    roofHeight: '',
+    bedCapacity: '',
+    engineCapacity: '',
+    cylinderCount: ''
   })
 
   const handleInputChange = (e) => {
@@ -37,6 +49,12 @@ export default function AddAd() {
   const handleImageUpload = (e) => {
     if (e.target.files) {
       setFormData(prev => ({ ...prev, images: [...prev.images, ...Array.from(e.target.files)] }))
+    }
+  }
+
+  const handleReportUpload = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData(prev => ({ ...prev, report: e.target.files[0] }))
     }
   }
 
@@ -66,6 +84,31 @@ export default function AddAd() {
               <CardTitle>Vehicle Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Vehicle Type</Label>
+                <RadioGroup
+                  defaultValue="car"
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, vehicleType: value }))}
+                  className="flex flex-wrap gap-4"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="car" id="car" />
+                    <Label htmlFor="car">Car</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="van" id="van" />
+                    <Label htmlFor="van">Van</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="truck" id="truck" />
+                    <Label htmlFor="truck">Truck</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="motorcycle" id="motorcycle" />
+                    <Label htmlFor="motorcycle">Motorcycle</Label>
+                  </div>
+                </RadioGroup>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="title">Ad Title</Label>
                 <Input
@@ -161,6 +204,99 @@ export default function AddAd() {
                   </Select>
                 </div>
               </div>
+              {formData.vehicleType === 'car' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="seatCount">Seat Count</Label>
+                    <Input
+                      id="seatCount"
+                      name="seatCount"
+                      type="number"
+                      value={formData.seatCount}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bodyType">Body Type</Label>
+                    <Input
+                      id="bodyType"
+                      name="bodyType"
+                      value={formData.bodyType}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+              )}
+              {formData.vehicleType === 'truck' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="loadCapacity">Load Capacity (kg)</Label>
+                    <Input
+                      id="loadCapacity"
+                      name="loadCapacity"
+                      type="number"
+                      value={formData.loadCapacity}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="tractionType">Traction Type</Label>
+                    <Input
+                      id="tractionType"
+                      name="tractionType"
+                      value={formData.tractionType}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+              )}
+              {formData.vehicleType === 'van' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="roofHeight">Roof Height</Label>
+                    <Input
+                      id="roofHeight"
+                      name="roofHeight"
+                      value={formData.roofHeight}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bedCapacity">Bed Capacity</Label>
+                    <Input
+                      id="bedCapacity"
+                      name="bedCapacity"
+                      type="number"
+                      value={formData.bedCapacity}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+              )}
+              {formData.vehicleType === 'motorcycle' && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="engineCapacity">Engine Capacity (cc)</Label>
+                    <Input
+                      id="engineCapacity"
+                      name="engineCapacity"
+                      type="number"
+                      value={formData.engineCapacity}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="cylinderCount">Cylinder Count</Label>
+                    <Input
+                      id="cylinderCount"
+                      name="cylinderCount"
+                      type="number"
+                      value={formData.cylinderCount}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                </div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
@@ -193,6 +329,17 @@ export default function AddAd() {
                 />
                 <p className="text-sm text-muted-foreground">You can upload multiple images</p>
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="report">Report (PDF)</Label>
+                <Input
+                  id="report"
+                  name="report"
+                  type="file"
+                  onChange={handleReportUpload}
+                  accept=".pdf"
+                  required
+                />
+              </div>
             </CardContent>
             <CardFooter>
               <Button type="submit" className="w-full">Submit Ad</Button>
@@ -203,3 +350,4 @@ export default function AddAd() {
     </div>
   )
 }
+
