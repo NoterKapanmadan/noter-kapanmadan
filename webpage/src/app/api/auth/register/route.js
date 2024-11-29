@@ -27,31 +27,35 @@ export async function POST(request) {
     }
 
     const hashedPassword = hashWithSalt(password, process.env.PASSWORD_SALT)
-    console.log(hashedPassword)
     const newAccountID = uuidv4();
     const forename = formData.get("forename");
     const surname = formData.get("surname");
     const phoneNumber = formData.get("phone_number");
 
-    const accountCreated = await query(
+    await query('BEGIN')
+
+    await query(
       `INSERT INTO Account (account_id, forename, surname, email, hashed_password, phone_number) 
       VALUES ($1, $2, $3, $4, $5, $6) 
       RETURNING *;`,
       [newAccountID, forename, surname, email, hashedPassword, phoneNumber]);
     
-    if (accountCreated.rowCount == 0) {
-      return NextResponse.json({ error: 'Account cannot be created!' }, { status: 403 })
-    }
-
-    const userCreated = await query(
+    await query(
       `INSERT INTO Users (account_id, profile_image, description) 
       VALUES ($1, $2, $3) 
       RETURNING *;`,
       [newAccountID, null, null]);
+
+    const queryResponse = await query('COMMIT');
+
+    if (queryResponse.rowCount == 0) {
+      return NextResponse.json({ error: 'Account cannot be created!' }, { status: 403 })
+    }
     
     return NextResponse.json({ msg: 'Account is created successfully!' }, { status: 200 })
   } catch (err) {
     console.log(err);
+    query('ROLLBACK');
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 }

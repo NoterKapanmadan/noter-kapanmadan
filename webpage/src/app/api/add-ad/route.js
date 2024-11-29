@@ -155,6 +155,7 @@ export async function POST(request) {
         if (res.rowCount === 0) {
             return NextResponse.json({ error: 'Failed to add ad!' }, { status: 400 })
         }
+
         return NextResponse.json({ msg: 'Ad added!' }, { status: 200 })
     } catch (err) {
         console.log(err);

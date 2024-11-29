@@ -22,8 +22,6 @@ export default async function middleware(req) {
     const payload = await decrypt(token)
     const isAuthenticated = payload?.account_id
 
-    console.log(token)
-
     if (isAuthenticated) {
       return NextResponse.next()
     } else {
