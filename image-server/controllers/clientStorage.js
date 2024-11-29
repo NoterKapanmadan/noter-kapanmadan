@@ -54,6 +54,7 @@ export const uploadBatch = (req, res) => {
 
 // also add get image to get blurred version etc????, or just use the same endpoint, or all of them will have same naming convention
 
+// ?images=["sag23t-3525wt-/0","sag23t-3525wt-/1"]
 export const getImages = (req, res) => {
     
     try {

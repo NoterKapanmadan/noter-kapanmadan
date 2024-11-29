@@ -10,6 +10,6 @@ const upload = multer({
 });
 
 router.post('/uploadBatch', upload.array('images'), uploadBatch);
-router.get('/getImages/:requestId', getImages);
+router.get('/getImages', getImages);
 
 export default router;
