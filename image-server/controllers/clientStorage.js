@@ -20,7 +20,6 @@ export const uploadBatch = (req, res) => {
             fs.mkdirSync("temp/");
         }
         const filenames = [];
-        const paths = [];
 
         if (fs.existsSync(`temp/${requestId}`)) {
             fs.rmSync(`temp/${requestId}`, { recursive: true });
@@ -35,7 +34,6 @@ export const uploadBatch = (req, res) => {
                 fs.writeFileSync(`temp/${requestId}/${filename}`, file.buffer);
                 // file written successfully
                 filenames.push(filename);
-                paths.push(`/temp/${requestId}/${filename}`);
             } catch (err) {
                 console.error(err);
             }
@@ -44,7 +42,6 @@ export const uploadBatch = (req, res) => {
         res.status(200).json({
             status: "Success!",
             filenames: filenames,
-            paths: paths
         })
 
     } catch (e) {
@@ -58,11 +55,13 @@ export const uploadBatch = (req, res) => {
 // also add get image to get blurred version etc????, or just use the same endpoint, or all of them will have same naming convention
 
 export const getImages = (req, res) => {
-    const requestId = req.params.requestId;
+    
     try {
-        const files = fs.readdirSync(`public/${requestId}`);
-        const paths = files.map((filename) => {
-            return `/public/${requestId}/${filename}`;
+        const images = JSON.parse(req.query.images);
+
+        const paths = images.map((imagePath) => {
+            const files = fs.readdirSync(`public/${imagePath}`);
+            return files.map((filename) => `/public/${imagePath}/${filename}`);
         });
         res.status(200).json({
             status: "Success!",
