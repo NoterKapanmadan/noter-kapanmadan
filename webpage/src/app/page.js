@@ -1,11 +1,16 @@
 import VehicleMarketplace from "@/components/layout/HomePage";
-import { getRandomCars } from "@/utils/placeholderCar";
+import { SERVER_URL } from "@/utils/constants"
 
 export default async function HomePage() {
-  let vehicleAds = await getRandomCars();
+  const ads = await fetch(`${SERVER_URL}/get-ads`, {
+    method: 'GET',
+  })
+  //Get images as well
+  const results = await ads.json();
+  console.log(results);
   return (
     <>
-      <VehicleMarketplace vehicleAds={vehicleAds} />
+      <VehicleMarketplace vehicleAds={results} />
     </>
   );
 }

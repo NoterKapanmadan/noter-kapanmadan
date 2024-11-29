@@ -8,14 +8,16 @@ import Link from "next/link"
 import { SERVER_URL } from "@/utils/constants"
 import { useToast } from "@/hooks/use-toast"
 import { useTransition } from "react"
+import { useRouter } from "next/navigation"
 
 export default function RegisterPage() {
   const { toast } = useToast()
   const [pending, startTransition] = useTransition()
+  const router = useRouter()
 
   const handleSubmit = async (formData) => {
     startTransition(async () => {
-      const response = await fetch(`${SERVER_URL}/register`, {
+      const response = await fetch(`${SERVER_URL}/auth/register`, {
         method: 'POST',
         cache: 'no-store',
         body: formData,
@@ -31,10 +33,12 @@ export default function RegisterPage() {
       }
   
       if (msg) {
-        return toast({
+        toast({
           title: 'Success!',
           description: msg,
         });
+
+        router.push('/login')
       }
     })
   }

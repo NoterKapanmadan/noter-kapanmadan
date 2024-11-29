@@ -17,7 +17,7 @@ export default function LoginPage() {
 
   const handleSubmit = (formData) => {
     startTransition(async () => {
-      const response = await fetch(`${SERVER_URL}/login`, {
+      const response = await fetch(`${SERVER_URL}/auth/login`, {
         method: 'POST',
         cache: 'no-store',
         body: formData,
