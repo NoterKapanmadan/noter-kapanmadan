@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
-
+import { decrypt } from '@/lib/auth';
 
 export async function POST(request) {
     try {
+        const { account_id } = await decrypt(request.cookies.get("Authorization").value)
+
         const formData = await request.formData()
         const vehicleType = formData.get("vehicleType");
         const title = formData.get("title");
@@ -20,7 +22,7 @@ export async function POST(request) {
         const adID = uuidv4();
         const vehicleID = uuidv4();
         //TODO get user ID from session
-        const userID = "77ff58b3-7461-4975-b480-1a6e656c9fd8"
+        const userID = account_id
         //TODO get image from form data
         //const report = formData.get("report");
         //const image = formData.get("image");
@@ -151,8 +153,7 @@ export async function POST(request) {
                 break;
         }
         if (res.rowCount === 0) {
-            return NextResponse.json({ error: 'Failed to add ad!' }
-                , { status: 400 })
+            return NextResponse.json({ error: 'Failed to add ad!' }, { status: 400 })
         }
         return NextResponse.json({ msg: 'Ad added!' }, { status: 200 })
     } catch (err) {

@@ -18,9 +18,11 @@ export default async function middleware(req) {
       return NextResponse.next()
     }
 
-    const token = req.headers.get("Authorization")
+    const token = req.cookies.get("Authorization")?.value
     const payload = await decrypt(token)
     const isAuthenticated = payload?.account_id
+
+    console.log(token)
 
     if (isAuthenticated) {
       return NextResponse.next()

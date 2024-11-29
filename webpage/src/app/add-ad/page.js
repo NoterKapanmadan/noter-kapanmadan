@@ -25,22 +25,22 @@ export default function AddAd() {
         body: formData,
       })
 
-    const { msg, error } = await response.json();
-  
-    if (error) {
-      return toast({
-        title: 'Something went wrong!',
-        description: error,
-      });
-    }
+      const { msg, error } = await response.json();
+    
+      if (error) {
+        return toast({
+          title: 'Something went wrong!',
+          description: error,
+        });
+      }
 
-    if (msg) {
-      toast({
-        title: 'Success!',
-        description: msg,
-      });
+      if (msg) {
+        toast({
+          title: 'Success!',
+          description: msg,
+        });
 
-      router.push('/') // Redirect to home page or ad listing page
+        router.push('/') // Redirect to home page or ad listing page
       }
     })
   }
