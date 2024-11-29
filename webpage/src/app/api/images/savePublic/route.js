@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
-import { IMAGE_SERVER_URL, JWT_SECRET } from '@/utils/constants';
+import { FILE_SERVER_URL, JWT_SECRET } from '@/utils/constants';
 
 export async function POST(request) {
     try {
         console.log("request.body", request.body);
         const body = await request.json();
         const jwt = body.jwt;
-        const response = await fetch(`${IMAGE_SERVER_URL}/serverStorage/saveRequest`, {
+        const response = await fetch(`${FILE_SERVER_URL}/serverStorage/saveRequest`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

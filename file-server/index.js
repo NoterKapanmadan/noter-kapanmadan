@@ -28,7 +28,7 @@ if (!fs.existsSync("public/")) {
 const defaultRouter = express.Router();
 
 defaultRouter.get('/', (req, res) => {
-  res.send('This is image server!')
+  res.send('This is file server!')
 })
 
 defaultRouter.use('/public', express.static('public'))
@@ -38,5 +38,5 @@ defaultRouter.use('/serverStorage', serverStorage);
 app.use('/', defaultRouter);
   
 app.listen(port, () => {
-  console.log(`Image server listening on port ${port}`)
+  console.log(`File server listening on port ${port}`)
 })

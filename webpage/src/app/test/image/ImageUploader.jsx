@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
-import { IMAGE_SERVER_URL } from '@/utils/constants'
+import { FILE_SERVER_URL } from '@/utils/constants'
 import { saveImagesPublic } from '@/utils/image'
 
 export default function ImageUploader({ jwt }) {
@@ -36,7 +36,7 @@ export default function ImageUploader({ jwt }) {
 
         try {
             // upload images to request pool
-            const result = await fetch(`${IMAGE_SERVER_URL}/clientStorage/uploadBatch`, {
+            const result = await fetch(`${FILE_SERVER_URL}/clientStorage/uploadBatch`, {
                 method: 'POST',
                 // Send JWT and Form Data
                 body: formData,
