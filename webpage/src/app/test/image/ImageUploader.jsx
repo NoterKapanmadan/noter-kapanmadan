@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { FILE_SERVER_URL } from '@/utils/constants'
-import { saveImagesPublic } from '@/utils/image'
+import { saveFilesPublic } from '@/utils/file'
 
 export default function ImageUploader({ jwt }) {
     const [selectedFiles, setSelectedFiles] = useState([])
@@ -30,7 +30,7 @@ export default function ImageUploader({ jwt }) {
         setUploadStatus('Uploading...')
 
         const formData = new FormData()
-        selectedFiles.forEach(file => formData.append('images', file))
+        selectedFiles.forEach(file => formData.append('files', file))
 
         formData.append('jwt', jwt)
 
@@ -62,7 +62,7 @@ export default function ImageUploader({ jwt }) {
     }, [selectedFiles])
 
     const savePublic = useCallback(async () => {
-        const path = await saveImagesPublic(jwt);
+        const path = await saveFilesPublic(jwt);
         setUploadStatus(`Successfully saved ${path}`);
     }
         , [jwt]);

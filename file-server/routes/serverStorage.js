@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteImages, deleteRequests, createRequest, saveRequest } from '../controllers/serverStorage.js';
+import { deleteFiles, deleteRequests, createRequest, saveRequest } from '../controllers/serverStorage.js';
 
 
 const router = express.Router();
@@ -19,7 +19,7 @@ router.use('/', (req, res, next) => {
 
 
 
-router.delete('/deleteImages', deleteImages);
+router.delete('/deleteFiles', deleteFiles);
 router.delete('/deleteRequests', deleteRequests);
 router.post('/createRequest', createRequest);
 router.post('/saveRequest', saveRequest);

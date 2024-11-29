@@ -25,7 +25,7 @@ export const createRequest = (req, res) => {
 export const saveRequest = (req, res) => {
 
     const jwt = req.body.jwt;
-    console.log("save request", jwt);
+
     try {
 
         if (!verifyJwt(jwt)) {
@@ -55,12 +55,12 @@ export const saveRequest = (req, res) => {
     }
 };
 
-export const deleteImages = (req, res) => {
+export const deleteFiles = (req, res) => {
     const paths = req.body.paths; // without public, e.g. requestId/filename
     try {
         paths.forEach((paths) => {
             try {
-                fs.rmSync(`public/${paths}`);
+                fs.rmSync(`public/${paths}`, { recursive: true });
             } catch (e) {
 
             }

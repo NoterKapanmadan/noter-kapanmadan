@@ -1,15 +1,15 @@
 import { SERVER_URL } from "./constants";
 
-export async function getImageUploadToken() {
-    const result = await fetch(`${SERVER_URL}/images/requestUploadToken`);
+export async function getFileUploadToken() {
+    const result = await fetch(`${SERVER_URL}/files/requestUploadToken`);
     const jwtData = await result.json();
     const jwt = jwtData.jwt;
     
     return jwt;
 }
 
-export async function saveImagesPublic(jwt) {
-const result = await fetch(`${SERVER_URL}/images/savePublic`, {
+export async function saveFilesPublic(jwt) {
+const result = await fetch(`${SERVER_URL}/files/savePublic`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

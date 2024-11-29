@@ -29,9 +29,10 @@ export const uploadBatch = (req, res) => {
 
         req.files.forEach((file, index) => {
             const suffix = file.originalname.substring(file.originalname.lastIndexOf('.') + 1)
-            const filename = `${index}.${suffix}`
+            const filename = `original.${suffix}`
             try {
-                fs.writeFileSync(`temp/${requestId}/${filename}`, file.buffer);
+                fs.mkdirSync(`temp/${requestId}/${index}`);
+                fs.writeFileSync(`temp/${requestId}/${index}/${filename}`, file.buffer);
                 // file written successfully
                 filenames.push(filename);
             } catch (err) {
@@ -54,15 +55,21 @@ export const uploadBatch = (req, res) => {
 
 // also add get image to get blurred version etc????, or just use the same endpoint, or all of them will have same naming convention
 
-// ?images=["sag23t-3525wt-/0","sag23t-3525wt-/1"]
-export const getImages = (req, res) => {
+// ?files=["sag23t-3525wt-/0","sag23t-3525wt-/1"]
+export const getFiles = (req, res) => {
     
     try {
-        const images = JSON.parse(req.query.images);
+        const files = JSON.parse(req.query.files);
 
-        const paths = images.map((imagePath) => {
-            const files = fs.readdirSync(`public/${imagePath}`);
-            return files.map((filename) => `/public/${imagePath}/${filename}`);
+        const paths = files.map((filePath) => {
+            // Show only files in the folder
+            let files;
+            try {
+            files = fs.readdirSync(`public/${filePath}`).filter((filename) => fs.lstatSync(`public/${filePath}/${filename}`).isFile());
+            } catch (e) {
+                return [];
+            }
+            return files.map((filename) => `/public/${filePath}/${filename}`);
         });
         res.status(200).json({
             status: "Success!",
