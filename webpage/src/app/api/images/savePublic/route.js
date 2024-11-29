@@ -19,6 +19,9 @@ export async function POST(request) {
             return NextResponse.json('Failed to request token', { status: 500 });
         }
         const data = await response.json();
+
+        console.log("save data: ", data);
+
         return NextResponse.json({path: data.path}, { status: 200 });
 
     } catch (err) {

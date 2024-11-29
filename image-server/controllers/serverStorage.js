@@ -43,7 +43,8 @@ export const saveRequest = (req, res) => {
 
         res.status(200).json({
             status: "Success!",
-            path: `/public/${requestId}`
+            path: `/public/${requestId}`,
+            imagePaths: fs.readdirSync(`public/${requestId}`).map((filename) => `/public/${requestId}/${filename}`)
         });
 
     } catch (e) {
