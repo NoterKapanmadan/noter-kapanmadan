@@ -162,7 +162,7 @@ export default function AddAd() {
                       <SelectValue placeholder="Select fuel type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Gasoline">Gasoline</SelectItem>
+                      <SelectItem value="Petrol">Gasoline</SelectItem>
                       <SelectItem value="Diesel">Diesel</SelectItem>
                       <SelectItem value="Electric">Electric</SelectItem>
                       <SelectItem value="Hybrid">Hybrid</SelectItem>
@@ -201,10 +201,16 @@ export default function AddAd() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="tractionType">Traction Type</Label>
-                    <Input
-                      id="tractionType"
-                      name="tractionType"
-                    />
+                    <Select name="tractionType">
+                    <SelectTrigger id="tractionType">
+                      <SelectValue placeholder="Select traction type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="2WD">2WD</SelectItem>
+                      <SelectItem value="4WD">4WD</SelectItem>
+                      <SelectItem value="6WD">6WD</SelectItem>
+                    </SelectContent>
+                  </Select>
                   </div>
                 </div>
               )}
