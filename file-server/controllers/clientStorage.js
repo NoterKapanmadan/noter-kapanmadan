@@ -1,6 +1,8 @@
 
 import fs from 'fs';
+
 import { decodeJwt, verifyJwt } from '../utils/jwt.js';
+import { compressImage } from '../utils/compressImage.js';
 
 
 export const uploadBatch = (req, res) => {
@@ -29,12 +31,18 @@ export const uploadBatch = (req, res) => {
 
         req.files.forEach((file, index) => {
             const suffix = file.originalname.substring(file.originalname.lastIndexOf('.') + 1)
-            const filename = `original.${suffix}`
             try {
-                fs.mkdirSync(`temp/${requestId}/${index}`);
-                fs.writeFileSync(`temp/${requestId}/${index}/${filename}`, file.buffer);
+                const folderPath = `temp/${requestId}/${index}`;
+                fs.mkdirSync(folderPath);
+                fs.writeFileSync(`${folderPath}/original.${suffix}`, file.buffer);
+                
+                
+                // if image compress it and create different versions
+                if(file.mimetype.startsWith("image/")) {
+                    compressImage(file.buffer, folderPath);
+                }
                 // file written successfully
-                filenames.push(filename);
+                filenames.push(file.originalname);
             } catch (err) {
                 console.error(err);
             }

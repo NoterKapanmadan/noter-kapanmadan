@@ -22,7 +22,7 @@ export async function POST(request) {
 
         console.log("save data: ", data);
 
-        return NextResponse.json({path: data.path}, { status: 200 });
+        return NextResponse.json({filePaths: data.filePaths}, { status: 200 });
 
     } catch (err) {
         console.log(err);

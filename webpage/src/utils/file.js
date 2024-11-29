@@ -19,6 +19,6 @@ const result = await fetch(`${SERVER_URL}/files/savePublic`, {
 
 const data = await result.json();
 
-return data.path;
+return data.filePaths;
 
 }

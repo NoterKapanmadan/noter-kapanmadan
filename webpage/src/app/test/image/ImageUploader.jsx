@@ -62,8 +62,8 @@ export default function ImageUploader({ jwt }) {
     }, [selectedFiles])
 
     const savePublic = useCallback(async () => {
-        const path = await saveFilesPublic(jwt);
-        setUploadStatus(`Successfully saved ${path}`);
+        const filePaths = await saveFilesPublic(jwt);
+        setUploadStatus(`Successfully saved ${JSON.stringify(filePaths)}`);
     }
         , [jwt]);
 
