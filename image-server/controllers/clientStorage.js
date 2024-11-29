@@ -1,11 +1,10 @@
 
 import fs from 'fs';
-import { verifyJwt } from '../utils/jwt.js';
-import { decode } from 'punycode';
+import { decodeJwt, verifyJwt } from '../utils/jwt.js';
 
 //image and filename in request
 export const uploadOne = (req, res) => {
-
+    const jwtToken = req.body.jwt;
     try {
 
         if (!verifyJwt(jwtToken)) {
@@ -16,23 +15,24 @@ export const uploadOne = (req, res) => {
             return;
         }
 
-        const requestId = decode(jwtToken).requestId;
+        const requestId = decodeJwt(jwtToken).requestId;
 
-        if (!fs.existsSync("public/")) {
-            fs.mkdirSync("public/");
+        if (!fs.existsSync("temp/")) {
+            fs.mkdirSync("temp/");
         }
 
-        if (!fs.existsSync(`public/${requestId}`)) {
-            fs.rmSync(`public/${requestId}`, { recursive: true });
-            fs.mkdirSync(`public/${requestId}`);
+        if (fs.existsSync(`temp/${requestId}`)) {
+            fs.rmSync(`temp/${requestId}`, { recursive: true });
         }
+
+        fs.mkdirSync(`temp/${requestId}`);
 
 
         const suffix = req.file.originalname.substring(req.file.originalname.lastIndexOf('.') + 1)
         const filename = `0.${suffix}`
 
         try {
-            fs.writeFileSync(`public/${filename}`, req.file.buffer);
+            fs.writeFileSync(`temp/${filename}`, req.file.buffer);
             // file written successfully
         } catch (err) {
             console.error(err);
@@ -40,7 +40,7 @@ export const uploadOne = (req, res) => {
         res.status(200).json({
             status: "Success!",
             filename: filename,
-            path: `/public/${requestId}/${filename}`
+            path: `/temp/${requestId}/${filename}`
         })
     } catch (e) {
         res.status(500).json({
@@ -52,7 +52,7 @@ export const uploadOne = (req, res) => {
 
 
 export const uploadBatch = (req, res) => {
-    const jwtToken = req.headers["jwt"];
+    const jwtToken = req.body.jwt;
     try {
         if (!verifyJwt(jwtToken)) {
             res.status(401).json({
@@ -62,27 +62,28 @@ export const uploadBatch = (req, res) => {
             return;
         }
 
-        const requestId = decode(jwtToken).requestId;
+        const requestId = decodeJwt(jwtToken).requestId;
 
-        if (!fs.existsSync("public/")) {
-            fs.mkdirSync("public/");
+        if (!fs.existsSync("temp/")) {
+            fs.mkdirSync("temp/");
         }
         const filenames = [];
         const paths = [];
 
-        if (!fs.existsSync(`public/${requestId}`)) {
-            fs.rmSync(`public/${requestId}`, { recursive: true });
-            fs.mkdirSync(`public/${requestId}`);
+        if (fs.existsSync(`temp/${requestId}`)) {
+            fs.rmSync(`temp/${requestId}`, { recursive: true });
         }
+
+        fs.mkdirSync(`temp/${requestId}`);
 
         req.files.forEach((file, index) => {
             const suffix = file.originalname.substring(file.originalname.lastIndexOf('.') + 1)
             const filename = `${index}.${suffix}`
             try {
-                fs.writeFileSync(`public/${requestId}/${filename}`, file.buffer);
+                fs.writeFileSync(`temp/${requestId}/${filename}`, file.buffer);
                 // file written successfully
                 filenames.push(filename);
-                paths.push(`/public/${requestId}/${filename}`);
+                paths.push(`/temp/${requestId}/${filename}`);
             } catch (err) {
                 console.error(err);
             }
@@ -107,7 +108,7 @@ export const getImages = (req, res) => {
     try {
         const files = fs.readdirSync(`public/${requestId}`);
         const paths = files.map((filename) => {
-            return `${requestId}/${filename}`;
+            return `/public/${requestId}/${filename}`;
         });
         res.status(200).json({
             status: "Success!",

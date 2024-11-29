@@ -5,10 +5,12 @@ import { getImages, uploadBatch, uploadOne } from '../controllers/clientStorage.
 
 
 const router = express.Router();
-const upload = multer();
+const upload = multer({
+    limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
 
-router.put('/uploadOne', upload.single('image'), uploadOne);
-router.put('/uploadBatch', upload.array('images'), uploadBatch);
-router.get('/getImages', getImages);
+router.post('/uploadOne', upload.single('image'), uploadOne);
+router.post('/uploadBatch', upload.array('images'), uploadBatch);
+router.get('/getImages/:requestId', getImages);
 
 export default router;

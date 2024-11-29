@@ -1,5 +1,6 @@
 # Image server
 public/
+temp/
 
 # Logs
 logs

@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import clientStorage from './routes/clientStorage.js';
 import serverStorage from './routes/serverStorage.js';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -12,6 +13,16 @@ const port = process.env.PORT || 8465
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Init folders
+if (!fs.existsSync("temp/")) {
+  fs.mkdirSync("temp/");
+}
+
+if (!fs.existsSync("public/")) {
+  fs.mkdirSync("public/");
+}
 
 
 const defaultRouter = express.Router();
