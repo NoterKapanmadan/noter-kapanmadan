@@ -15,5 +15,5 @@ services:
     build:
       context: ./webpage
     ports:
-      - "3000:3000"
+      - "8464:3000"
     restart: unless-stopped
