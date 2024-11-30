@@ -20,7 +20,7 @@ export default function AddAd() {
 
   const handleSubmit = (formData) => {
     startTransition(async () => {
-      const response = await fetch(`${SERVER_URL}/add-ad`, {
+      const response = await fetch(`${SERVER_URL}/ad/add-ad`, {
         method: 'POST',
         body: formData,
       })

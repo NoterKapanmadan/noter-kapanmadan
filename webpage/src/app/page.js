@@ -5,6 +5,7 @@ export default async function HomePage() {
   const ads = await fetch(`${SERVER_URL}/ad/get-ads`, {
     method: 'GET',
   })
+  console.log("server ads:", ads);
   //Get images as well
   const results = await ads.json();
   console.log(results);

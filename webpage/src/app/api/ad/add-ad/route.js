@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { query } from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { decrypt } from '@/lib/auth';
+import { uploadFilesServer } from '@/utils/file';
 
 export async function POST(request) {
     try {
@@ -24,29 +25,43 @@ export async function POST(request) {
         //TODO get user ID from session
         const userID = account_id
         //TODO get image from form data
-        //const report = formData.get("report");
-        //const image = formData.get("image");
+        const report = formData.get("report");
+        const images = formData.getAll("images");
+        console.log("images", images);
+
+        const { imageIds } = await uploadFilesServer(images);
+
         let res;
+
+        // Begin transaction
+        await query('BEGIN');
+
+        // Insert into Vehicle table
+        await query(
+            `INSERT INTO Vehicle(vehicle_ID, brand, model, year, km, gear_type, fuel_type)
+            VALUES ($1, $2, $3, $4, $5, $6::gear_type, $7::fuel_type);`,
+            [vehicleID, brand, model, year, km, transmission, fuelType]
+        );
+
+        // Insert into Ad table
+        await query(
+            `INSERT INTO Ad (ad_ID,vehicle_ID, user_ID, title, description, price, location)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [adID, vehicleID, userID, title, description, price, location]
+        );
+
+        // Insert images into Image table
+        await query(
+            `INSERT INTO AdImage (ad_ID, image)
+            VALUES 
+            ${imageIds.map((_, index) => `($1, $${index + 2})`).join(', ')};`,
+            [adID, ...imageIds]
+        );
 
         switch (vehicleType) {
             case "car":
                 const seatCount = formData.get("seatCount");
                 const bodyType = formData.get("bodyType");
-                // Begin transaction
-                await query('BEGIN');
-
-                // Insert into Vehicle table
-                await query(
-                    `INSERT INTO Vehicle(vehicle_ID, brand, model, year, km, gear_type, fuel_type)
-                    VALUES ($1, $2, $3, $4, $5, $6::gear_type, $7::fuel_type);`,
-                    [vehicleID, brand, model, year, km, transmission, fuelType]
-                );
-
-                await query(
-                    `INSERT INTO Ad (ad_ID,vehicle_ID, user_ID, title, description, price, location)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                    [adID, vehicleID, userID, title, description, price, location]
-                );
 
                 // Insert into Car table
                 await query(
@@ -55,28 +70,11 @@ export async function POST(request) {
                     [vehicleID, seatCount, bodyType]
                 );
 
-                // Commit transaction
-                res = await query('COMMIT');
-                console.log('Transaction committed successfully.');
+
                 break;
             case "motorcycle":
                 const engineCapacity = formData.get("engineCapacity");
                 const cylinderCount = formData.get("cylinderCount");
-                // Begin transaction
-                await query('BEGIN');
-
-                // Insert into Vehicle table
-                await query(
-                    `INSERT INTO Vehicle(vehicle_ID, brand, model, year, km, gear_type, fuel_type)
-                    VALUES ($1, $2, $3, $4, $5, $6::gear_type, $7::fuel_type);`,
-                    [vehicleID, brand, model, year, km, transmission, fuelType]
-                );
-
-                await query(
-                    `INSERT INTO Ad (ad_ID,vehicle_ID, user_ID, title, description, price, location)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                    [adID, vehicleID, userID, title, description, price, location]
-                );
 
                 // Insert into Car table
                 await query(
@@ -85,28 +83,11 @@ export async function POST(request) {
                     [vehicleID, engineCapacity, cylinderCount]
                 );
 
-                // Commit transaction
-                res = await query('COMMIT');
-                console.log('Transaction committed successfully.');
+
                 break;
             case "truck":
                 const loadCapacity = formData.get("loadCapacity");
                 const tractionType = formData.get("tractionType");
-                // Begin transaction
-                await query('BEGIN');
-
-                // Insert into Vehicle table
-                await query(
-                    `INSERT INTO Vehicle(vehicle_ID, brand, model, year, km, gear_type, fuel_type)
-                    VALUES ($1, $2, $3, $4, $5, $6::gear_type, $7::fuel_type);`,
-                    [vehicleID, brand, model, year, km, transmission, fuelType]
-                );
-
-                await query(
-                    `INSERT INTO Ad (ad_ID,vehicle_ID, user_ID, title, description, price, location)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                    [adID, vehicleID, userID, title, description, price, location]
-                );
 
                 // Insert into Car table
                 await query(
@@ -115,28 +96,11 @@ export async function POST(request) {
                     [vehicleID, loadCapacity, tractionType]
                 );
 
-                // Commit transaction
-                res = await query('COMMIT');
-                console.log('Transaction committed successfully.');
+
                 break;
             case "van":
                 const roofHeight = formData.get("roofHeight");
                 const bedCapacity = formData.get("bedCapacity");
-                // Begin transaction
-                await query('BEGIN');
-
-                // Insert into Vehicle table
-                await query(
-                    `INSERT INTO Vehicle(vehicle_ID, brand, model, year, km, gear_type, fuel_type)
-                    VALUES ($1, $2, $3, $4, $5, $6::gear_type, $7::fuel_type);`,
-                    [vehicleID, brand, model, year, km, transmission, fuelType]
-                );
-
-                await query(
-                    `INSERT INTO Ad (ad_ID,vehicle_ID, user_ID, title, description, price, location)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-                    [adID, vehicleID, userID, title, description, price, location]
-                );
 
                 // Insert into Car table
                 await query(
@@ -145,13 +109,16 @@ export async function POST(request) {
                     [vehicleID, roofHeight, bedCapacity]
                 );
 
-                // Commit transaction
-                res = await query('COMMIT');
-                console.log('Transaction committed successfully.');
+
                 break;
             default:
                 break;
         }
+
+        // Commit transaction
+        res = await query('COMMIT');
+        console.log('Transaction committed successfully.');
+
         if (res.rowCount === 0) {
             return NextResponse.json({ error: 'Failed to add ad!' }, { status: 400 })
         }
