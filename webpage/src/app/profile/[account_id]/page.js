@@ -13,16 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { notFound } from "next/navigation";
 import { SERVER_URL } from "@/utils/constants";
 import { formatDate } from "@/utils/date";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { updateProfile } from "@/app/actions";
 
 async function fetchUser(account_id) {
   const res = await fetch(`${SERVER_URL}/profile/${account_id}`, {
@@ -43,6 +35,25 @@ async function fetchUser(account_id) {
 export default async function ProfilePage({ params }) {
   const { account_id } = params;
 
+  const handleSubmit = async (formData) => {
+    "use server";
+    const { msg, error } = await updateProfile(formData, account_id);
+
+    /*if (error) {
+      return toast({
+        title: "Something went wrong!",
+        description: error,
+      });
+    }
+
+    if (msg) {
+      return toast({
+        title: "Success!",
+        description: msg,
+      });
+    }*/
+  };
+
   const user = await fetchUser(account_id);
 
   if (!user) {
@@ -62,52 +73,77 @@ export default async function ProfilePage({ params }) {
             <CardTitle className="text-2xl">Profile Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="relative w-32 h-32 rounded-full overflow-hidden border">
-                <Image
-                  src={user.profilePicture || "/placeholder.svg"}
-                  alt="Profile picture"
-                  layout="fill"
-                  objectFit="cover"
+            <form action={handleSubmit}>
+              <div className="flex flex-col items-center space-y-4">
+                <div className="relative w-32 h-32 rounded-full overflow-hidden border">
+                  <Image
+                    src={user.profilePicture || "/placeholder.svg"}
+                    alt="Profile picture"
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+                <Button variant="outline">Change Picture</Button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="forename">Forename</Label>
+                  <Input
+                    name="forename"
+                    id="forename"
+                    defaultValue={user.forename}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="surname">Surname</Label>
+                  <Input
+                    name="surname"
+                    id="surname"
+                    defaultValue={user.surname}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  name="email"
+                  id="email"
+                  type="email"
+                  defaultValue={user.email}
                 />
               </div>
-              <Button variant="outline">Change Picture</Button>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="forename">Forename</Label>
-                <Input id="forename" value={user.forename} readOnly />
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  name="phone_number"
+                  id="phone"
+                  type="tel"
+                  defaultValue={user.phone_number}
+                />
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="surname">Surname</Label>
-                <Input id="surname" value={user.surname} readOnly />
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  name="description"
+                  id="description"
+                  defaultValue={user.description}
+                />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={user.email} readOnly />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" type="tel" value={user.phone_number} readOnly />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea id="description" value={user.description} readOnly />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="registrationDate">Registration Date</Label>
-              <p className="text-sm">{formatDate(user.registration_date)}</p>
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="registrationDate">Registration Date</Label>
+                <p className="text-sm">{formatDate(user.registration_date)}</p>
+              </div>
+              <Button type="submit" className="w-full">
+                Edit Profile
+              </Button>
+            </form>
           </CardContent>
-          <CardFooter>
-            <Button className="w-full">Edit Profile</Button>
-          </CardFooter>
+          <CardFooter></CardFooter>
         </Card>
       </main>
     </div>

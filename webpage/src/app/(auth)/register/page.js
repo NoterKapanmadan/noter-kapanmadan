@@ -1,54 +1,63 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-import { SERVER_URL } from "@/utils/constants"
-import { useToast } from "@/hooks/use-toast"
-import { useTransition } from "react"
-import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Link from "next/link";
+import { SERVER_URL } from "@/utils/constants";
+import { useToast } from "@/hooks/use-toast";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
-  const { toast } = useToast()
-  const [pending, startTransition] = useTransition()
-  const router = useRouter()
+  const { toast } = useToast();
+  const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleSubmit = async (formData) => {
     startTransition(async () => {
       const response = await fetch(`${SERVER_URL}/auth/register`, {
-        method: 'POST',
-        cache: 'no-store',
+        method: "POST",
+        cache: "no-store",
         body: formData,
       });
-  
+
       const { msg, error } = await response.json();
-  
+
       if (error) {
         return toast({
-          title: 'Something went wrong!',
+          title: "Something went wrong!",
           description: error,
         });
       }
-  
+
       if (msg) {
         toast({
-          title: 'Success!',
+          title: "Success!",
           description: msg,
         });
 
-        router.push('/login')
+        router.push("/login");
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Register for NoterKapanmadan.com</CardTitle>
-          <CardDescription>Create your account to start buying and selling vehicles</CardDescription>
+          <CardDescription>
+            Create your account to start buying and selling vehicles
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={handleSubmit}>
@@ -131,5 +140,5 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
