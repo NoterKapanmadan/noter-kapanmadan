@@ -73,7 +73,6 @@ export async function uploadFilesServer(files) {
         )}` );
         const base64ImagesData = await base64Images.json();
 
-
         ads = ads.map((ad) => {
             return {
                 ...ad,

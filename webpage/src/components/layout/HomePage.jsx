@@ -231,7 +231,7 @@ const filteredAds = vehicleAds;
                       width={800}
                       height={500}
                       blurDataURL={ad.base64Image}
-                      placeholder="blur"
+                      placeholder= {ad.base64Image ? "blur": "empty"}
                       className="w-[19rem] h-48 object-cover rounded-lg" />
                       :
                       <div className="w-full h-48 bg-gray-300 rounded-lg" />

@@ -41,4 +41,4 @@ app.listen(port, () => {
   console.log(`File server listening on port ${port}`)
 })
 
-// add also a service worker to non modified images since last 24 hours
+// add also a service worker to non modified requests since last 24 hours
