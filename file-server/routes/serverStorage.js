@@ -4,7 +4,7 @@ import multer from 'multer';
 
 const router = express.Router();
 const upload = multer({
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+    limits: { fileSize: 100 * 1024 * 1024 } // 100MB
 });
 
 //Authentication token middleware
