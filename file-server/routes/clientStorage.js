@@ -5,9 +5,7 @@ import { getBase64, getFiles, uploadBatch } from '../controllers/clientStorage.j
 
 
 const router = express.Router();
-const upload = multer({
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB
-});
+const upload = multer();
 
 router.post('/uploadBatch', upload.array('files'), uploadBatch);
 router.get('/getFiles', getFiles);
