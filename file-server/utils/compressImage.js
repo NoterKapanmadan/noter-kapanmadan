@@ -21,7 +21,7 @@ export async function compressImage(fileBuffer, folderPath) {
     // Image for detail page which keeps original image's aspect ratio
     await sharp(fileBuffer)
         .resize(height > LARGE_RESIZE_HEIGHT ?
-            { height: LARGE_RESIZE_HEIGHT, width: LARGE_RESIZE_HEIGHT * aspectRatio }
+            { height: LARGE_RESIZE_HEIGHT, width: Math.floor(LARGE_RESIZE_HEIGHT * aspectRatio) }
             : { height, width }
         )
         .jpeg({ quality: 90, progressive: true })
@@ -30,7 +30,7 @@ export async function compressImage(fileBuffer, folderPath) {
     // Image for maybe profile picture when is small, aspect ratio according to card size
     await sharp(fileBuffer)
         .resize(height > SMALL_RESIZE_HEIGHT ?
-            { height: SMALL_RESIZE_HEIGHT, width: SMALL_RESIZE_HEIGHT * aspectRatio }
+            { height: SMALL_RESIZE_HEIGHT, width: Math.floor(SMALL_RESIZE_HEIGHT * aspectRatio) }
             : { height, width }
         )
         .toFile(`${folderPath}/small.jpg`)

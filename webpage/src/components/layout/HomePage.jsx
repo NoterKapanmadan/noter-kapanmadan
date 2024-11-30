@@ -12,6 +12,7 @@ import { Calendar } from 'lucide-react'
 import { getRandomCars } from '@/utils/placeholderCar'
 import Link from 'next/link'
 import { logout } from '@/app/actions'
+import { getImageSrc } from '@/utils/file'
 
 // Mock data for vehicle ads
 const vehicleAdss = [
@@ -223,12 +224,18 @@ const filteredAds = vehicleAds;
               {filteredAds.map(ad => (
                 <Card key={ad.id} className="flex flex-col">
                   <CardHeader className="p-3">
-                    <img
-                      src={ad.image}
+                    { ad.images ?
+                      <Image
+                      src={getImageSrc(ad.images[0], 'medium_resized')}
                       alt={ad.title}
-                      width={300}
-                      height={200}
-                      className="w-full h-48 object-cover rounded-lg" />
+                      width={800}
+                      height={500}
+                      blurDataURL={ad.base64Image}
+                      placeholder="blur"
+                      className="w-[19rem] h-48 object-cover rounded-lg" />
+                      :
+                      <div className="w-full h-48 bg-gray-300 rounded-lg" />
+                      }
                   </CardHeader>
                   <CardContent className="flex-grow p-3">
                     <CardTitle className="mb-2">{ad.title}</CardTitle>

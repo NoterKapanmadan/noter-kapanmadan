@@ -1,4 +1,4 @@
-import { SERVER_URL } from "./constants";
+import { FILE_SERVER_URL, JWT_SECRET, SERVER_URL } from "./constants";
 
 export async function getFileUploadToken() {
     const result = await fetch(`${SERVER_URL}/files/requestUploadToken`);
@@ -18,7 +18,68 @@ const result = await fetch(`${SERVER_URL}/files/savePublic`, {
 });
 
 const data = await result.json();
-
 return data.filePaths;
 
 }
+
+
+export async function uploadFilesServer(files) {
+
+    const formData = new FormData();
+    files.forEach(file => formData.append('files', file));
+
+    const response = await fetch(`${FILE_SERVER_URL}/serverStorage/uploadFilesDirectly`, {
+        method: 'POST',
+        headers: {
+            'authentication': JWT_SECRET,
+        },
+        cache: 'no-cache',
+        body: formData
+    });
+    
+    const data = await response.json(); // { filePaths: [string], imageIds: [string] }
+    console.log("data", data);
+    return { filePaths: data.filePaths, imageIds: data.imageIds };
+    
+    }
+
+/**
+ * 
+ * @param {string} imageId String of imageId like '261agd-1a2d-1a2d-1a2d/1'
+ * @param {'high' | 'medium_resized' | 'low'} quality The quality of the image, can be:
+ *  'high' (details page),
+ *  'medium_resized' (listing page),
+ *  or 'low' (very small image for example for profile picture in homepage) 
+ * @returns {string} The URL of the image with the specified quality
+ */
+    export const getImageSrc = (imageId, quality = 'high') => {
+        if (quality === 'high') return `${FILE_SERVER_URL}/public/${imageId}/large.jpg`;
+        else if (quality === 'medium_resized') return `${FILE_SERVER_URL}/public/${imageId}/medium_resized.jpg`;
+        else if (quality === 'low') return `${FILE_SERVER_URL}/public/${imageId}/small.jpg`;
+        else return `${FILE_SERVER_URL}/public/${imageId}/large.jpg`;
+    }
+
+    export const extractImagesFromAds = async (rawAds) => {
+        let ads;
+        ads = rawAds.map((ad) => {
+            return {
+                ...ad,
+                images: ad.images ? ad.images.split(',') : null
+            }
+        });
+
+        const base64Images = await fetch(`${FILE_SERVER_URL}/clientStorage/getBase64?files=${JSON.stringify(
+            ads.map((ad) => ad.images ? ad.images[0] : null)
+        )}` );
+        const base64ImagesData = await base64Images.json();
+
+
+        ads = ads.map((ad) => {
+            return {
+                ...ad,
+                base64Image: ad.images ? base64ImagesData.map[ad.images[0]] : null,
+            }
+        });
+
+        return ads;
+    };

@@ -90,3 +90,33 @@ export const getFiles = (req, res) => {
         })
     }
 }
+
+export const getBase64 = (req, res) => {
+    
+    try {
+        const files = JSON.parse(req.query.files);
+
+        const base64Map = {};
+    
+        files.forEach((filePath) => {
+
+            try {
+            const data = fs.readFileSync(`public/${filePath}/resizedBase64`, 'utf8');
+                base64Map[filePath] = data;
+            } catch (e) {
+                base64Map[filePath] = null;
+            }
+
+        });
+        res.status(200).json({
+            status: "Success!",
+            map: base64Map
+        })
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({
+            status: "Error!",
+            message: e.message
+        })
+    }
+}
