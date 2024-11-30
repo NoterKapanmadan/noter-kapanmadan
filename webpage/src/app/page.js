@@ -4,6 +4,7 @@ import { SERVER_URL } from "@/utils/constants"
 export default async function HomePage() {
   const ads = await fetch(`${SERVER_URL}/ad/get-ads`, {
     method: 'GET',
+    cache: 'no-cache',
   })
   console.log("server ads:", ads);
   //Get images as well
