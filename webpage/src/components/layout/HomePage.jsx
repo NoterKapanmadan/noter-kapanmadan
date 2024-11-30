@@ -222,7 +222,7 @@ const filteredAds = vehicleAds;
           <div className="flex-1">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {filteredAds.map(ad => (
-                <Card key={ad.id} className="flex flex-col">
+                <Card key={ad.ad_id} className="flex flex-col">
                   <CardHeader className="p-3">
                     { ad.images ?
                       <Image
