@@ -4,14 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { decrypt } from '@/lib/auth';
 import { uploadFilesServer } from '@/utils/file';
 
-export const config = {
-    api: {
-        bodyParser: {
-            sizeLimit: '100mb',
-        },
-    },
-};
-
 
 export async function POST(request) {
     try {
