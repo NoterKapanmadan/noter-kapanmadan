@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  file-server:
+    build:
+      context: ./file-server
+    ports:
+      - "8465:8465"
+    volumes:
+      - ./file-server/public:/app/public
+      - ./file-server/temp:/app/temp
+    restart: unless-stopped
+
+  webpage:
+    build:
+      context: ./webpage
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
