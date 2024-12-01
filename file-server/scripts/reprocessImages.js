@@ -6,9 +6,9 @@ function isNumber(value) {
     return !isNaN(value) && value.trim() !== "";
 }
 
-async function reprocessImages() {
-    const requests = fs.readdirSync('public');
+async function reprocessImages(aspectRatio) {
 
+    const requests = fs.readdirSync('public');
 
     for (const request of requests) {
         
@@ -42,11 +42,13 @@ async function reprocessImages() {
             const type = await fileTypeFromBuffer(fileBuffer);
             if(!type || !type.mime.startsWith('image/')) continue;
 
-            await compressImage(fileBuffer, `public/${request}/${imageFolder}`);
+            await compressImage(fileBuffer, `public/${request}/${imageFolder}`, aspectRatio);
         }
     }
 
 
 }
 
-reprocessImages();
+const args = process.argv.slice(2);
+const aspectRatio = args[0];
+reprocessImages(aspectRatio);
