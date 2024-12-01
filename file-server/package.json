@@ -7,13 +7,15 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "file-type": "^19.6.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "sharp": "^0.33.5",
     "uuid": "^11.0.3"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "reprocess": "node scripts/reprocessImages.js"
   },
   "type": "module"
 }
