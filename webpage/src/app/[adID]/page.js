@@ -27,8 +27,12 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { sendHistory } from "@/app/actions";
 
-export default function AdPage() {
+export default async function AdPage({params}) {
+  //send history to db
+  const adID = params.adID
+  sendHistory(adID)
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-primary text-primary-foreground shadow">

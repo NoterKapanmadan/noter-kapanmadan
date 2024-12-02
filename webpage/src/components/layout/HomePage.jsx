@@ -248,7 +248,7 @@ const filteredAds = vehicleAds;
                   </CardContent>
                   <CardFooter className="p-3">
                     <Button className="w-full" asChild>
-                      <Link href={`/ad_id`}>View Details</Link>
+                      <Link href={ad.ad_id}>View Details</Link>
                     </Button>
                   </CardFooter>
                 </Card>
