@@ -71,9 +71,14 @@ const filteredAds = vehicleAds;
             Logout
           </span>
           <h1 className="text-xl font-bold">NoterKapanmadan</h1>
-          <Link href="/add-ad">
-            <Button variant = "primary">create-ad</Button>
-          </Link>
+          <div className="flex space-x-2">
+            <Link href="/recent-ads">
+              <Button variant="primary">recent-visited-ads</Button>
+            </Link>
+            <Link href="/add-ad">
+              <Button variant="primary">create-ad</Button>
+            </Link>
+          </div>
         </div>
       </header>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">

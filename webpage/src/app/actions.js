@@ -24,3 +24,16 @@ export const sendHistory = async (adID) => {
   const { msg, error } = await response.json();
   return { msg, error };
 };
+
+export const getHistory = async () => {
+  const response = await fetch(`${SERVER_URL}/history/get-recent-ads`, {
+    method: 'GET',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  })
+  const res = await response.json();
+  return res;
+};
