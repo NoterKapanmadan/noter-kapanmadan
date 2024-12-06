@@ -56,11 +56,6 @@ export default function TransactionsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-primary text-primary-foreground shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-xl font-bold">NoterKapanmadan</h1>
-        </div>
-      </header>
       <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
         <Card className="mb-6">
           <CardHeader>

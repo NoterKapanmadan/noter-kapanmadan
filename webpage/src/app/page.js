@@ -1,4 +1,4 @@
-import VehicleMarketplace from "@/components/layout/HomePage";
+import Ads from "@/components/layout/Ads";
 import { SERVER_URL } from "@/utils/constants"
 
 export default async function HomePage() {
@@ -6,13 +6,13 @@ export default async function HomePage() {
     method: 'GET',
     cache: 'no-cache',
   })
-  console.log("server ads:", ads);
+  // console.log("server ads:", ads);
   //Get images as well
   const results = await ads.json();
-  console.log(results);
+  // console.log(results);
   return (
     <>
-      <VehicleMarketplace vehicleAds={results} />
+      <Ads vehicleAds={results} />
     </>
   );
 }

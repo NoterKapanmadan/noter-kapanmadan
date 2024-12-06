@@ -18,7 +18,7 @@ export async function GET(request) {
 
         const finalizedAds = await extractImagesFromAds(ads.rows);
     
-        console.log("get ads final:", finalizedAds);
+        // console.log("get ads final:", finalizedAds);
 
         return NextResponse.json(finalizedAds, { status: 200 })
     } catch (err) {

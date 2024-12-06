@@ -7,7 +7,7 @@ export async function POST(request) {
     try {
         const req = await request.json();
         const { account_id } = await decrypt(request.cookies.get("Authorization").value)
-        console.log(req)
+
         //check if user has already seen the ad
         const history = await query(
             `SELECT * FROM visits WHERE ad_id = $1 AND account_id = $2`,

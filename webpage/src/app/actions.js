@@ -1,15 +1,28 @@
 'use server';
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getAuthToken } from "@/lib/auth";
+import { decrypt, getAuthToken } from "@/lib/auth";
 import { SERVER_URL } from "@/utils/constants";
+import { revalidatePath, revalidateTag } from "next/cache";
+
+export const revalidatePathClient = revalidatePath;
+export const revalidateTagClient = revalidateTag;
 
 export const logout = async () => {
   cookies().delete("Authorization");
-  redirect('/login');
+  redirect('/');
 };
 
+export const isAuthenticated = async () => {
+  const token = getAuthToken()
+  const payload = await decrypt(token)
+  const isAuthenticated = payload?.account_id
+
+  return Boolean(payload?.account_id)
+}
+
 export const sendHistory = async (adID) => {
+  if (!isAuthenticated()) return
 
   const response = await fetch(`${SERVER_URL}/history/add-history`, {
     method: 'POST',
