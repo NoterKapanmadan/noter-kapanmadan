@@ -1,7 +1,7 @@
 "use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getAuthToken } from "@/lib/auth";
+import { getAuthToken, decrypt } from "@/lib/auth";
 import { SERVER_URL } from "@/utils/constants";
 
 export const logout = async () => {
@@ -9,7 +9,15 @@ export const logout = async () => {
   redirect("/login");
 };
 
+export const getAccountID = async () => {
+  const token = getAuthToken();
+  const payload = await decrypt(token);
+
+  return payload?.account_id;
+};
+
 export const updateProfile = async (formData, account_id) => {
+  console.log("update profile test");
   const response = await fetch(`${SERVER_URL}/profile/${account_id}`, {
     method: "POST",
     cache: "no-store",

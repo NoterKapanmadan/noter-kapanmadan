@@ -37,11 +37,11 @@ export async function POST(req, context) {
     const { account_id } = await decrypt(
       req.cookies.get("Authorization").value
     );
+
     const formData = await req.formData();
 
     const forename = formData.get("forename");
     const surname = formData.get("surname");
-    const email = formData.get("email").toLowerCase();
     const phone_number = formData.get("phone_number");
     const description = formData.get("description");
 
@@ -49,9 +49,9 @@ export async function POST(req, context) {
 
     await query(
       `UPDATE Account
-      SET forename = $1, surname = $2, email = $3, phone_number = $4
-      WHERE account_id = $5`,
-      [forename, surname, email, phone_number, account_id]
+      SET forename = $1, surname = $2, phone_number = $3
+      WHERE account_id = $4`,
+      [forename, surname, phone_number, account_id]
     );
 
     await query(
@@ -63,12 +63,10 @@ export async function POST(req, context) {
 
     await query("COMMIT");
 
-    if (user.rowCount > 0) {
-      return NextResponse.json(
-        { error: "Email already exists!" },
-        { status: 403 }
-      );
-    }
+    return NextResponse.json(
+      { msg: "Profile is updated successfully!" },
+      { status: 200 }
+    );
   } catch (err) {
     console.log(err);
     query("ROLLBACK");

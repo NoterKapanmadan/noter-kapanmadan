@@ -1,7 +1,5 @@
-const { format } = require("date-fns");
+import { format } from "date-fns";
 
-export async function formatDate(date) {
-  const formattedDate = format(date, "dd/MM/yyyy");
-
-  return formattedDate;
+export function formatDate(date) {
+  return format(date, "dd/MM/yyyy");
 }
