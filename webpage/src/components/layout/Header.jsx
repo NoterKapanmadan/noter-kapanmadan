@@ -13,12 +13,12 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { LogOut, ArrowLeftRight, HandCoins, User } from 'lucide-react';
-import { isAuthenticated, logout } from '@/app/actions';
+import { logout, getCurrentUserInfo } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import AuthLink from '@/components/layout/AuthLink';
 
 export default async function Header() {
-  const isAuth = await isAuthenticated();
+  const currentUser = await getCurrentUserInfo();
 
   return (
     <header className="bg-primary text-primary-foreground shadow">
@@ -28,7 +28,7 @@ export default async function Header() {
             NoterKapanmadan
           </Link>
         </h1>
-        {isAuth ? (
+        {currentUser ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer border-gray-50">
@@ -37,7 +37,7 @@ export default async function Header() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>Hasan Kutluhan Şıpka</DropdownMenuLabel>
+              <DropdownMenuLabel>{`${currentUser.forename} ${currentUser.surname}`}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link href="/profile">

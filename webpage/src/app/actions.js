@@ -16,9 +16,15 @@ export const logout = async () => {
 export const isAuthenticated = async () => {
   const token = getAuthToken()
   const payload = await decrypt(token)
-  const isAuthenticated = payload?.account_id
 
-  return Boolean(payload?.account_id)
+  return !!payload?.account_id
+}
+
+export const getCurrentUserInfo = async () => {
+  const token = getAuthToken()
+  const payload = await decrypt(token)
+
+  return !!payload?.account_id && payload
 }
 
 export const sendHistory = async (adID) => {
