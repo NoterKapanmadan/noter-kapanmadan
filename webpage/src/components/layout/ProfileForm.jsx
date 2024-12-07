@@ -23,7 +23,6 @@ export default function ProfileForm({ user, accountId }) {
   const fileInputRef = useRef(null);
 
   const handleChangePictureClick = () => {
-    // Trigger the hidden file input
     fileInputRef.current.click();
   };
 
@@ -31,7 +30,6 @@ export default function ProfileForm({ user, accountId }) {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      // Generate a preview
       const reader = new FileReader();
       reader.onload = (event) => {
         setPreviewSrc(event.target.result);
@@ -149,7 +147,7 @@ export default function ProfileForm({ user, accountId }) {
           </div>
 
           <Button type="submit" disabled={pending} className="w-full">
-            Edit Profile
+            Update Profile
           </Button>
         </form>
       </CardContent>
