@@ -1,6 +1,7 @@
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { decrypt } from "@/lib/auth";
+import { uploadFilesServer, getImageSrc } from "@/utils/file";
 
 export async function GET(req, context) {
   const account_id = context.params.account_id;
@@ -21,8 +22,15 @@ export async function GET(req, context) {
     if (user.rowCount === 0) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+    const imageId = user.rows[0].profile_image;
+    const imageSrc = await getImageSrc(imageId);
 
-    return NextResponse.json(user.rows[0], { status: 200 });
+    const userData = {
+      ...user.rows[0],
+      profilePicture: imageSrc,
+    };
+
+    return NextResponse.json(userData, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -44,6 +52,12 @@ export async function POST(req, context) {
     const surname = formData.get("surname");
     const phone_number = formData.get("phone_number");
     const description = formData.get("description");
+    const profilePicture = formData.get("profilePicture");
+
+    const profilePictureArr = [profilePicture];
+
+    const { imageIds } = await uploadFilesServer(profilePictureArr);
+    const imageId = imageIds[0];
 
     await query("BEGIN");
 
@@ -56,9 +70,9 @@ export async function POST(req, context) {
 
     await query(
       `UPDATE Users
-      SET description = $1
+      SET description = $1, profile_image = $3
       WHERE account_id = $2`,
-      [description, account_id]
+      [description, account_id, imageId]
     );
 
     await query("COMMIT");

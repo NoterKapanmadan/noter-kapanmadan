@@ -8,16 +8,44 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { formatDate } from "@/utils/date";
-import { useTransition } from "react";
+import { useTransition, useState, useRef } from "react";
 import { SERVER_URL } from "@/utils/constants";
 
 export default function ProfileForm({ user, accountId }) {
   const { toast } = useToast();
 
   const [pending, startTransition] = useTransition();
+  const [previewSrc, setPreviewSrc] = useState(
+    user.profilePicture || "/placeholder.svg"
+  );
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const fileInputRef = useRef(null);
+
+  const handleChangePictureClick = () => {
+    // Trigger the hidden file input
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      // Generate a preview
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPreviewSrc(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (formData) => {
     startTransition(async () => {
+      if (selectedFile) {
+        formData.append("profilePicture", selectedFile);
+      }
+
       const res = await fetch(`${SERVER_URL}/profile/${accountId}`, {
         method: "POST",
         body: formData,
@@ -50,13 +78,23 @@ export default function ProfileForm({ user, accountId }) {
         <div className="flex flex-col items-center space-y-4">
           <div className="relative w-32 h-32 rounded-full overflow-hidden border">
             <Image
-              src={user.profilePicture || "/placeholder.svg"}
+              src={previewSrc}
               alt="Profile picture"
               layout="fill"
               objectFit="cover"
             />
           </div>
-          <Button variant="outline">Change Picture</Button>
+          <Button variant="outline" onClick={handleChangePictureClick}>
+            Change Picture
+          </Button>
+          <input
+            type="file"
+            name="profilePicture"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+          />
         </div>
         <form action={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
