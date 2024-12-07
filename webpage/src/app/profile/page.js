@@ -63,7 +63,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-center space-y-4">
               <div className="relative w-32 h-32 rounded-full overflow-hidden border">
                 <Image
-                  src="/avatar.avif"
+                  src="/avatar.png"
                   alt="Profile picture"
                   layout="fill"
                   objectFit="cover"

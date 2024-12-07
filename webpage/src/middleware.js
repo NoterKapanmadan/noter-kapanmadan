@@ -45,6 +45,7 @@ export default async function middleware(req) {
   if (!isAuthenticated) {
     return NextResponse.redirect(new URL("/", req.url));
   }
+
 }
 
 export const config = {

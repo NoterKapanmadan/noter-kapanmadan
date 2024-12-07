@@ -32,7 +32,7 @@ export default async function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer border-gray-50">
-                <AvatarImage src="avatar.avif" />
+                <AvatarImage src="/avatar.png" />
                 <AvatarFallback>HKŞ</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>

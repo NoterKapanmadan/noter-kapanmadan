@@ -112,7 +112,7 @@ export default async function AdPage({ params }) {
               </CardHeader>
               <CardContent>
                 <Avatar className="border">
-                  <AvatarImage src="/avatar.avif" />
+                  <AvatarImage src="/avatar.png" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <p className="font-semibold">John Doe</p>

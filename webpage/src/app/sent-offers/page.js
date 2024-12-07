@@ -87,7 +87,7 @@ export default function Component() {
                     <div className="flex gap-2 items-center">
                       <Avatar className="border">
                         <AvatarImage
-                          src="/avatar.avif"
+                          src="/avatar.png"
                           alt={offer.sellerName}
                         />
                         <AvatarFallback>

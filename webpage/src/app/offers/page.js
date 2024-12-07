@@ -43,7 +43,7 @@ export default function Component() {
               <CardContent>
                 <div className="flex items-center space-x-2 mb-4">
                   <Avatar className="border">
-                    <AvatarImage src="/avatar.avif" />
+                    <AvatarImage src="/avatar.png" />
                     <AvatarFallback>{offer.buyerName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                   </Avatar>
                   <div>

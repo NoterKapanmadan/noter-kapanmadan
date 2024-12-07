@@ -27,10 +27,10 @@ export async function POST(request) {
                 [req.adID, account_id]
             );
         }
-        return NextResponse.json({ message: 'History added' });
+        return NextResponse.json({ message: 'History added' }, { status: 200 });
     }
     catch (e) {
         console.error(e);
-        return NextResponse.json({ message: 'Error adding history' });
+        return NextResponse.json({ message: 'Error adding history' }, { status: 500 });
     }
 }
