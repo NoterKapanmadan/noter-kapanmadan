@@ -10,13 +10,14 @@ import { useToast } from "@/hooks/use-toast";
 import { formatDate } from "@/utils/date";
 import { useTransition, useState, useRef } from "react";
 import { SERVER_URL } from "@/utils/constants";
+import { revalidateTagClient } from "@/app/actions";
 
 export default function ProfileForm({ user, accountId }) {
   const { toast } = useToast();
 
   const [pending, startTransition] = useTransition();
   const [previewSrc, setPreviewSrc] = useState(
-    user.profilePicture || "/placeholder.svg"
+    user.profilePicture || "/avatar.png"
   );
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -63,6 +64,8 @@ export default function ProfileForm({ user, accountId }) {
           title: "Success!",
           description: msg,
         });
+
+        revalidateTagClient("currentUser");
       }
     });
   };

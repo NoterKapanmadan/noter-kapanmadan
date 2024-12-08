@@ -12,7 +12,7 @@ export async function GET(req, context) {
 
   try {
     const user = await query(
-      `SELECT forename, surname, email, phone_number, registration_date, description, profile_image
+      `SELECT Account.account_id, forename, surname, email, phone_number, registration_date, description, profile_image
         FROM Users
         JOIN Account ON Account.account_ID = Users.account_ID
         WHERE Users.account_ID = $1`,
@@ -27,7 +27,7 @@ export async function GET(req, context) {
 
     const userData = {
       ...user.rows[0],
-      profilePicture: imageSrc,
+      profilePicture: imageId && imageSrc,
     };
 
     return NextResponse.json(userData, { status: 200 });

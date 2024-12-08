@@ -10,7 +10,7 @@ export const revalidateTagClient = revalidateTag;
 
 export const logout = async () => {
   cookies().delete("Authorization");
-  redirect('/');
+  redirect("/");
 };
 
 export const getAccountID = async () => {
@@ -36,33 +36,42 @@ export const updateProfile = async (formData, account_id) => {
   return { msg, error };
 };
 
-
 export const isAuthenticated = async () => {
-  const token = getAuthToken()
-  const payload = await decrypt(token)
+  const token = getAuthToken();
+  const payload = await decrypt(token);
 
-  return !!payload?.account_id
-}
+  return !!payload?.account_id;
+};
 
 export const getCurrentUserInfo = async () => {
-  const token = getAuthToken()
-  const payload = await decrypt(token)
+  const token = getAuthToken();
+  const payload = await decrypt(token);
 
-  return !!payload?.account_id && payload
-}
+  if (!!payload?.account_id) {
+    const res = await fetch(`${SERVER_URL}/profile/${payload.account_id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 600, tags: ["currentUser"] },
+    });
+    const user = await res.json();
+    return user;
+  }
+
+  return null;
+};
 
 export const sendHistory = async (adID) => {
-  if (!isAuthenticated()) return
+  if (!isAuthenticated()) return;
 
   const response = await fetch(`${SERVER_URL}/history/add-history`, {
-    method: 'POST',
-    cache: 'no-cache',
+    method: "POST",
+    cache: "no-cache",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Cookie: "Authorization=" + getAuthToken(),
     },
     body: JSON.stringify({ adID }),
-  })
+  });
 
   const { msg, error } = await response.json();
   return { msg, error };
@@ -70,13 +79,13 @@ export const sendHistory = async (adID) => {
 
 export const getHistory = async () => {
   const response = await fetch(`${SERVER_URL}/history/get-recent-ads`, {
-    method: 'GET',
-    cache: 'no-cache',
+    method: "GET",
+    cache: "no-cache",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Cookie: "Authorization=" + getAuthToken(),
     },
-  })
+  });
   const res = await response.json();
   return res;
 };

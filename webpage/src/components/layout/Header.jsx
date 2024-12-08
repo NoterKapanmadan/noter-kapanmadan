@@ -15,7 +15,6 @@ import AuthLink from "@/components/layout/AuthLink";
 
 export default async function Header() {
   const currentUser = await getCurrentUserInfo();
-  console.log(currentUser);
 
   return (
     <header className="bg-primary text-primary-foreground shadow">
@@ -27,8 +26,9 @@ export default async function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer border-gray-50">
-                <AvatarImage src="/avatar.png" />
-                <AvatarFallback>HKŞ</AvatarFallback>
+                <AvatarImage
+                  src={currentUser.profilePicture || "/avatar.png"}
+                />
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
