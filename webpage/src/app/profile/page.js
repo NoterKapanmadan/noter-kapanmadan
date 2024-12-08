@@ -54,11 +54,6 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-primary text-primary-foreground shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-xl font-bold">NoterKapanmadan</h1>
-        </div>
-      </header>
       <main className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
         <Card>
           <CardHeader>
@@ -68,7 +63,7 @@ export default function ProfilePage() {
             <div className="flex flex-col items-center space-y-4">
               <div className="relative w-32 h-32 rounded-full overflow-hidden border">
                 <Image
-                  src="/avatar.avif"
+                  src="/avatar.png"
                   alt="Profile picture"
                   layout="fill"
                   objectFit="cover"

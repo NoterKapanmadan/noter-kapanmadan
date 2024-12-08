@@ -37,15 +37,17 @@ export default async function middleware(req) {
   const payload = await decrypt(token);
   const isAuthenticated = payload?.account_id;
 
-  const authRoutes = ["/login", "/register"];
+  const adRoutePattern = /^\/ad\/[^/]+$/;
+  const isUnprotectedRoute = adRoutePattern.test(pathname) || pathname === '/'
 
-  const isAuthRoute = authRoutes.some((route) => route === pathname);
-
-  if (isAuthenticated && isAuthRoute) {
-    return NextResponse.redirect(new URL("/", req.url));
-  } else if (!isAuthenticated && !isAuthRoute) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (isUnprotectedRoute) {
+    return NextResponse.next()
   }
+
+  if (!isAuthenticated) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
 }
 
 export const config = {

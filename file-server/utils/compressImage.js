@@ -5,7 +5,9 @@ const SMALL_RESIZE_HEIGHT = 100;
 const MEDIUM_RESIZE_HEIGHT = 500;
 const LARGE_RESIZE_HEIGHT = 1440;
 
-export async function compressImage(fileBuffer, folderPath) {
+const ASPECT_RATIO = 1.6;
+
+export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = ASPECT_RATIO) {
 
     const image = sharp(fileBuffer);
     const metadata = await image.metadata();
@@ -14,7 +16,7 @@ export async function compressImage(fileBuffer, folderPath) {
 
     // Image for listing page, aspect ratio according to card size
     await sharp(fileBuffer)
-        .resize({ height: MEDIUM_RESIZE_HEIGHT, width: Math.floor(MEDIUM_RESIZE_HEIGHT * 1.6), fit: 'contain' })
+        .resize({ height: MEDIUM_RESIZE_HEIGHT, width: Math.floor(MEDIUM_RESIZE_HEIGHT * resizeAspectRatio), fit: 'contain' })
         .jpeg({ quality: 70, progressive: true })
         .toFile(`${folderPath}/medium_resized.jpg`)
 
@@ -37,7 +39,7 @@ export async function compressImage(fileBuffer, folderPath) {
 
     // Base64 image for blur for medium image
     const resizedBase64 = await sharp(fileBuffer)
-        .resize({height: 10, width: 16, fit: 'contain'})
+        .resize({height: 10, width: Math.floor(10 * resizeAspectRatio), fit: 'contain'})
         .jpeg({ quality: 30 })
         .toBuffer()
 

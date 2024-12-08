@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
+import Header from "@/components/layout/Header";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -15,13 +16,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html className="h-full" lang="en">
       <body
         className={cn(
-          "min-h-screen font-sans",
+          "h-full font-sans",
           fontSans.variable,
         )}
-      >
+      > 
+        <Header />
         {children}
         <Toaster />
       </body>

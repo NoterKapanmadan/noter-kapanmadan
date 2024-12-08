@@ -28,11 +28,6 @@ export default function Component() {
 
   return (
     <div className="bg-gray-50 min-h-screen">    
-    <header className="bg-primary text-primary-foreground shadow">
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-xl font-bold">NoterKapanmadan</h1>
-      </div>
-    </header>
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-3 text-center">Your Car Offers</h1>
       {offers.length === 0 ? (
@@ -48,7 +43,7 @@ export default function Component() {
               <CardContent>
                 <div className="flex items-center space-x-2 mb-4">
                   <Avatar className="border">
-                    <AvatarImage src="/avatar.avif" />
+                    <AvatarImage src="/avatar.png" />
                     <AvatarFallback>{offer.buyerName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                   </Avatar>
                   <div>

@@ -9,25 +9,11 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Calendar } from 'lucide-react'
-import { getRandomCars } from '@/utils/placeholderCar'
 import Link from 'next/link'
-import { logout } from '@/app/actions'
 import { getImageSrc } from '@/utils/file'
+import AuthLink from '@/components/layout/AuthLink'
 
-// Mock data for vehicle ads
-const vehicleAdss = [
-  { id: 1, title: "2018 Toyota Camry", price: 15000, date: "2023-06-01", location: "New York", brand: "Toyota", model: "Camry", year: 2018, km: 50000, gear_type: "Automatic", fuel_type: "Gasoline" },
-  { id: 2, title: "2020 Honda Civic", price: 18000, date: "2023-06-02", location: "Los Angeles", brand: "Honda", model: "Civic", year: 2020, km: 30000, gear_type: "Manual", fuel_type: "Gasoline" },
-  { id: 3, title: "2019 Ford F-150", price: 25000, date: "2023-06-03", location: "Chicago", brand: "Ford", model: "F-150", year: 2019, km: 40000, gear_type: "Automatic", fuel_type: "Diesel" },
-  { id: 4, title: "2017 Tesla Model 3", price: 35000, date: "2023-06-04", location: "San Francisco", brand: "Tesla", model: "Model 3", year: 2017, km: 60000, gear_type: "Automatic", fuel_type: "Electric" },
-  { id: 5, title: "2021 BMW 3 Series", price: 40000, date: "2023-06-05", location: "Miami", brand: "BMW", model: "3 Series", year: 2021, km: 20000, gear_type: "Automatic", fuel_type: "Gasoline" },
-  { id: 6, title: "2016 Chevrolet Malibu", price: 12000, date: "2023-06-06", location: "Houston", brand: "Chevrolet", model: "Malibu", year: 2016, km: 70000, gear_type: "Automatic", fuel_type: "Gasoline" },
-]
-
-
-
-
-export default function VehicleMarketplace({vehicleAds}) {
+export default function Ads({ vehicleAds }) {
   const [filters, setFilters] = useState({
     title: '',
     minPrice: 0,
@@ -57,31 +43,20 @@ export default function VehicleMarketplace({vehicleAds}) {
     (filters.gear_type ? ad.gear_type === filters.gear_type : true) &&
     (filters.fuel_type ? ad.fuel_type === filters.fuel_type : true))
 */
-const filteredAds = vehicleAds;
+  const filteredAds = vehicleAds;
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-primary text-primary-foreground shadow">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <span
-            className="text-red-400 cursor-pointer"
-            onClick={async () => {
-              await logout();
-            }}
-          >
-            Logout
-          </span>
-          <h1 className="text-xl font-bold">NoterKapanmadan</h1>
-          <Link href="/add-ad">
-            <Button variant = "primary">create-ad</Button>
-          </Link>
-        </div>
-      </header>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Sidebar with filters */}
           <div className="w-full lg:w-80 space-y-4">
             <Card>
-              <CardHeader>
+              <CardHeader className="flex flex-col gap-4">
+                <AuthLink href="/add-ad">
+                 <Button className="w-full">
+                    Create Add
+                  </Button>
+                </AuthLink>
                 <CardTitle>Filters</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -248,7 +223,7 @@ const filteredAds = vehicleAds;
                   </CardContent>
                   <CardFooter className="p-3">
                     <Button className="w-full" asChild>
-                      <Link href={`/ad_id`}>View Details</Link>
+                      <Link href={`/ad/${ad.ad_id}`}>View Details</Link>
                     </Button>
                   </CardFooter>
                 </Card>
