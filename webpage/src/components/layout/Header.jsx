@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,27 +6,22 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import { LogOut, ArrowLeftRight, HandCoins, User } from 'lucide-react';
-import { logout, getCurrentUserInfo } from '@/app/actions';
-import { Button } from '@/components/ui/button';
-import AuthLink from '@/components/layout/AuthLink';
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogOut, ArrowLeftRight, HandCoins, User } from "lucide-react";
+import { logout, getCurrentUserInfo } from "@/app/actions";
+import { Button } from "@/components/ui/button";
+import AuthLink from "@/components/layout/AuthLink";
 
 export default async function Header() {
   const currentUser = await getCurrentUserInfo();
+  console.log(currentUser);
 
   return (
     <header className="bg-primary text-primary-foreground shadow">
       <div className="container py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <h1 className="text-xl font-bold">
-          <Link href="/">
-            NoterKapanmadan
-          </Link>
+          <Link href="/">NoterKapanmadan</Link>
         </h1>
         {currentUser ? (
           <DropdownMenu>
@@ -40,7 +35,7 @@ export default async function Header() {
               <DropdownMenuLabel>{`${currentUser.forename} ${currentUser.surname}`}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/profile">
+                <Link href={`/profile/${currentUser.account_id}`}>
                   <User size={16} />
                   Profile
                 </Link>
@@ -78,5 +73,5 @@ export default async function Header() {
         )}
       </div>
     </header>
-  )
+  );
 }
