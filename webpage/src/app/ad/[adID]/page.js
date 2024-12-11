@@ -41,7 +41,7 @@ export default async function AdPage({ params }) {
   });
   const ad = await res.json();
 
-  console.log(ad);
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -105,24 +105,27 @@ export default async function AdPage({ params }) {
           <div className="lg:w-1/3 space-y-3">
             {/* Seller Information */}
             <Card>
-              <CardHeader>
-                <CardTitle>Seller Information</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Avatar className="border">
-                  <AvatarImage src="/avatar.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <p className="font-semibold">John Doe</p>
-                <p>{ad.location || "Location Not Specified"}</p>
-                <p>
-                  Listed on:{" "}
-                  {ad.date
-                    ? new Date(ad.date).toLocaleDateString()
-                    : "Date Not Available"}
-                </p>
-              </CardContent>
-            </Card>
+            <CardHeader>
+              <CardTitle>Seller Information</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Avatar className="border">
+                <AvatarImage src={ad.profilePhotoData} alt={`${ad.name} ${ad.surname}`} />
+                <AvatarFallback>
+                  {ad.name && ad.surname ? ad.name[0] + ad.surname[0] : "N/A"}
+                </AvatarFallback>
+              </Avatar>
+              <p className="font-semibold">{ad.name + " " + ad.surname}</p>
+              <p>{ad.location || "Location Not Specified"}</p>
+              <p>
+                Listed on:{" "}
+                {ad.date
+                  ? new Date(ad.date).toLocaleDateString()
+                  : "Date Not Available"}
+              </p>
+            </CardContent>
+          </Card>
+
             {/* Actions */}
             {isAuth && (
               <Card>
