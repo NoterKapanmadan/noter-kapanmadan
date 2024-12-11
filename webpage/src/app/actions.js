@@ -89,3 +89,16 @@ export const getHistory = async () => {
   const res = await response.json();
   return res;
 };
+
+export const getBalance = async () => {
+  const response = await fetch(`${SERVER_URL}/balance/set-balance`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+  const res = await response.json();
+  return res;
+}
