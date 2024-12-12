@@ -29,6 +29,8 @@ import AdImageCarousel  from "@/components/layout/AdImageCarousel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { sendHistory, isAuthenticated } from "@/app/actions";
 import { SERVER_URL } from "@/utils/constants";
+import Link from "next/link";
+import { capitalizeFirstLetters } from "@/utils/helpers";
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
@@ -41,7 +43,7 @@ export default async function AdPage({ params }) {
   });
   const ad = await res.json();
 
-
+  console.log(ad);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,11 +73,11 @@ export default async function AdPage({ params }) {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <p className="text-sm font-semibold">Brand</p>
-                    <p>{ad.brand || "Not Specified"}</p>
+                    <p>{capitalizeFirstLetters(ad.brand) || "Not Specified"}</p>
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Model</p>
-                    <p>{ad.model || "Not Specified"}</p>
+                    <p>{capitalizeFirstLetters(ad.model) || "Not Specified"}</p>
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Year</p>
@@ -87,12 +89,65 @@ export default async function AdPage({ params }) {
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Transmission</p>
-                    <p>{ad.gear_type || "Not Specified"}</p>
+                    <p>{capitalizeFirstLetters(ad.gear_type) || "Not Specified"}</p>
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Fuel Type</p>
-                    <p>{ad.fuel_type || "Not Specified"}</p>
+                    <p>{capitalizeFirstLetters(ad.fuel_type) || "Not Specified"}</p>
                   </div>
+
+                  {/* Vehicle-Specific Details */}
+                  {ad.vehicleDetails && ad.vehicleDetails.type === "Car" && (
+                    <>
+                      <div>
+                        <p className="text-sm font-semibold">Seat Count</p>
+                        <p>{ad.vehicleDetails.seatCount || "Not Specified"}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">Body Type</p>
+                        <p>{capitalizeFirstLetters(ad.vehicleDetails.bodyType) || "Not Specified"}</p>
+                      </div>
+                    </>
+                  )}
+
+                  {ad.vehicleDetails && ad.vehicleDetails.type === "Truck" && (
+                    <>
+                      <div>
+                        <p className="text-sm font-semibold">Load Capacity</p>
+                        <p>{ad.vehicleDetails.loadCapacity ? `${ad.vehicleDetails.loadCapacity} kg` : "Not Specified"}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">Traction Type</p>
+                        <p>{capitalizeFirstLetters(ad.vehicleDetails.tractionType) || "Not Specified"}</p>
+                      </div>
+                    </>
+                  )}
+
+                  {ad.vehicleDetails && ad.vehicleDetails.type === "Van" && (
+                    <>
+                      <div>
+                        <p className="text-sm font-semibold">Roof Height</p>
+                        <p>{ad.vehicleDetails.roofHeight ? `${ad.vehicleDetails.roofHeight} m` : "Not Specified"}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">Bed Capacity</p>
+                        <p>{ad.vehicleDetails.bedCapacity || "Not Specified"}</p>
+                      </div>
+                    </>
+                  )}
+
+                  {ad.vehicleDetails && ad.vehicleDetails.type === "Motorcycle" && (
+                    <>
+                      <div>
+                        <p className="text-sm font-semibold">Engine Capacity</p>
+                        <p>{ad.vehicleDetails.engineCapacity ? `${ad.vehicleDetails.engineCapacity} cc` : "Not Specified"}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">Cylinder Count</p>
+                        <p>{ad.vehicleDetails.cylinderCount || "Not Specified"}</p>
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div className="mt-4">
                   <p className="text-sm font-semibold">Description</p>
@@ -100,6 +155,8 @@ export default async function AdPage({ params }) {
                 </div>
               </CardContent>
             </Card>
+
+
           </div>
           {/* Right Content */}
           <div className="lg:w-1/3 space-y-3">
@@ -109,6 +166,7 @@ export default async function AdPage({ params }) {
               <CardTitle>Seller Information</CardTitle>
             </CardHeader>
             <CardContent>
+              <Link href={`/profile/${ad.account_id}`}>
               <Avatar className="border">
                 <AvatarImage src={ad.profilePhotoData} alt={`${ad.name} ${ad.surname}`} />
                 <AvatarFallback>
@@ -123,6 +181,7 @@ export default async function AdPage({ params }) {
                   ? new Date(ad.date).toLocaleDateString()
                   : "Date Not Available"}
               </p>
+              </Link>
             </CardContent>
           </Card>
 

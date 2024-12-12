@@ -54,7 +54,7 @@ export default function Ads({ vehicleAds }) {
               <CardHeader className="flex flex-col gap-4">
                 <AuthLink href="/add-ad">
                  <Button className="w-full">
-                    Create Add
+                    Create Ad
                   </Button>
                 </AuthLink>
                 <CardTitle>Filters</CardTitle>
