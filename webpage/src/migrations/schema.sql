@@ -174,9 +174,9 @@ CREATE TABLE IF NOT EXISTS Bid (
 -- Create Transaction table
 CREATE TABLE IF NOT EXISTS Transaction (
     transaction_ID UUID PRIMARY KEY UNIQUE NOT NULL,
-    bid_ID UUID NOT NULL,
-    sender_ID UUID NOT NULL,
-    receiver_ID UUID NOT NULL,
+    bid_ID UUID,
+    sender_ID UUID,
+    receiver_ID UUID,
     amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (bid_ID) REFERENCES Bid(bid_ID),
     FOREIGN KEY (sender_ID) REFERENCES Users(account_ID),
