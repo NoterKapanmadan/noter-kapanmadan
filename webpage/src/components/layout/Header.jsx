@@ -42,6 +42,12 @@ export default async function Header() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
+                <Link href="/balance">
+                  <Landmark size={16} />
+                  Balance
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href="/offers">
                   <HandCoins size={16} />
                   Offers
@@ -51,12 +57,6 @@ export default async function Header() {
                 <Link href="/transactions">
                   <ArrowLeftRight size={16} />
                   Transactions
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/balance">
-                  <Landmark size={16} />
-                  Balance
                 </Link>
               </DropdownMenuItem>
               <form action={logout}>

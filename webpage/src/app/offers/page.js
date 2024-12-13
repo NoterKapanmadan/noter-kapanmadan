@@ -2,13 +2,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Check, X } from 'lucide-react'
+import { Check, CircleDollarSign, X } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getOffers } from "@/app/actions"
-
-const offers = [
-  { id: '1', carModel: '2018 Toyota Camry', offeredPrice: 15000, buyerName: 'HTalks', buyerAvatar: '/placeholder.svg?height=40&width=40' },
-]
+import OfferActions from "@/components/layout/OfferActions"
 
 export default async function OffersPage() {
   const offers = await getOffers()
@@ -45,22 +42,27 @@ export default async function OffersPage() {
                     </div>
                     <div className="flex justify-between">
                       <div className="flex flex-col justify-center items-start gap-2">
-                        <Badge variant="secondary">Ad Price</Badge>
-                        <p className="text-lg font-bold">${offer.price}</p>
-                      </div>
-                      <div className="flex flex-col justify-center items-start gap-2">
                         <Badge variant="secondary">Offered Price</Badge>
                         <p className="text-lg font-bold">${offer.amount}</p>
                       </div>
+                      <div className="flex flex-col justify-center items-start gap-2">
+                        <Badge variant="secondary">Ad Price</Badge>
+                        <p className="text-lg font-bold">${offer.price}</p>
+                      </div>
                     </div>
                   </CardContent>
-                  <CardFooter className="flex justify-between *:w-full gap-2">
-                    <Button>
-                      <Check className="mr-2 h-4 w-4" /> Accept
-                    </Button>
-                    <Button  variant="outline">
-                      <X className="mr-2 h-4 w-4" /> Reject
-                    </Button>
+                  <CardFooter>
+                    {offer.status === "pending" ? (
+                      <OfferActions bid_ID={offer.bid_id} />
+                    ) : offer.status === "accepted" ? (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge className="bg-green-600 text-white hover:bg-green-700">Accepted</Badge>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge variant="destructive">Rejected</Badge>
+                      </div>
+                    )}
                   </CardFooter>
                 </Card>
               )) : (
@@ -90,22 +92,35 @@ export default async function OffersPage() {
                     </div>
                     <div className="flex justify-between">
                       <div className="flex flex-col justify-center items-start gap-2">
+                        {offer.status === "accepted" ? (
+                          <Badge className="bg-green-600 text-white hover:bg-green-700">Accepted Price</Badge>
+                        ) : (
+                          <Badge variant="secondary">Offered Price</Badge>
+                        )}
+                        <p className="text-lg font-bold">${offer.amount}</p>
+                      </div>
+                      <div className="flex flex-col justify-center items-start gap-2">
                         <Badge variant="secondary">Ad Price</Badge>
                         <p className="text-lg font-bold">${offer.price}</p>
                       </div>
-                      <div className="flex flex-col justify-center items-start gap-2">
-                        <Badge variant="secondary">Offered Price</Badge>
-                        <p className="text-lg font-bold">${offer.amount}</p>
-                      </div>
                     </div>
                   </CardContent>
-                  <CardFooter className="flex justify-between *:w-full gap-2">
-                    <Button>
-                      <Check className="mr-2 h-4 w-4" /> Accept
-                    </Button>
-                    <Button  variant="outline">
-                      <X className="mr-2 h-4 w-4" /> Reject
-                    </Button>
+                  <CardFooter>
+                    {offer.status === "pending" ? (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge>Waiting</Badge>
+                      </div>
+                    ) : offer.status === "accepted" ? (
+                      <div className="flex w-full justify-between items-end gap-2">
+                        <Button className="w-full">
+                          <CircleDollarSign className="mr-2 h-4 w-4" /> Complete Payment
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge variant="destructive">Rejected</Badge>
+                      </div>
+                    )}
                   </CardFooter>
                 </Card>
               )) : (

@@ -25,55 +25,58 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SERVER_URL } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { revalidateTagClient } from "@/app/actions";
 
 export default function AdActions({ ad_ID }) {
   const { toast } = useToast();
   const [offerOpen, setOfferOpen] = useState(false);
+  const [pending, startTransition] = useTransition()
 
   const handleSendOffer = async (formData) => {
-    const offerAmount = formData.get("offer");
+    startTransition(async () => {
+      const offerAmount = formData.get("offer");
 
-    if (!offerAmount || offerAmount <= 0) {
-      toast({
-        title: "Invalid Input",
-        description: "Please enter a valid offer amount.",
-      });
-      return;
-    }
-
-    try {
-      const res = await fetch(`${SERVER_URL}/offer/send-offer`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ad_id: ad_ID, amount: offerAmount }),
-      });
-
-      if (res.ok) {
+      if (!offerAmount || offerAmount <= 0) {
         toast({
-          title: "Offer Sent",
-          description: "Your offer was sent successfully.",
+          title: "Invalid Input",
+          description: "Please enter a valid offer amount.",
         });
-        
-        revalidateTagClient("offers");
-        setOfferOpen(false);
-      } else {
-        const error = await res.json();
+        return;
+      }
+
+      try {
+        const res = await fetch(`${SERVER_URL}/offer/send-offer`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ad_id: ad_ID, amount: offerAmount }),
+        });
+
+        if (res.ok) {
+          toast({
+            title: "Offer Sent",
+            description: "Your offer was sent successfully.",
+          });
+
+          revalidateTagClient("offers");
+          setOfferOpen(false);
+        } else {
+          const error = await res.json();
+          toast({
+            title: "Error",
+            description: `Failed to send offer: ${error.message}`,
+          });
+        }
+      } catch (error) {
+        console.error("Error sending offer:", error);
         toast({
-          title: "Error",
-          description: `Failed to send offer: ${error.message}`,
+          title: "Unexpected Error",
+          description: "An unexpected error occurred. Please try again.",
         });
       }
-    } catch (error) {
-      console.error("Error sending offer:", error);
-      toast({
-        title: "Unexpected Error",
-        description: "An unexpected error occurred. Please try again.",
-      });
-    }
+    })
   };
 
   return (
@@ -102,9 +105,9 @@ export default function AdActions({ ad_ID }) {
             </DialogHeader>
             <form action={handleSendOffer}>
               <div className="grid gap-3 py-4">
-                <div className="grid grid-cols-4 items-center gap-3">
+                <div className="flex flex-col items-start gap-3">
                   <Label htmlFor="offer" className="text-right">
-                    Offer Amount
+                    Amount
                   </Label>
                   <Input
                     id="offer"
@@ -117,7 +120,7 @@ export default function AdActions({ ad_ID }) {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Send Offer</Button>
+                <Button type="submit" disabled={pending}>Send Offer</Button>
               </DialogFooter>
             </form>
           </DialogContent>
