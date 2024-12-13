@@ -174,10 +174,11 @@ CREATE TABLE IF NOT EXISTS Bid (
 -- Create Transaction table
 CREATE TABLE IF NOT EXISTS Transaction (
     transaction_ID UUID PRIMARY KEY UNIQUE NOT NULL,
-    bid_ID UUID NOT NULL,
-    sender_ID UUID NOT NULL,
-    receiver_ID UUID NOT NULL,
+    bid_ID UUID,
+    sender_ID UUID,
+    receiver_ID UUID,
     amount DECIMAL(10, 2) NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (bid_ID) REFERENCES Bid(bid_ID),
     FOREIGN KEY (sender_ID) REFERENCES Users(account_ID),
     FOREIGN KEY (receiver_ID) REFERENCES Users(account_ID)
@@ -213,4 +214,25 @@ CREATE TABLE IF NOT EXISTS Favorites (
     FOREIGN KEY (ad_ID) REFERENCES Ad(ad_ID),
     FOREIGN KEY (account_ID) REFERENCES Users(account_ID)
 );
+
+
+-- Create function for updating balance
+CREATE OR REPLACE FUNCTION update_balance_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Users
+    SET balance = balance + NEW.amount
+    WHERE account_ID = NEW.receiver_ID;
+    UPDATE Users
+    SET balance = balance - NEW.amount
+    WHERE account_ID = NEW.sender_ID;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger for updating balance
+CREATE OR REPLACE TRIGGER update_balance AFTER INSERT ON Transaction
+REFERENCING NEW TABLE AS new_table
+FOR EACH ROW
+EXECUTE FUNCTION update_balance_function();
 
