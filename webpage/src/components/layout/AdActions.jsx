@@ -24,16 +24,22 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SERVER_URL } from "@/utils/constants";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { revalidateTagClient } from "@/app/actions";
 
 export default function AdActions({ ad_ID }) {
-  const handleSendOffer = async (e) => {
-    e.preventDefault();
+  const { toast } = useToast();
+  const [offerOpen, setOfferOpen] = useState(false);
 
-    const formData = new FormData(e.target);
+  const handleSendOffer = async (formData) => {
     const offerAmount = formData.get("offer");
 
     if (!offerAmount || offerAmount <= 0) {
-      alert("Please enter a valid offer amount.");
+      toast({
+        title: "Invalid Input",
+        description: "Please enter a valid offer amount.",
+      });
       return;
     }
 
@@ -47,14 +53,29 @@ export default function AdActions({ ad_ID }) {
       });
 
       if (res.ok) {
-        alert("Offer sent successfully.");
+        toast({
+          title: "Offer Sent",
+          description: "Your offer was sent successfully.",
+        });
+        setOfferOpen(false);
+        revalidateTagClient("currentUser");
       } else {
         const error = await res.json();
-        alert(`Failed to send offer: ${error.message}`);
+        toast({
+          title: "Error",
+          description: `Failed to send offer: ${error.message}`,
+        });
+
+        
+
       }
     } catch (error) {
       console.error("Error sending offer:", error);
-      alert("An unexpected error occurred. Please try again.");
+      toast({
+        title: "Unexpected Error",
+        description: "An unexpected error occurred. Please try again.",
+      });
+      
     }
   };
 
@@ -68,7 +89,7 @@ export default function AdActions({ ad_ID }) {
           <MessageCircle className={`mr-2 h-4 w-4`} />
           Send Message
         </Button>
-        <Dialog>
+        <Dialog open={offerOpen} onOpenChange={setOfferOpen}>
           <DialogTrigger asChild>
             <Button className="w-full">
               <HandCoins className={`mr-2 h-4 w-4`} />
@@ -82,7 +103,7 @@ export default function AdActions({ ad_ID }) {
                 Enter your offer amount below. The offer will be sent to the seller.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSendOffer}>
+            <form action={handleSendOffer}>
               <div className="grid gap-3 py-4">
                 <div className="grid grid-cols-4 items-center gap-3">
                   <Label htmlFor="offer" className="text-right">
