@@ -24,6 +24,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import AdImageCarousel  from "@/components/layout/AdImageCarousel";
+import AdActions from "@/components/layout/AdActions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { sendHistory, isAuthenticated } from "@/app/actions";
 import { SERVER_URL } from "@/utils/constants";
@@ -197,57 +198,7 @@ export default async function AdPage({ params }) {
 
             {/* Actions */}
             {isAuth && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button className="w-full" variant="secondary">
-                    <MessageCircle className={`mr-2 h-4 w-4`} />
-                    Send Message
-                  </Button>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button className="w-full">
-                        <HandCoins className={`mr-2 h-4 w-4`} />
-                        Make an Offer
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Make an Offer</DialogTitle>
-                        <DialogDescription>
-                          Enter your offer amount below. The offer will be sent
-                          to the seller.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <form>
-                        <div className="grid gap-3 py-4">
-                          <div className="grid grid-cols-4 items-center gap-3">
-                            <Label htmlFor="offer" className="text-right">
-                              Offer Amount
-                            </Label>
-                            <Input
-                              id="offer"
-                              type="number"
-                              className="col-span-3"
-                              placeholder="Enter your offer"
-                              required
-                            />
-                          </div>
-                        </div>
-                        <DialogFooter>
-                          <Button type="submit">Send Offer</Button>
-                        </DialogFooter>
-                      </form>
-                    </DialogContent>
-                  </Dialog>
-                  <Button variant="outline" className="w-full">
-                    <Heart className={`mr-2 h-4 w-4`} />
-                    Add to Favorites
-                  </Button>
-                </CardContent>
-              </Card>
+              <AdActions ad_ID= {ad_ID}/>
             )}
           </div>
         </div>

@@ -27,8 +27,9 @@ export async function POST(req) {
         // Check if the user is making an offer on their own ad
         const userCheckQuery = `SELECT user_ID FROM Ad WHERE ad_ID = $1`;
         const userCheckResult = await query(userCheckQuery, [ad_id]);
+        
 
-        if (userCheckResult.rows[0].user_ID === account_id) {
+        if (userCheckResult.rows[0].user_id === account_id) {
             return NextResponse.json({ message: 'Cannot send an offer to your own ad' }, { status: 400 });
         }
 
