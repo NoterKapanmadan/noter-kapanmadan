@@ -43,22 +43,10 @@ export default function Ads({ ads, initialFilters, totalPages }) {
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const formData = new FormData(e.target)
-    const newFilters = {
-      title: formData.get('title') || '',
-      minPrice: Number(formData.get('minPrice')) || 0,
-      maxPrice: Number(formData.get('maxPrice')) || 50000,
-      date: formData.get('date') || '',
-      location: formData.get('location') || '',
-      brand: formData.get('brand') || '',
-      model: formData.get('model') || '',
-      minYear: Number(formData.get('minYear')) || 2000,
-      maxYear: Number(formData.get('maxYear')) || 2023,
-      maxKm: Number(formData.get('maxKm')) || 100000,
-      gear_type: formData.get('gear_type') || '',
-      fuel_type: formData.get('fuel_type') || '',
+  const handleSubmit = (formData) => {
+    const newFilters = {}
+    for (const pair of formData) {
+      newFilters[pair[0]] = pair[1];
     }
 
     updateFilter(newFilters)
@@ -96,7 +84,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                 </AuthLink>
                 <CardTitle>Filters</CardTitle>
               </CardHeader>
-              <form onSubmit={handleSubmit}>
+              <form action={handleSubmit}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="title">Title</Label>
@@ -111,6 +99,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                     <div className="flex items-center space-x-2">
                       <Input
                         type="number"
+                        min="0"
                         name="minPrice"
                         defaultValue={filters.minPrice}
                         className="w-20"
@@ -118,6 +107,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                       <span>-</span>
                       <Input
                         type="number"
+                        min="0"
                         name="maxPrice"
                         defaultValue={filters.maxPrice}
                         className="w-20"
@@ -168,6 +158,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                     <div className="flex items-center space-x-2">
                       <Input
                         type="number"
+                        min="0"
                         name="minYear"
                         defaultValue={filters.minYear}
                         className="w-20"
@@ -175,6 +166,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                       <span>-</span>
                       <Input
                         type="number"
+                        min="0"
                         name="maxYear"
                         defaultValue={filters.maxYear}
                         className="w-20"
@@ -187,7 +179,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                       type="range"
                       name="maxKm"
                       min="0"
-                      max="200000"
+                      max="500000"
                       step="1000"
                       defaultValue={filters.maxKm}
                       className="w-full"

@@ -5,15 +5,15 @@ import { getAuthToken } from "@/lib/auth";
 export default async function HomePage({ searchParams }) {
   const {
     title = '',
-    minPrice = '0',
-    maxPrice = '50000',
+    minPrice = '',
+    maxPrice = '',
     date = '',
     location = '',
     brand = '',
     model = '',
-    minYear = '2000',
-    maxYear = '2023',
-    maxKm = '100000',
+    minYear = '',
+    maxYear = '',
+    maxKm = '',
     gear_type = '',
     fuel_type = '',
     page = '1'
@@ -21,23 +21,32 @@ export default async function HomePage({ searchParams }) {
 
   const filters = {
     title,
-    minPrice: Number(minPrice),
-    maxPrice: Number(maxPrice),
+    minPrice,
+    maxPrice,
     date,
     location,
     brand,
     model,
-    minYear: Number(minYear),
-    maxYear: Number(maxYear),
-    maxKm: Number(maxKm),
+    minYear,
+    maxYear,
+    maxKm,
     gear_type,
     fuel_type,
-    page: Number(page)
+    page
   }
 
-  const queryParams = new URLSearchParams(searchParams)
+  const filteredFilters = {};
+  
+  for (const key of Object.keys(filters)) {
+    console.log(key)
+    if (filters[key]) {
+      filteredFilters[key] = filters[key]
+    }
+  }
+  
+  const queryParams = new URLSearchParams(filteredFilters)
 
-  const { vehicleAds, totalPages } = await fetch(`${SERVER_URL}/ad/get-ads?${queryParams}`, {
+  const res = await fetch(`${SERVER_URL}/ad/get-ads?${queryParams}`, {
     method: "GET",
     cache: "no-cache",
     headers: {
@@ -46,9 +55,13 @@ export default async function HomePage({ searchParams }) {
     },
   });
 
+  const {vehicleAds, totalPages} = await res.json()
+
+  // console.log("vehicleAds: ", vehicleAds, totalPages)
+
   return (
-      <Ads
-      ads={vehicleAds || []}
+    <Ads
+      ads={vehicleAds}
       initialFilters={filters}
       totalPages={totalPages}
     />
