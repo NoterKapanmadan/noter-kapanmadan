@@ -8,7 +8,7 @@ export async function GET(request) {
     const { account_id } = await decrypt(request.cookies.get("Authorization").value)
 
     const incomingOffersQuery = `
-      SELECT b.*, a.title, a.price, a.location, acc.email AS bidder_email, acc.forename AS bidder_forename, acc.surname AS bidder_surname, u.profile_image AS profile_image
+      SELECT b.*, a.title, a.price, acc.account_ID as bidder_id, acc.email AS bidder_email, acc.forename AS bidder_forename, acc.surname AS bidder_surname, u.profile_image AS profile_image
       FROM Bid b
       JOIN Ad a ON b.ad_ID = a.ad_ID
       JOIN Account acc ON b.user_ID = acc.account_ID
@@ -18,7 +18,7 @@ export async function GET(request) {
     `;
 
     const sentOffersQuery = `
-      SELECT b.*, a.title, a.price, a.location, acc.email AS owner_email, acc.forename AS owner_forename, acc.surname AS owner_surname, u.profile_image AS profile_image
+      SELECT b.*, a.title, a.price, acc.account_ID as owner_id, a.location, acc.email AS owner_email, acc.forename AS owner_forename, acc.surname AS owner_surname, u.profile_image AS profile_image
       FROM Bid b
       JOIN Ad a ON b.ad_ID = a.ad_ID
       JOIN Account acc ON a.user_ID = acc.account_ID

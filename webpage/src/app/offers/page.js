@@ -6,6 +6,8 @@ import { Check, CircleDollarSign, X } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getOffers } from "@/app/actions"
 import OfferActions from "@/components/layout/OfferActions"
+import Link from "next/link"
+import CompletePayment from "@/components/layout/CompletePayment"
 
 export default async function OffersPage() {
   const offers = await getOffers()
@@ -29,7 +31,7 @@ export default async function OffersPage() {
                     <CardDescription>Offer from {`${offer.bidder_forename} ${offer.bidder_surname}`}</CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1">
-                    <div className="flex items-center space-x-2 mb-4">
+                    <Link href={`/profile/${offer.bidder_id}`} className="flex items-center space-x-2 mb-4">
                       <Avatar className="border">
                         <AvatarImage 
                           className="object-cover"
@@ -39,7 +41,7 @@ export default async function OffersPage() {
                       <div>
                         <p className="text-sm font-medium">{`${offer.bidder_forename} ${offer.bidder_surname}`}</p>
                       </div>
-                    </div>
+                    </Link>
                     <div className="flex justify-between">
                       <div className="flex flex-col justify-center items-start gap-2">
                         <Badge variant="secondary">Offered Price</Badge>
@@ -58,9 +60,13 @@ export default async function OffersPage() {
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge className="bg-green-600 text-white hover:bg-green-700">Accepted</Badge>
                       </div>
-                    ) : (
+                    ) : offer.status === "rejected" ? (
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge variant="destructive">Rejected</Badge>
+                      </div>
+                    ) : offer.status === "completed" && (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge>Completed</Badge>
                       </div>
                     )}
                   </CardFooter>
@@ -79,7 +85,7 @@ export default async function OffersPage() {
                     <CardDescription>Offer from {`${offer.owner_forename} ${offer.owner_surname}`}</CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1">
-                    <div className="flex items-center space-x-2 mb-4">
+                    <Link href={`/profile/${offer.owner_id}`} className="flex items-center space-x-2 mb-4">
                       <Avatar className="border">
                         <AvatarImage 
                           className="object-cover"
@@ -89,14 +95,10 @@ export default async function OffersPage() {
                       <div>
                         <p className="text-sm font-medium">{`${offer.owner_forename} ${offer.owner_surname}`}</p>
                       </div>
-                    </div>
+                    </Link>
                     <div className="flex justify-between">
                       <div className="flex flex-col justify-center items-start gap-2">
-                        {offer.status === "accepted" ? (
-                          <Badge className="bg-green-600 text-white hover:bg-green-700">Accepted Price</Badge>
-                        ) : (
-                          <Badge variant="secondary">Offered Price</Badge>
-                        )}
+                        <Badge variant="secondary">Offered Price</Badge>
                         <p className="text-lg font-bold">${offer.amount}</p>
                       </div>
                       <div className="flex flex-col justify-center items-start gap-2">
@@ -111,14 +113,14 @@ export default async function OffersPage() {
                         <Badge>Waiting</Badge>
                       </div>
                     ) : offer.status === "accepted" ? (
-                      <div className="flex w-full justify-between items-end gap-2">
-                        <Button className="w-full">
-                          <CircleDollarSign className="mr-2 h-4 w-4" /> Complete Payment
-                        </Button>
-                      </div>
-                    ) : (
+                      <CompletePayment bid_ID={offer.bid_id} />
+                    ) : offer.status === "rejected" ? (
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge variant="destructive">Rejected</Badge>
+                      </div>
+                    ) : offer.status === "completed" && (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge>Completed</Badge>
                       </div>
                     )}
                   </CardFooter>

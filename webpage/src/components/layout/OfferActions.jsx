@@ -1,5 +1,5 @@
 "use client"
-import { Check, CircleDollarSign, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { revalidateTagClient } from '@/app/actions'
 import { useToast } from '@/hooks/use-toast'
@@ -20,13 +20,15 @@ export default function OfferActions({ bid_ID }) {
         },
         body: JSON.stringify({ bid_ID, action: 'accept' }),
       });
-    
+      
+      const { message } = await response.json();
+
       if (response.ok) {
         revalidateTagClient("offers")
       } else {
         toast({
           title: 'Something went wrong!',
-          description: response.message,
+          description: message,
         });
       }
     })
