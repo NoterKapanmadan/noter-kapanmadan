@@ -38,7 +38,6 @@ export default async function HomePage({ searchParams }) {
   const filteredFilters = {};
   
   for (const key of Object.keys(filters)) {
-    console.log(key)
     if (filters[key]) {
       filteredFilters[key] = filters[key]
     }

@@ -192,18 +192,18 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                     <Label htmlFor="gear_type">Gear Type</Label>
                     <select name="gear_type" id="gear_type" defaultValue={filters.gear_type || ''} className="w-full border rounded p-2">
                       <option value="">Any</option>
-                      <option value="Automatic">Automatic</option>
-                      <option value="Manual">Manual</option>
+                      <option value="automatic">Automatic</option>
+                      <option value="manual">Manual</option>
                     </select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="fuel_type">Fuel Type</Label>
                     <select name="fuel_type" id="fuel_type" defaultValue={filters.fuel_type || ''} className="w-full border rounded p-2">
                       <option value="">Any</option>
-                      <option value="Gasoline">Gasoline</option>
-                      <option value="Diesel">Diesel</option>
-                      <option value="Electric">Electric</option>
-                      <option value="Hybrid">Hybrid</option>
+                      <option value="petrol">Petrol</option>
+                      <option value="diesel">Diesel</option>
+                      <option value="electric">Electric</option>
+                      <option value="hybrid">Hybrid</option>
                     </select>
                   </div>
                 </CardContent>
