@@ -11,7 +11,6 @@ import CompletePayment from "@/components/layout/CompletePayment"
 
 export default async function OffersPage() {
   const offers = await getOffers()
-  console.log(offers)
 
   return (
     <div className="bg-gray-50 min-h-screen">    
