@@ -82,3 +82,23 @@ export async function uploadFilesServer(files) {
 
         return ads;
     };
+
+    export const extractImagesFromAd = async (rawAd) => {
+        let ad;
+        ad = {
+            ...rawAd,
+            images: rawAd.images ? rawAd.images.split(',') : null
+        };
+
+        const base64Images = await fetch(`${FILE_SERVER_URL}/clientStorage/getBase64?files=${JSON.stringify(
+            ad.images ? ad.images : null
+        )}` );
+        const base64ImagesData = await base64Images.json();
+
+        ad = {
+            ...ad,
+            base64Images: ad.images ? ad.images.map((image) => base64ImagesData.map[image]) : null,
+        };
+
+        return ad;
+    }
