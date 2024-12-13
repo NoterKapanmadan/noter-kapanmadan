@@ -89,3 +89,14 @@ export const getHistory = async () => {
   const res = await response.json();
   return res;
 };
+
+export const getFilteredAds = async (filters) => {
+  const response = await fetch(`${SERVER_URL}/history/get-recent-ads`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+}

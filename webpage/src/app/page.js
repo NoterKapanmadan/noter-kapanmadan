@@ -1,18 +1,54 @@
 import Ads from "@/components/layout/Ads";
 import { SERVER_URL } from "@/utils/constants"
+import { getAuthToken } from "@/lib/auth";
 
-export default async function HomePage() {
-  const ads = await fetch(`${SERVER_URL}/ad/get-ads`, {
-    method: 'GET',
-    cache: 'no-cache',
-  })
-  // console.log("server ads:", ads);
-  //Get images as well
-  const results = await ads.json();
-  // console.log(results);
+export default async function HomePage({ searchParams }) {
+  const {
+    title = '',
+    minPrice = '0',
+    maxPrice = '50000',
+    date = '',
+    location = '',
+    brand = '',
+    model = '',
+    minYear = '2000',
+    maxYear = '2023',
+    maxKm = '100000',
+    gear_type = '',
+    fuel_type = '',
+    page = '1'
+  } = searchParams
+
+  const filters = {
+    title,
+    minPrice: Number(minPrice),
+    maxPrice: Number(maxPrice),
+    date,
+    location,
+    brand,
+    model,
+    minYear: Number(minYear),
+    maxYear: Number(maxYear),
+    maxKm: Number(maxKm),
+    gear_type,
+    fuel_type,
+    page: Number(page)
+  }
+
+  const { vehicleAds, totalPages } = await fetch(`${SERVER_URL}/ad/add-ad`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+
   return (
-    <>
-      <Ads vehicleAds={results} />
-    </>
+      <Ads
+      ads={vehicleAds || []}
+      initialFilters={filters}
+      totalPages={totalPages}
+    />
   );
 }
