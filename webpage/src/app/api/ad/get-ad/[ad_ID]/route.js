@@ -118,7 +118,7 @@ export async function GET(req, context) {
             vehicleDetails: specificDetails,
         };
 
-        console.log(adData)
+        //console.log(adData)
 
         return NextResponse.json(adData, { status: 200 });
     } catch (err) {

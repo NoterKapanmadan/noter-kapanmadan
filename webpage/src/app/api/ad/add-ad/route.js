@@ -34,7 +34,7 @@ export async function POST(request) {
         //TODO get image from form data
         const report = formData.get("report");
         const images = formData.getAll("images");
-        console.log("images", images);
+        // console.log("images", images);
 
         const { imageIds } = await uploadFilesServer(images);
 
