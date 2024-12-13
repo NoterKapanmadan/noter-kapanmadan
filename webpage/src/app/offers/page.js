@@ -1,72 +1,120 @@
-'use client'
-
-import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Check, X } from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getOffers } from "@/app/actions"
 
-export default function Component() {
-  const [offers, setOffers] = useState([
-    { id: '1', carModel: '2018 Toyota Camry', offeredPrice: 15000, buyerName: 'HTalks', buyerAvatar: '/placeholder.svg?height=40&width=40' },
-    { id: '2', carModel: '2019 Honda Civic', offeredPrice: 16500, buyerName: 'Enis Kirazoğlu', buyerAvatar: '/placeholder.svg?height=40&width=40' },
-    { id: '3', carModel: '2020 Ford Mustang', offeredPrice: 28000, buyerName: 'Fırat Sobutay', buyerAvatar: '/placeholder.svg?height=40&width=40' },
-  ])
+const offers = [
+  { id: '1', carModel: '2018 Toyota Camry', offeredPrice: 15000, buyerName: 'HTalks', buyerAvatar: '/placeholder.svg?height=40&width=40' },
+]
 
-  const handleAccept = (id) => {
-    setOffers(offers.filter(offer => offer.id !== id))
-    // Here you would typically make an API call to update the offer status
-    console.log(`Offer ${id} accepted`)
-  }
-
-  const handleReject = (id) => {
-    setOffers(offers.filter(offer => offer.id !== id))
-    // Here you would typically make an API call to update the offer status
-    console.log(`Offer ${id} rejected`)
-  }
+export default async function OffersPage() {
+  const offers = await getOffers()
+  console.log(offers)
 
   return (
     <div className="bg-gray-50 min-h-screen">    
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-3 text-center">Your Car Offers</h1>
-      {offers.length === 0 ? (
-        <p className="text-center text-gray-500">No offers available at the moment.</p>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {offers.map((offer) => (
-            <Card key={offer.id}>
-              <CardHeader>
-                <CardTitle>{offer.carModel}</CardTitle>
-                <CardDescription>Offer from {offer.buyerName}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 mb-4">
-                  <Avatar className="border">
-                    <AvatarImage src="/avatar.png" />
-                    <AvatarFallback>{offer.buyerName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">{offer.buyerName}</p>
-                  </div>
-                </div>
-                <Badge variant="secondary" className="mb-2">Offered Price</Badge>
-                <p className="text-2xl font-bold">${offer.offeredPrice}</p>
-              </CardContent>
-              <CardFooter className="flex justify-between *:w-full gap-2">
-                <Button onClick={() => handleAccept(offer.id)} className="w-[45%]">
-                  <Check className="mr-2 h-4 w-4" /> Accept
-                </Button>
-                <Button onClick={() => handleReject(offer.id)} variant="outline" className="w-[45%]">
-                  <X className="mr-2 h-4 w-4" /> Reject
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      )}
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-3 text-center">Offers</h1>
+        <Tabs defaultValue="incoming-offers" className="flex flex-col items-center">
+          <TabsList className="bg-gray-200">
+            <TabsTrigger value="incoming-offers">Incoming Offers</TabsTrigger>
+            <TabsTrigger value="sent-offers">Sent Offers</TabsTrigger>
+          </TabsList>
+          <TabsContent value="incoming-offers" className="w-full">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {offers.incomingOffers.length > 0 ? offers.incomingOffers.map((offer) => (
+                <Card className="flex flex-col" key={offer.bid_id}>
+                  <CardHeader>
+                    <CardTitle>{offer.title}</CardTitle>
+                    <CardDescription>Offer from {`${offer.bidder_forename} ${offer.bidder_surname}`}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="flex items-center space-x-2 mb-4">
+                      <Avatar className="border">
+                        <AvatarImage 
+                          className="object-cover"
+                          src={offer.bidder_profile_photo || "/avatar.png"}  
+                        />
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">{`${offer.bidder_forename} ${offer.bidder_surname}`}</p>
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="flex flex-col justify-center items-start gap-2">
+                        <Badge variant="secondary">Ad Price</Badge>
+                        <p className="text-lg font-bold">${offer.price}</p>
+                      </div>
+                      <div className="flex flex-col justify-center items-start gap-2">
+                        <Badge variant="secondary">Offered Price</Badge>
+                        <p className="text-lg font-bold">${offer.amount}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-between *:w-full gap-2">
+                    <Button>
+                      <Check className="mr-2 h-4 w-4" /> Accept
+                    </Button>
+                    <Button  variant="outline">
+                      <X className="mr-2 h-4 w-4" /> Reject
+                    </Button>
+                  </CardFooter>
+                </Card>
+              )) : (
+                <p className="text-gray-600">No incoming offers</p>
+              )}
+            </div>
+          </TabsContent>
+          <TabsContent value="sent-offers" className="w-full">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {offers.sentOffers.length > 0 ? offers.sentOffers.map((offer) => (
+                <Card className="flex flex-col" key={offer.bid_id}>
+                  <CardHeader>
+                    <CardTitle>{offer.title}</CardTitle>
+                    <CardDescription>Offer from {`${offer.owner_forename} ${offer.owner_surname}`}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="flex items-center space-x-2 mb-4">
+                      <Avatar className="border">
+                        <AvatarImage 
+                          className="object-cover"
+                          src={offer.owner_profile_photo || "/avatar.png"}  
+                        />
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium">{`${offer.owner_forename} ${offer.owner_surname}`}</p>
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="flex flex-col justify-center items-start gap-2">
+                        <Badge variant="secondary">Ad Price</Badge>
+                        <p className="text-lg font-bold">${offer.price}</p>
+                      </div>
+                      <div className="flex flex-col justify-center items-start gap-2">
+                        <Badge variant="secondary">Offered Price</Badge>
+                        <p className="text-lg font-bold">${offer.amount}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-between *:w-full gap-2">
+                    <Button>
+                      <Check className="mr-2 h-4 w-4" /> Accept
+                    </Button>
+                    <Button  variant="outline">
+                      <X className="mr-2 h-4 w-4" /> Reject
+                    </Button>
+                  </CardFooter>
+                </Card>
+              )) : (
+                <p className="text-gray-600">No sent offers</p>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
-    </div>
-
   )
 }

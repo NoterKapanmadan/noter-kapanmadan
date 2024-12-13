@@ -21,7 +21,6 @@ export const getAccountID = async () => {
 };
 
 export const updateProfile = async (formData, account_id) => {
-  console.log("update profile test");
   const response = await fetch(`${SERVER_URL}/profile/${account_id}`, {
     method: "POST",
     cache: "no-store",
@@ -102,6 +101,7 @@ export const getBalance = async () => {
   const res = await response.json();
   return res;
 }
+
 export const getTransactions = async () => {
   const response = await fetch(`${SERVER_URL}/transaction/get-transactions`, {
     method: "GET",
@@ -111,6 +111,20 @@ export const getTransactions = async () => {
       Cookie: "Authorization=" + getAuthToken(),
     },
   });
+  const res = await response.json();
+  return res;
+}
+
+export const getOffers = async () => {
+  const response = await fetch(`${SERVER_URL}/offer/get-offers`, {
+    method: "GET",
+    next: { revalidate: 60, tags: ["offers"] },
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+
   const res = await response.json();
   return res;
 }

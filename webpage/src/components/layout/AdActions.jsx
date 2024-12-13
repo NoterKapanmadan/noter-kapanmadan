@@ -57,17 +57,15 @@ export default function AdActions({ ad_ID }) {
           title: "Offer Sent",
           description: "Your offer was sent successfully.",
         });
-        setOfferOpen(false);
+        
         revalidateTagClient("offers");
+        setOfferOpen(false);
       } else {
         const error = await res.json();
         toast({
           title: "Error",
           description: `Failed to send offer: ${error.message}`,
         });
-
-        
-
       }
     } catch (error) {
       console.error("Error sending offer:", error);
@@ -75,7 +73,6 @@ export default function AdActions({ ad_ID }) {
         title: "Unexpected Error",
         description: "An unexpected error occurred. Please try again.",
       });
-      
     }
   };
 
