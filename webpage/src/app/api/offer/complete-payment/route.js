@@ -58,6 +58,9 @@ export async function POST(req) {
         // Update the bid status to 'completed'
         await query('UPDATE Bid SET status = $1 WHERE bid_ID = $2', ['completed', bid_ID]);
 
+        // Update the ads status to 'sold'
+        await query('UPDATE Ad SET status = $1 WHERE ad_ID = $2', ['sold', bidDetails.ad_id]);
+
         return NextResponse.json({ message: 'Payment completed successfully' });
     } catch (e) {
         console.error(e);
