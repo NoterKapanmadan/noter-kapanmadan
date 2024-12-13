@@ -169,7 +169,7 @@ export default async function AdPage({ params }) {
 
           </div>
           {/* Right Content */}
-          <div className="lg:w-1/3 space-y-3">
+          <div className="lg:w-1/3 space-y-4">
             {/* Seller Information */}
             <Card>
             <CardHeader>

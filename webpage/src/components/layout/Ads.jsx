@@ -12,6 +12,7 @@ import { Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { getImageSrc } from '@/utils/file'
 import AuthLink from '@/components/layout/AuthLink'
+import { formatDate } from '@/utils/date'
 
 export default function Ads({ vehicleAds }) {
   const [filters, setFilters] = useState({
@@ -216,7 +217,8 @@ export default function Ads({ vehicleAds }) {
                     <CardTitle className="mb-2">{ad.title}</CardTitle>
                     <div className="space-y-1">
                       <p className="text-2xl font-bold text-primary">${ad.price}</p>
-                      <p className="text-sm text-muted-foreground">{ad.location} - {ad.date}</p>
+                      <p className="text-sm text-muted-foreground">{formatDate(ad.date)}</p>
+                      <p className="text-sm text-muted-foreground">{ad.location}</p>
                       <p className="text-sm">{ad.year} - {ad.km} km</p>
                       <p className="text-sm">{ad.gear_type} - {ad.fuel_type}</p>
                     </div>

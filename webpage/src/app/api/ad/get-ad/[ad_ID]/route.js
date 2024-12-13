@@ -114,9 +114,11 @@ export async function GET(req, context) {
 
         const adData = {
             ...finalizedAd,
-            profilePhotoData: imageSrc ? imageSrc : null,
+            profilePhotoData: profilePhoto ? imageSrc : null,
             vehicleDetails: specificDetails,
         };
+
+        console.log(adData)
 
         return NextResponse.json(adData, { status: 200 });
     } catch (err) {
