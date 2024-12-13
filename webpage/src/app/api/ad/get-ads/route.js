@@ -4,6 +4,8 @@ import { FILE_SERVER_URL } from '@/utils/constants';
 import { extractImagesFromAds } from '@/utils/file';
 
 export async function GET(request) {
+    const url = new URL(request.url);
+    console.log("denem", url.searchParams);
     try {
         const ads = await query(
             `SELECT Ad.ad_ID, title, description, price, location, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type,

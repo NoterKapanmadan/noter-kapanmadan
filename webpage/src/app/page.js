@@ -35,7 +35,9 @@ export default async function HomePage({ searchParams }) {
     page: Number(page)
   }
 
-  const { vehicleAds, totalPages } = await fetch(`${SERVER_URL}/ad/add-ad`, {
+  const queryParams = new URLSearchParams(searchParams)
+
+  const { vehicleAds, totalPages } = await fetch(`${SERVER_URL}/ad/get-ads?${queryParams}`, {
     method: "GET",
     cache: "no-cache",
     headers: {

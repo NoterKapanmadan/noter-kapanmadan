@@ -24,7 +24,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
         params.set(key, String(value))
       }
     })
-    router.push(`/?${params.toString()}`)
+    router.replace(`/?${params.toString()}`)
   }
 
   const updateFilter = (updatedFields) => {
