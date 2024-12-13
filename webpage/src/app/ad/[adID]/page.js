@@ -148,7 +148,20 @@ export default async function AdPage({ params }) {
                       </div>
                     </>
                   )}
+                  <div className="">
+                  <p className="text-sm font-semibold">Listed On</p>
+                  <p>
+                    {ad.date
+                      ? new Date(ad.date).toLocaleDateString()
+                      : "Date Not Available"}
+                  </p>
                 </div>
+                <div className="">
+                  <p className="text-sm font-semibold">Location</p>
+                  <p>{ad.location || "Location Not Specified"}</p>
+                </div>
+                </div>
+                
                 <div className="mt-4">
                   <p className="text-sm font-semibold">Description</p>
                   <p>{ad.description || "No Description Available"}</p>
@@ -174,13 +187,12 @@ export default async function AdPage({ params }) {
                 </AvatarFallback>
               </Avatar>
               <p className="font-semibold">{ad.name + " " + ad.surname}</p>
-              <p>{ad.location || "Location Not Specified"}</p>
               <p>
-                Listed on:{" "}
-                {ad.date
-                  ? new Date(ad.date).toLocaleDateString()
-                  : "Date Not Available"}
+                {" "}
+                {ad.phone_number || "Phone Number Not Specified"}
               </p>
+              <p>{ad.email || "Email Not Specified"}</p>
+              
               </Link>
             </CardContent>
           </Card>

@@ -25,6 +25,8 @@ export async function GET(req, context) {
                 Account.forename as name, 
                 Account.surname as surname,
                 Account.account_ID as account_ID,
+                Account.phone_number as phone_number,
+                Account.email as email,
                 Users.profile_image as profilePhoto,
                 -- Specific vehicle details
                 Car.seat_count,
@@ -62,6 +64,8 @@ export async function GET(req, context) {
                 Account.forename, 
                 Account.surname,
                 Account.account_ID,
+                Account.phone_number,
+                Account.email,
                 Users.profile_image,
                 Car.seat_count,
                 Car.body_type,
