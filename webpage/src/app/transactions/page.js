@@ -19,9 +19,9 @@ export default async function TransactionsPage() {
     return {
       id: transaction.transaction_id,
       date: new Date(transaction.date).toLocaleString(),
-      type: transaction.sender_id == account_id ? transaction.receiver_id != null? "Buying Vehicle" : "Withdrawn from Balance" : transaction.receiver_id ? "Sold Vehicle" : "Deposit to Balance",
+      type: transaction.sender_id === account_id ? transaction.receiver_id  ? "Buying Vehicle" : "Withdrawn from Balance" :  transaction.sender_ID ? "Sold Vehicle" : "Deposit to Balance",
       adId: transaction.ad_id,
-      adOwner: transaction.sender_id == account_id ? transaction.receiver_id != null : transaction.sender_id,
+      adOwner: transaction.sender_id === account_id ? transaction.receiver_id : transaction.sender_id,
       amount: transaction.amount,
     }
   })
