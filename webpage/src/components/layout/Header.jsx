@@ -27,6 +27,7 @@ export default async function Header() {
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer border-gray-50">
                 <AvatarImage
+                  className="object-cover"
                   src={currentUser.profilePicture || "/avatar.png"}
                 />
               </Avatar>

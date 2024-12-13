@@ -9,8 +9,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Heart,
-  ChevronLeft,
-  ChevronRight,
   HandCoins,
   MessageCircle,
 } from "lucide-react";
@@ -31,6 +29,7 @@ import { sendHistory, isAuthenticated } from "@/app/actions";
 import { SERVER_URL } from "@/utils/constants";
 import Link from "next/link";
 import { capitalizeFirstLetters } from "@/utils/helpers";
+import { formatDate } from "@/utils/date";
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
@@ -42,8 +41,6 @@ export default async function AdPage({ params }) {
     cache: "no-cache",
   });
   const ad = await res.json();
-
-  console.log(ad);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -152,7 +149,7 @@ export default async function AdPage({ params }) {
                   <p className="text-sm font-semibold">Listed On</p>
                   <p>
                     {ad.date
-                      ? new Date(ad.date).toLocaleDateString()
+                      ? formatDate(ad.date)
                       : "Date Not Available"}
                   </p>
                 </div>
@@ -180,11 +177,12 @@ export default async function AdPage({ params }) {
             </CardHeader>
             <CardContent>
               <Link href={`/profile/${ad.account_id}`}>
-              <Avatar className="border">
-                <AvatarImage src={ad.profilePhotoData} alt={`${ad.name} ${ad.surname}`} />
-                <AvatarFallback>
-                  {ad.name && ad.surname ? ad.name[0] + ad.surname[0] : "N/A"}
-                </AvatarFallback>
+              <Avatar className="border w-16 h-16">
+                <AvatarImage
+                  className="object-cover"
+                  src={ad.profilePhotoData || "/avatar.png"} 
+                  alt={`${ad.name} ${ad.surname}`}
+                />
               </Avatar>
               <p className="font-semibold">{ad.name + " " + ad.surname}</p>
               <p>

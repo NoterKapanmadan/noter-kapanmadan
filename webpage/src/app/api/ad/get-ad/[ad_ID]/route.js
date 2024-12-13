@@ -79,7 +79,6 @@ export async function GET(req, context) {
         );
         
         const finalizedAd = await extractImagesFromAd(ad.rows[0]);
-        //console.log("finalizedAd", finalizedAd);
         const profilePhoto = finalizedAd.profilephoto;
 
         let specificDetails = {};
@@ -112,9 +111,6 @@ export async function GET(req, context) {
         let imageSrc = null;
         
         imageSrc = await getImageSrc(profilePhoto);
-        //console.log("hwllo");
-            
-        
 
         const adData = {
             ...finalizedAd,
