@@ -20,7 +20,7 @@ export async function GET(request) {
     const fuel_type = url.searchParams.get('fuel_type');
     const page = parseInt(url.searchParams.get('page') || '1', 10);
 
-    const limit = 10;
+    const limit = 9;
     const offset = (page - 1) * limit;
 
     let conditions = ["status = 'active'"];

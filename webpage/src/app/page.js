@@ -32,7 +32,7 @@ export default async function HomePage({ searchParams }) {
     maxKm,
     gear_type,
     fuel_type,
-    page
+    page: Number(page),
   }
 
   const filteredFilters = {};
