@@ -11,10 +11,19 @@ export async function POST(request) {
         const diff = req.diff;
         const transaction_id = uuidv4();
         if(diff < 0) {
-            const res = await query(
+            const balance = await query(
+                'SELECT balance FROM users WHERE account_id = $1',
+                [account_id]
+            );
+            if (balance.rows[0].balance < -diff) {
+                return NextResponse.json({ message: 'Insufficient balance' }, { status: 400 });
+            }
+            else {
+                const res = await query(
                 'INSERT INTO transaction (transaction_ID,sender_ID, amount) VALUES ($1, $2, $3)',
                 [transaction_id,account_id, -diff]
-            );
+                );
+            }
         }
         else {
             const res = await query(

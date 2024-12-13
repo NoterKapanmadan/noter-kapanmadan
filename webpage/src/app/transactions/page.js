@@ -21,7 +21,7 @@ export default async function TransactionsPage() {
       date: transaction.date,
       type: transaction.receiver_id && !transaction.sender_id ? "Deposit to Balance" : transaction.sender_id && !transaction.receiver_id ? "Withdrawn from Balance" : transaction.receiver_id === account_id ? "Sell Vehicle" : transaction.sender_id === account_id ? "Buy Vehicle" : "Unknown Transaction",
       adId: transaction.ad_id,
-      adOwner: transaction.sender_id == account_id ? transaction.receiver_id != null : transaction.sender_id,
+      adOwner: transaction.sender_id === account_id ? transaction.receiver_id : transaction.sender_id,
       amount: transaction.amount,
     }
   })

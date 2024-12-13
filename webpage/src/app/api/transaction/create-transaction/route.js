@@ -7,11 +7,12 @@ export async function POST(request) {
         const req = await request.json();
         const sender_ID = req.body.sender_ID;
         const receiver_ID = req.body.receiver_ID;
+        const bid_ID = req.body.bid_ID;
         const amount = req.body.amount;
         const transaction_id = uuidv4();
         const res = await query(
-            'INSERT INTO transaction (transaction_ID, sender_ID, receiver_ID, amount) VALUES ($1, $2, $3, $4)',
-            [transaction_id, sender_ID, receiver_ID, amount]
+            'INSERT INTO transaction (transaction_ID, ,bid_ID, sender_ID, receiver_ID, amount) VALUES ($1, $2, $3, $4, $5)',
+            [transaction_id,bid_ID ,sender_ID, receiver_ID, amount]
         );
         return NextResponse.json({ message: 'Transaction created' }, { status: 200 });
     }

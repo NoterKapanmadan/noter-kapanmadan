@@ -63,21 +63,17 @@ export default function BalancePage({user_balance}) {
           description: "Please enter a valid amount."
         })
       }
-      if (amount > balance) {
-        return toast({
-          title: "Insufficient balance",
-          description: "You do not have enough balance to withdraw this amount."
-        })
-      }
+      console.log("withdraw amount:", amount);
       const res = await fetch(`${SERVER_URL}/balance/set-balance`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ diff: -amount }),
       });
       if (!res.ok) {
+        const s =  await res.json()
         return toast({
           title: "Error withdrawing balance",
-          description: "An error occurred while withdrawing balance."
+          description: s.message ? s.message : "An error occurred while withdrawing balance."
         })
       }
       setBalance(prevBalance => prevBalance - amount)
@@ -88,7 +84,6 @@ export default function BalancePage({user_balance}) {
       })
   })
   }
-  console.log("user_balance:", user_balance);
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
