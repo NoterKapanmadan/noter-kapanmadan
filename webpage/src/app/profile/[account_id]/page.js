@@ -49,7 +49,7 @@ export default async function ProfilePage({ params }) {
               <div className="flex flex-col items-center space-y-4">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden border">
                   <Image
-                    src={user.profilePicture || "/placeholder.svg"}
+                    src={user.profilePicture || "/avatar.png"}
                     alt="Profile picture"
                     layout="fill"
                     objectFit="cover"
@@ -63,7 +63,7 @@ export default async function ProfilePage({ params }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="surname">Surname</Label>
-                  <p className="text-sm">{user.email}</p>
+                  <p className="text-sm">{user.surname}</p>
                 </div>
               </div>
 
