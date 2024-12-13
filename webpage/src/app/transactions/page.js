@@ -1,19 +1,6 @@
-"use client"
 
-import React, { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getTransactions,getAccountID } from "@/app/actions";
 import {
   Table,
   TableBody,
@@ -24,11 +11,20 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState([
-    { id: 1, date: '10-11-2024', type: 'Buy Vehicle', amount: -19500, adId: 'AD123', adOwner: 'John Doe' },
-    { id: 2, date: '08-11-2024', type: 'Balance Added', amount: 20000, adId: null, adOwner: null },
-  ])
+export default async function TransactionsPage() {
+  const res = await getTransactions();
+  const account_id = await getAccountID();
+  console.log(res)
+  const transactions = res.map((transaction) => {
+    return {
+      id: transaction.transaction_id,
+      date: new Date(transaction.date).toLocaleString(),
+      type: transaction.sender_id == account_id ? transaction.receiver_id != null? "Buying Vehicle" : "Withdrawn from Balance" : transaction.receiver_id ? "Sold Vehicle" : "Deposit to Balance",
+      adId: transaction.ad_id,
+      adOwner: transaction.sender_id == account_id ? transaction.receiver_id != null : transaction.sender_id,
+      amount: transaction.amount,
+    }
+  })
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -62,7 +58,7 @@ export default function TransactionsPage() {
                         'N/A'
                       )}
                     </TableCell>
-                    <TableCell className={`text-right ${transaction.amount >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <TableCell className={`text-right ${transaction.type === "Buying Vehicle"|| transaction.type === "Withdrawn from Balance" ? 'text-red-600': 'text-green-600' }`}>
                       ${Math.abs(transaction.amount).toFixed(2)}
                     </TableCell>
                   </TableRow>

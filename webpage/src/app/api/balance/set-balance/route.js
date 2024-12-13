@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db';
 import { decrypt } from '@/lib/auth';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request) {
     try {
@@ -8,11 +9,19 @@ export async function POST(request) {
         const { account_id } = await decrypt(request.cookies.get("Authorization").value)
         console.log(req.diff)
         const diff = req.diff;
-
-        const res = await query(
-            'UPDATE users SET balance = balance + $1 WHERE account_id = $2',
-            [diff, account_id]
-        );
+        const transaction_id = uuidv4();
+        if(diff < 0) {
+            const res = await query(
+                'INSERT INTO transaction (transaction_ID,sender_ID, amount) VALUES ($1, $2, $3)',
+                [transaction_id,account_id, -diff]
+            );
+        }
+        else {
+            const res = await query(
+                'INSERT INTO transaction (transaction_ID, receiver_ID, amount) VALUES ($1, $2, $3)',
+                [transaction_id,account_id, diff]
+            );
+        }
         return NextResponse.json({ message: 'Balance updated' }, { status: 200 });
     }
     catch (e) {

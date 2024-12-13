@@ -102,3 +102,15 @@ export const getBalance = async () => {
   const res = await response.json();
   return res;
 }
+export const getTransactions = async () => {
+  const response = await fetch(`${SERVER_URL}/transaction/get-transactions`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+  const res = await response.json();
+  return res;
+}
