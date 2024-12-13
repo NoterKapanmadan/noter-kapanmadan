@@ -40,12 +40,6 @@ export async function POST(req) {
             // Update bid status to accepted
             await query('UPDATE Bid SET status = $1 WHERE bid_ID = $2', ['accepted', bid_ID]);
 
-            // Create a transaction for the accepted bid
-            await query(
-                'INSERT INTO Transaction (transaction_ID, bid_ID, sender_ID, receiver_ID, amount) VALUES (gen_random_uuid(), $1, $2, $3, $4)',
-                [bid_ID, bidDetails.user_id, account_id, bidDetails.amount]
-            );
-
             return NextResponse.json({ message: 'Offer accepted' });
         } else if (action === 'reject') {
             // Update bid status to rejected
