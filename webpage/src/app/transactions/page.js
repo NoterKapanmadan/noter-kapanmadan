@@ -10,6 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatDateAndTime } from "@/utils/date";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function TransactionsPage() {
   const res = await getTransactions();
@@ -51,10 +53,24 @@ export default async function TransactionsPage() {
                     <TableCell>{transaction.type}</TableCell>
                     <TableCell>
                       {transaction.adId && transaction.adOwner ? (
-                        <>
-                          Ad ID: {transaction.adId}<br />
-                          Ad Owner: {transaction.adOwner}
-                        </>
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <span>Ad ID: {transaction.adId}</span>
+                            <Link href={`/ad/${transaction.adId}`}>
+                              <Button variant="outline" className="ml-2 text-blue-600">
+                                View Ad
+                              </Button>
+                            </Link>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span>Owner ID: {transaction.adOwner}</span>
+                            <Link href={`/profile/${transaction.adOwner}`}>
+                              <Button variant="outline" className="ml-2 text-blue-600">
+                                View Owner
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
                       ) : (
                         'N/A'
                       )}
