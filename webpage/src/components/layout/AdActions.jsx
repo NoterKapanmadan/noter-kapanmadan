@@ -58,7 +58,7 @@ export default function AdActions({ ad_ID }) {
           description: "Your offer was sent successfully.",
         });
         setOfferOpen(false);
-        revalidateTagClient("currentUser");
+        revalidateTagClient("offers");
       } else {
         const error = await res.json();
         toast({
