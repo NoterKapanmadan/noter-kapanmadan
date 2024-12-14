@@ -55,20 +55,26 @@ export default async function TransactionsPage() {
                       {transaction.adId && transaction.adOwner ? (
                         <div className="space-y-2">
                           <div className="flex items-center space-x-2">
-                            <span>Ad ID: {transaction.adId}</span>
-                            <Link href={`/ad/${transaction.adId}`}>
-                              <Button variant="outline" className="ml-2 text-blue-600">
-                                View Ad
-                              </Button>
-                            </Link>
+                            <span>
+                              Ad ID: {' '}
+                              <Link 
+                                className="text-blue-600 hover:underline"
+                                href={`/ad/${transaction.adId}`}
+                              >
+                                {transaction.adOwner}
+                              </Link>
+                            </span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <span>Owner ID: {transaction.adOwner}</span>
-                            <Link href={`/profile/${transaction.adOwner}`}>
-                              <Button variant="outline" className="ml-2 text-blue-600">
-                                View Owner
-                              </Button>
-                            </Link>
+                            <span>
+                              Owner ID: {' '}
+                              <Link 
+                                className="text-blue-600 hover:underline"
+                                href={`/profile/${transaction.adOwner}`}
+                              >
+                                {transaction.adOwner}
+                              </Link>
+                            </span>
                           </div>
                         </div>
                       ) : (

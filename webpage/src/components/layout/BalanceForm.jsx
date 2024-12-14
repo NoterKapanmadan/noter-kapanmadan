@@ -96,81 +96,83 @@ export default function BalancePage({user_balance}) {
               <Label htmlFor="balance">Current Balance</Label>
               <div className="text-2xl font-bold">${balance}</div>
             </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="w-full">Add Balance</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Add Balance</DialogTitle>
-                  <DialogDescription>
-                    Enter the amount you want to add to your account balance.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="addBalanceAmount" className="text-right">
-                      Amount
-                    </Label>
-                    <Input
-                      id="addBalanceAmount"
-                      type="number"
-                      step="0.01"
-                      value={addBalanceAmount}
-                      onChange={(e) => {
-                        const value = e.target.value
-                        if (/^\d*(\.\d{0,2})?$/.test(value)) {
-                          setAddBalanceAmount(value)
-                        }
-                      }}
-                      className="col-span-3"
-                      placeholder="Enter amount"
-                    />
+            <div className="flex gap-2">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full">Add Balance</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Add Balance</DialogTitle>
+                    <DialogDescription>
+                      Enter the amount you want to add to your account balance.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex flex-col items-start gap-3">
+                      <Label htmlFor="addBalanceAmount" className="text-right">
+                        Amount
+                      </Label>
+                      <Input
+                        id="addBalanceAmount"
+                        type="number"
+                        step="0.01"
+                        value={addBalanceAmount}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          if (/^\d*(\.\d{0,2})?$/.test(value)) {
+                            setAddBalanceAmount(value)
+                          }
+                        }}
+                        className="col-span-3"
+                        placeholder="Enter amount"
+                      />
+                    </div>
                   </div>
-                </div>
-                <DialogFooter>
-                  <Button onClick={handleAddBalance}>Add Balance</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                  <DialogFooter>
+                    <Button onClick={handleAddBalance}>Add Balance</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
 
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="w-full">Withdraw Balance</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Withdraw Balance</DialogTitle>
-                  <DialogDescription>
-                    Enter the amount you want to withdraw from your account balance.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="withdrawBalanceAmount" className="text-right">
-                      Amount
-                    </Label>
-                    <Input
-                      id="withdrawBalanceAmount"
-                      type="number"
-                      step="0.01"
-                      value={withdrawBalanceAmount}
-                      onChange={(e) => {
-                        const value = e.target.value
-                        if (/^\d*(\.\d{0,2})?$/.test(value)) {
-                          setWithdrawBalanceAmount(value)
-                        }
-                      }}
-                      className="col-span-3"
-                      placeholder="Enter amount"
-                    />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full">Withdraw Balance</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Withdraw Balance</DialogTitle>
+                    <DialogDescription>
+                      Enter the amount you want to withdraw from your account balance.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex flex-col items-start gap-3">
+                      <Label htmlFor="withdrawBalanceAmount" className="text-right">
+                        Amount
+                      </Label>
+                      <Input
+                        id="withdrawBalanceAmount"
+                        type="number"
+                        step="0.01"
+                        value={withdrawBalanceAmount}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          if (/^\d*(\.\d{0,2})?$/.test(value)) {
+                            setWithdrawBalanceAmount(value)
+                          }
+                        }}
+                        className="col-span-3"
+                        placeholder="Enter amount"
+                      />
+                    </div>
                   </div>
-                </div>
-                <DialogFooter>
-                  <Button onClick={handleWithdrawBalance}>Withdraw Balance</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+                  <DialogFooter>
+                    <Button onClick={handleWithdrawBalance}>Withdraw Balance</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
           </CardContent>
         </Card>
       </main>
