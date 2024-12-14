@@ -6,6 +6,14 @@ import Image from 'next/image'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Slider } from "@/components/ui/slider"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import AuthLink from '@/components/layout/AuthLink'
@@ -16,7 +24,10 @@ export default function Ads({ ads, initialFilters, totalPages }) {
   const [filters, setFilters] = useState(initialFilters)
   const [isPending, startTransition] = useTransition()
   const formRef = useRef(null)
-  
+
+  const [fuelType, setFuelType] = useState(filters.fuel_type || '')
+  const [gearType, setGearType] = useState(filters.gear_type || '')
+
   const router = useRouter()
 
   const pushWithFilters = (updatedFilters) => {
@@ -48,8 +59,12 @@ export default function Ads({ ads, initialFilters, totalPages }) {
   const handleSubmit = (formData) => {
     const newFilters = {}
     for (const pair of formData) {
+      console.log(pair[0], pair[1])
       newFilters[pair[0]] = pair[1];
     }
+
+    newFilters["gear_type"] = gearType
+    newFilters["fuel_type"] = fuelType
 
     updateFilter(newFilters)
   }
@@ -70,6 +85,8 @@ export default function Ads({ ads, initialFilters, totalPages }) {
       fuel_type: '',
     }
     updateFilter(resetFilters)
+    setFuelType('')
+    setGearType('')
     formRef.current.reset()
   }
 
@@ -177,37 +194,48 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="maxKm">Max Kilometers</Label>
-                    <input
-                      type="range"
-                      name="maxKm"
-                      min="0"
-                      max="500000"
-                      step="1000"
-                      defaultValue={filters.maxKm}
-                      className="w-full"
-                    />
-                    <div className="text-right text-sm text-muted-foreground">
-                      {filters.maxKm} km
-                    </div>
+                    <Label>Max Kilometers</Label>
+                    <Slider
+                      min={0}
+                      max={500000}
+                      step={1000}
+                      defaultValue={[filters.maxKm]}
+                      onValueChange={(value) => setFilters({...filters, maxKm: value[0]})} />
+                    <div className="text-right text-sm text-muted-foreground">{filters.maxKm} km</div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="gear_type">Gear Type</Label>
-                    <select name="gear_type" id="gear_type" defaultValue={filters.gear_type || ''} className="w-full border rounded p-2">
-                      <option value="">Any</option>
-                      <option value="automatic">Automatic</option>
-                      <option value="manual">Manual</option>
-                    </select>
+                    <Select 
+                      name="gear_type" 
+                      id="gear_type"
+                      value={gearType}
+                      onValueChange={(value) => setGearType(value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Gear Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="manual">Manual</SelectItem>
+                        <SelectItem value="automatic">Automatic</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="fuel_type">Fuel Type</Label>
-                    <select name="fuel_type" id="fuel_type" defaultValue={filters.fuel_type || ''} className="w-full border rounded p-2">
-                      <option value="">Any</option>
-                      <option value="petrol">Petrol</option>
-                      <option value="diesel">Diesel</option>
-                      <option value="electric">Electric</option>
-                      <option value="hybrid">Hybrid</option>
-                    </select>
+                  <Label htmlFor="fuel_type">Fuel Type</Label>
+                    <Select 
+                      name="fuel_type" 
+                      id="fuel_type"
+                      value={fuelType}
+                      onValueChange={(value) => setFuelType(value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Fuel Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="petrol">Petrol</SelectItem>
+                        <SelectItem value="diesel">Diesel</SelectItem>
+                        <SelectItem value="electric">Electric</SelectItem>
+                        <SelectItem value="hybrid">Hybrid</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </CardContent>
                 <CardFooter className="flex gap-2">
