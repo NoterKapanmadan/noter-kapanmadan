@@ -23,34 +23,87 @@ export async function GET(request) {
     const limit = 9;
     const offset = (page - 1) * limit;
 
-    let conditions = ["status = 'active'"];
+    const conditions = ["status = 'active'"];
+    const params = [];
+    let paramIndex = 1;
 
-    console.log("maxPrice", maxPrice)
+    if (title) {
+        conditions.push(`title ILIKE $${paramIndex}`);
+        params.push(`%${title}%`);
+        paramIndex++;
+    }
 
-    if (title) conditions.push(`title ILIKE '%${title}%'`);
-    if (location) conditions.push(`location ILIKE '%${location}%'`);
-    if (brand) conditions.push(`brand ILIKE '%${brand}%'`);
-    if (model) conditions.push(`model ILIKE '%${model}%'`);
-    if (minPrice) conditions.push(`price >= ${minPrice}`);
-    if (maxPrice) conditions.push(`price <= ${maxPrice}`);
-    if (minYear) conditions.push(`year >= ${minYear}`);
-    if (maxYear) conditions.push(`year <= ${maxYear}`);
-    if (maxKm) conditions.push(`km <= ${maxKm}`);
-    if (gear_type) conditions.push(`gear_type = '${gear_type}'`);
-    if (fuel_type) conditions.push(`fuel_type = '${fuel_type}'`);
+    if (location) {
+        conditions.push(`location ILIKE $${paramIndex}`);
+        params.push(`%${location}%`);
+        paramIndex++;
+    }
 
+    if (brand) {
+        conditions.push(`brand ILIKE $${paramIndex}`);
+        params.push(`%${brand}%`);
+        paramIndex++;
+    }
+
+    if (model) {
+        conditions.push(`model ILIKE $${paramIndex}`);
+        params.push(`%${model}%`);
+        paramIndex++;
+    }
+
+    if (minPrice) {
+        conditions.push(`price >= $${paramIndex}`);
+        params.push(minPrice);
+        paramIndex++;
+    }
+
+    if (maxPrice) {
+        conditions.push(`price <= $${paramIndex}`);
+        params.push(maxPrice);
+        paramIndex++;
+    }
+
+    if (minYear) {
+        conditions.push(`year >= $${paramIndex}`);
+        params.push(minYear);
+        paramIndex++;
+    }
+
+    if (maxYear) {
+        conditions.push(`year <= $${paramIndex}`);
+        params.push(maxYear);
+        paramIndex++;
+    }
+
+    if (maxKm) {
+        conditions.push(`km <= $${paramIndex}`);
+        params.push(maxKm);
+        paramIndex++;
+    }
+
+    if (gear_type) {
+        conditions.push(`gear_type = $${paramIndex}`);
+        params.push(gear_type);
+        paramIndex++;
+    }
+
+    if (fuel_type) {
+        conditions.push(`fuel_type = $${paramIndex}`);
+        params.push(fuel_type);
+        paramIndex++;
+    }
 
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
-
-    console.log(whereClause);
+    const adsParams = [...params, limit, offset];
 
     try {
         const countRes = await query(`
             SELECT COUNT(*) as total_count
             FROM Ad
             JOIN Vehicle ON Ad.vehicle_ID = Vehicle.vehicle_ID
-            ${whereClause};
-        `);
+            ${whereClause};`,
+            params
+        );
 
         const totalCount = parseInt(countRes.rows[0].total_count, 10);
         const totalPages = Math.ceil(totalCount / limit);
@@ -64,8 +117,9 @@ export async function GET(request) {
             ${whereClause}
             GROUP BY Ad.ad_ID, title, description, price, location, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type
             ORDER BY date DESC
-            LIMIT ${limit} OFFSET ${offset};
-        `);
+            LIMIT $${paramIndex} OFFSET $${paramIndex+1};`,
+            adsParams
+        );
 
         const finalizedAds = await extractImagesFromAds(ads.rows);
 
