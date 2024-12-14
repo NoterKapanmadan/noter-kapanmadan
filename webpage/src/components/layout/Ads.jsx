@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Input } from "@/components/ui/input"
@@ -15,6 +15,8 @@ import { Calendar } from 'lucide-react'
 export default function Ads({ ads, initialFilters, totalPages }) {
   const [filters, setFilters] = useState(initialFilters)
   const [isPending, startTransition] = useTransition()
+  const formRef = useRef(null)
+  
   const router = useRouter()
 
   const pushWithFilters = (updatedFilters) => {
@@ -55,19 +57,20 @@ export default function Ads({ ads, initialFilters, totalPages }) {
   const handleReset = () => {
     const resetFilters = {
       title: '',
-      minPrice: 0,
-      maxPrice: 50000,
+      minPrice: '',
+      maxPrice: '',
       date: '',
       location: '',
       brand: '',
       model: '',
-      minYear: 2000,
-      maxYear: 2023,
-      maxKm: 100000,
+      minYear: '',
+      maxYear: '',
+      maxKm: '',
       gear_type: '',
       fuel_type: '',
     }
-    setFilters(resetFilters)
+    updateFilter(resetFilters)
+    formRef.current.reset()
   }
 
   return (
@@ -84,7 +87,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                 </AuthLink>
                 <CardTitle>Filters</CardTitle>
               </CardHeader>
-              <form action={handleSubmit}>
+              <form ref={formRef} action={handleSubmit}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="title">Title</Label>
