@@ -19,6 +19,7 @@ import Link from 'next/link'
 import AuthLink from '@/components/layout/AuthLink'
 import { getImageSrc } from '@/utils/file'
 import { Calendar } from 'lucide-react'
+import PlaceAutocomplete from './PlaceAutocomplete'
 
 export default function Ads({ ads, initialFilters, totalPages }) {
   const [filters, setFilters] = useState(initialFilters)
@@ -149,14 +150,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="location">Location</Label>
-                    <Input
-                      id="location"
-                      name="location"
-                      defaultValue={filters.location}
-                    />
-                  </div>
+                    <PlaceAutocomplete isFilter/>
                   <div className="space-y-2">
                     <Label htmlFor="brand">Brand</Label>
                     <Input
@@ -200,13 +194,13 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                       max={500000}
                       step={1000}
                       defaultValue={[filters.maxKm]}
-                      onValueChange={(value) => setFilters({...filters, maxKm: value[0]})} />
+                      onValueChange={(value) => setFilters({ ...filters, maxKm: value[0] })} />
                     <div className="text-right text-sm text-muted-foreground">{filters.maxKm} km</div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="gear_type">Gear Type</Label>
-                    <Select 
-                      name="gear_type" 
+                    <Select
+                      name="gear_type"
                       id="gear_type"
                       value={gearType}
                       onValueChange={(value) => setGearType(value)}>
@@ -220,9 +214,9 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                  <Label htmlFor="fuel_type">Fuel Type</Label>
-                    <Select 
-                      name="fuel_type" 
+                    <Label htmlFor="fuel_type">Fuel Type</Label>
+                    <Select
+                      name="fuel_type"
                       id="fuel_type"
                       value={fuelType}
                       onValueChange={(value) => setFuelType(value)}>
@@ -258,14 +252,14 @@ export default function Ads({ ads, initialFilters, totalPages }) {
               {ads.map(ad => (
                 <Card key={ad.ad_id} className="flex flex-col">
                   <CardHeader className="p-3">
-                    { ad.images ?
+                    {ad.images ?
                       <Image
                         src={getImageSrc(ad.images[0], 'medium_resized')}
                         alt={ad.title}
                         width={800}
                         height={500}
                         blurDataURL={ad.base64Image}
-                        placeholder= {ad.base64Image ? "blur": "empty"}
+                        placeholder={ad.base64Image ? "blur" : "empty"}
                         className="w-[19rem] h-48 object-cover rounded-lg" />
                       :
                       <div className="w-full h-48 bg-gray-300 rounded-lg" />

@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { SERVER_URL } from "@/utils/constants"
 import { useToast } from "@/hooks/use-toast"
+import PlaceAutocomplete from '@/components/layout/PlaceAutocomplete'
 
 
 export default function AddAd() {
@@ -44,6 +45,7 @@ export default function AddAd() {
       }
     })
   }
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -256,14 +258,7 @@ export default function AddAd() {
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  name="location"
-                  required
-                />
-              </div>
+              <PlaceAutocomplete required/>
               <div className="space-y-2">
                 <Label htmlFor="images">Images</Label>
                 <Input
