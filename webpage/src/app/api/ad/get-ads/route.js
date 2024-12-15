@@ -136,7 +136,7 @@ export async function GET(request) {
         const totalPages = Math.ceil(totalCount / limit);
 
         const ads = await query(`
-            SELECT Ad.ad_ID, title, description, price, location, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type,
+            SELECT Ad.ad_ID, title, description, price, location, latitude, longitude, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type,
                    string_agg(image, ',') as images
             FROM Ad
             JOIN Vehicle ON Ad.vehicle_ID = Vehicle.vehicle_ID
