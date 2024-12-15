@@ -10,7 +10,7 @@ export async function GET(request) {
     const minPrice = url.searchParams.get('minPrice');
     const maxPrice = url.searchParams.get('maxPrice');
     const date = url.searchParams.get('date'); // If needed
-    const location = url.searchParams.get('location');
+    // const location = url.searchParams.get('location');
     const brand = url.searchParams.get('brand');
     const model = url.searchParams.get('model');
     const minYear = url.searchParams.get('minYear');
@@ -18,6 +18,10 @@ export async function GET(request) {
     const maxKm = url.searchParams.get('maxKm');
     const gear_type = url.searchParams.get('gear_type');
     const fuel_type = url.searchParams.get('fuel_type');
+    const latitude = url.searchParams.get('latitude');
+    const longitude = url.searchParams.get('longitude');
+    const maxDistance = url.searchParams.get('maxDistance');
+
     const page = parseInt(url.searchParams.get('page') || '1', 10);
 
     const limit = 9;
@@ -33,11 +37,13 @@ export async function GET(request) {
         paramIndex++;
     }
 
+    /* old location filter
     if (location) {
         conditions.push(`location ILIKE $${paramIndex}`);
         params.push(`%${location}%`);
         paramIndex++;
     }
+*/
 
     if (brand) {
         conditions.push(`brand ILIKE $${paramIndex}`);
@@ -91,6 +97,15 @@ export async function GET(request) {
         conditions.push(`fuel_type = $${paramIndex}`);
         params.push(fuel_type);
         paramIndex++;
+    }
+    console.log("location filter early:", minYear,latitude, longitude, maxDistance);
+    if(latitude && longitude && maxDistance && maxDistance < 2000) {
+        console.log("location filter:", latitude, longitude, maxDistance);
+        conditions.push(`earth_distance(ll_to_earth($${paramIndex}, $${paramIndex + 1}), ll_to_earth(latitude, longitude)) < $${paramIndex + 2} * 1000`);
+        params.push(latitude);
+        params.push(longitude);
+        params.push(maxDistance);
+        paramIndex+= 3;
     }
 
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';

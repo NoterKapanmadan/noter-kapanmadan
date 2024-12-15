@@ -27,6 +27,8 @@ export async function POST(request) {
         const brand = formData.get("brand");
         const transmission = formData.get("transmission").toLowerCase();
         const fuelType = formData.get("fuelType").toLowerCase();
+        const latitude = formData.get("latitude");
+        const longitude = formData.get("longitude");
         const adID = uuidv4();
         const vehicleID = uuidv4();
         //TODO get user ID from session
@@ -52,9 +54,9 @@ export async function POST(request) {
 
         // Insert into Ad table
         await query(
-            `INSERT INTO Ad (ad_ID,vehicle_ID, user_ID, title, description, price, location)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-            [adID, vehicleID, userID, title, description, price, location]
+            `INSERT INTO Ad (ad_ID,vehicle_ID, user_ID, title, description, price, location, latitude, longitude)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+            [adID, vehicleID, userID, title, description, price, location, latitude, longitude]
         );
 
         // Insert images into Image table

@@ -8,18 +8,23 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
 // add clear location too
-export default function PlaceAutocomplete({ required, isFilter = true, defaultMaxDistance = 10 }) {
+// When latitude and longitude are not entered, it may not give a ‘required’ error because location is entered. That needs to be fixed.
+// add reset filters feature
+// add use my location
+// konum için çok ilginç indexing yapılabilir yakın olanlar için filan, linear scan yapmaktansa
 
-    const [selectedPlace, setSelectedPlace] = useState('');
+export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistance = 10 }) {
+
+    const [selectedPlace, setSelectedPlace] = useState();
     const [selectedLatitude, setSelectedLatitude] = useState('');
-    const [selectedLongtitude, setSelectedLongtitude] = useState('');
+    const [selectedLongitude, setSelectedLongitude] = useState('');
     const [maxDistance, setMaxDistance] = useState(defaultMaxDistance ? defaultMaxDistance : '');
 
     const handlePlaceSelected = (place) => {
         console.log("Place: ", place)
         setSelectedPlace(place);
         setSelectedLatitude(place.geometry.location.lat());
-        setSelectedLongtitude(place.geometry.location.lng());
+        setSelectedLongitude(place.geometry.location.lng());
         //const lat = place.geometry.location.lat()
         //const long = place.geometry.location.lng()
         //const formatted_address
@@ -43,7 +48,7 @@ export default function PlaceAutocomplete({ required, isFilter = true, defaultMa
                 <Label htmlFor="location">Location</Label>
                 <Input ref={ref} id="location" name="location" required={required} />
                 <input className="hidden" id="latitude" name="latitude" readOnly value={selectedLatitude} />
-                <input className="hidden" id="latitude" name="longtitude" readOnly value={selectedLongtitude} />
+                <input className="hidden" id="longitude" name="longitude" readOnly value={selectedLongitude} />
             </div>
             {selectedLatitude && isFilter ? <div className="space-y-2">
                 <Label>Max Distance</Label>

@@ -16,6 +16,9 @@ export default async function HomePage({ searchParams }) {
     maxKm = '',
     gear_type = '',
     fuel_type = '',
+    latitude = '',
+    longitude = '',
+    maxDistance = '',
     page = '1'
   } = searchParams
 
@@ -32,6 +35,9 @@ export default async function HomePage({ searchParams }) {
     maxKm,
     gear_type,
     fuel_type,
+    latitude,
+    longitude,
+    maxDistance,
     page: Number(page),
   }
 
