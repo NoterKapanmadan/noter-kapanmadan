@@ -154,6 +154,9 @@ CREATE TABLE IF NOT EXISTS Ad (
     FOREIGN KEY (user_ID) REFERENCES Users(account_ID)
 );
 
+CREATE INDEX IF NOT EXISTS idx_latitude ON Ad(latitude);
+CREATE INDEX IF NOT EXISTS idx_longitude ON Ad(longitude);
+
 -- Create AdImage table
 CREATE TABLE IF NOT EXISTS AdImage (
     ad_ID UUID NOT NULL,

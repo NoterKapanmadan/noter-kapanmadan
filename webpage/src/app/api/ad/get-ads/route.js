@@ -5,7 +5,7 @@ import { extractImagesFromAds } from '@/utils/file';
 
 export async function GET(request) {
     const url = new URL(request.url);
-  
+
     const title = url.searchParams.get('title');
     const minPrice = url.searchParams.get('minPrice');
     const maxPrice = url.searchParams.get('maxPrice');
@@ -98,14 +98,26 @@ export async function GET(request) {
         params.push(fuel_type);
         paramIndex++;
     }
-    console.log("location filter early:", minYear,latitude, longitude, maxDistance);
-    if(latitude && longitude && maxDistance && maxDistance < 2000) {
-        console.log("location filter:", latitude, longitude, maxDistance);
-        conditions.push(`earth_distance(ll_to_earth($${paramIndex}, $${paramIndex + 1}), ll_to_earth(latitude, longitude)) < $${paramIndex + 2} * 1000`);
+
+
+    if (latitude && longitude && maxDistance && maxDistance < 2000) {
+        // for better efficiency, first use latitude and longitude differences to use index, after that calculate complex distance formula
+        conditions.push(`
+  latitude BETWEEN $1 - ($3 / 111.32)
+              AND $1 + ($3 / 111.32)
+  AND
+  longitude BETWEEN $2 - ($3 / (111.32 * COS(RADIANS($1))))
+               AND $2 + ($3 / (111.32 * COS(RADIANS($1))))
+  AND (
+    6371 * ACOS(
+      COS(RADIANS($1)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS($2))
+      + SIN(RADIANS($1)) * SIN(RADIANS(latitude))
+    )
+  ) < $3`);
         params.push(latitude);
         params.push(longitude);
         params.push(maxDistance);
-        paramIndex+= 3;
+        paramIndex += 3;
     }
 
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
@@ -132,7 +144,7 @@ export async function GET(request) {
             ${whereClause}
             GROUP BY Ad.ad_ID, title, description, price, location, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type
             ORDER BY date DESC
-            LIMIT $${paramIndex} OFFSET $${paramIndex+1};`,
+            LIMIT $${paramIndex} OFFSET $${paramIndex + 1};`,
             adsParams
         );
 
