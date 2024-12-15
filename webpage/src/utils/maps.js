@@ -38,3 +38,16 @@ export async function mapsGeocode(text) {
     })
 }
 
+export async function mapsReverseGeocode(latitude, longitude) {
+    
+    const res = await client.reverseGeocode({
+        params: {
+            key: MAPS_KEY,
+            latlng: {lat: latitude, lng: longitude}
+        }
+    })
+    
+    const address = res.data.results[0].formatted_address;
+    return address;
+}
+
