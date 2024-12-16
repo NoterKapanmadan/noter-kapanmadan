@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "../ui/button";
 import { getLocationToAddress } from "@/app/actions";
-import { X } from "lucide-react";
+import { X, MapPinned } from "lucide-react";
 
 // add clear location too +++
 // When latitude and longitude are not entered, it may not give a ‘required’ error because location is entered. That needs to be fixed. +++ fixed
@@ -113,7 +113,7 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
                 <Label htmlFor="location">Location</Label>
                 <div className="relative">
                     <Input ref={ref} id="location-select" required={required} className="pr-8" />
-                    {isSelected && (
+                    {isSelected ? (
                         <button
                             type="button"
                             onClick={clearSelection}
@@ -122,9 +122,19 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
                         >
                             <X className="w-5 h-5 text-gray-500 hover:text-gray-600" />
                         </button>
-                    )}
+                    ):
+                    <button
+                    type="button"
+                    onClick={getUserLocation}
+                    className="absolute right-2 top-2 text-gray-600 hover:text-gray-800"
+                    aria-label="Use my location"
+                    disabled={isLocationPending}
+                >
+                    <MapPinned className={`w-5 h-5 text-gray-500 ${!isLocationPending && "hover:text-gray-600"}`} />
+                </button>
+                    
+                    }
                 </div>
-                <Button onClick={getUserLocation} disabled={isLocationPending}>Use My Location</Button>
 
                 {required && <input className="hidden" id="location" name="location" readOnly value={locationText} />}
                 <input className="hidden" id="latitude" name="latitude" readOnly value={selectedLatitude} />
