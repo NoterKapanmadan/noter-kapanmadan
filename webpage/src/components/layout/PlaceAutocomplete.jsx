@@ -2,7 +2,7 @@
 
 import { MAPS_KEY } from "@/utils/constants";
 import { useState } from "react";
-import Autocomplete, { usePlacesWidget } from "react-google-autocomplete";
+import { usePlacesWidget } from "react-google-autocomplete";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -24,6 +24,7 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
     const [selectedLongitude, setSelectedLongitude] = useState('');
     const [maxDistance, setMaxDistance] = useState(defaultMaxDistance ? defaultMaxDistance : '');
     const [userLocation, setUserLocation] = useState(null);
+    const [isLocationPending, setLocationPending] = useState();
 
     const handlePlaceSelected = (place) => {
         console.log("Place: ", place)
@@ -53,8 +54,10 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
         // if geolocation is supported by the users browser
         if (navigator.geolocation) {
             // get the current users location
+            setLocationPending(true);
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
+
                     // save the geolocation coordinates in two variables
                     const { latitude, longitude } = position.coords;
                     // update the value of userlocation variable
@@ -66,10 +69,13 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
                     ref.current.value = address;
                     setSelectedLatitude(latitude);
                     setSelectedLongitude(longitude);
+                    setLocationPending(false);
+                
                 },
                 // if there was an error getting the users location
                 (error) => {
                     console.error('Error getting user location:', error);
+                    setLocationPending(false);
                 }
             );
         }
@@ -88,7 +94,7 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
 
                 <Label htmlFor="location">Location</Label>
                 <Input ref={ref} id="location" name="location" required={required} />
-                <Button onClick={getUserLocation}>Get User Location</Button>
+                <Button onClick={getUserLocation} disabled={isLocationPending}>Get User Location</Button>
 
                 <input className="hidden" id="latitude" name="latitude" readOnly value={selectedLatitude} />
                 <input className="hidden" id="longitude" name="longitude" readOnly value={selectedLongitude} />
