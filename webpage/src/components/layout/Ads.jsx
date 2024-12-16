@@ -84,6 +84,10 @@ export default function Ads({ ads, initialFilters, totalPages }) {
       maxKm: '',
       gear_type: '',
       fuel_type: '',
+      maxDistance: '',
+      latitude: '',
+      longitude: '',
+
     }
     updateFilter(resetFilters)
     setFuelType('')
