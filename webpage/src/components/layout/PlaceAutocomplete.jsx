@@ -94,7 +94,7 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
 
                 <Label htmlFor="location">Location</Label>
                 <Input ref={ref} id="location" name="location" required={required} />
-                <Button onClick={getUserLocation} disabled={isLocationPending}>Get User Location</Button>
+                <Button onClick={getUserLocation} disabled={isLocationPending}>Use My Location</Button>
 
                 <input className="hidden" id="latitude" name="latitude" readOnly value={selectedLatitude} />
                 <input className="hidden" id="longitude" name="longitude" readOnly value={selectedLongitude} />

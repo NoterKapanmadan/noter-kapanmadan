@@ -103,17 +103,17 @@ export async function GET(request) {
     if (latitude && longitude && maxDistance && maxDistance < 2000) {
         // for better efficiency, first use latitude and longitude differences to use index, after that calculate complex distance formula
         conditions.push(`
-  latitude BETWEEN $1 - ($3 / 111.32)
-              AND $1 + ($3 / 111.32)
+  latitude BETWEEN $${paramIndex} - ($${paramIndex + 2} / 111.32)
+              AND $${paramIndex} + ($${paramIndex + 2} / 111.32)
   AND
-  longitude BETWEEN $2 - ($3 / (111.32 * COS(RADIANS($1))))
-               AND $2 + ($3 / (111.32 * COS(RADIANS($1))))
+  longitude BETWEEN $${paramIndex + 1} - ($${paramIndex + 2} / (111.32 * COS(RADIANS($${paramIndex}))))
+               AND $${paramIndex + 1} + ($${paramIndex + 2} / (111.32 * COS(RADIANS($${paramIndex}))))
   AND (
     6371 * ACOS(
-      COS(RADIANS($1)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS($2))
-      + SIN(RADIANS($1)) * SIN(RADIANS(latitude))
+      COS(RADIANS($${paramIndex})) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS($${paramIndex + 1}))
+      + SIN(RADIANS($${paramIndex})) * SIN(RADIANS(latitude))
     )
-  ) < $3`);
+  ) < $${paramIndex + 2}`);
         params.push(latitude);
         params.push(longitude);
         params.push(maxDistance);
@@ -122,7 +122,7 @@ export async function GET(request) {
 
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
     const adsParams = [...params, limit, offset];
-
+    console.log("where clause", whereClause);
     try {
         const countRes = await query(`
             SELECT COUNT(*) as total_count
