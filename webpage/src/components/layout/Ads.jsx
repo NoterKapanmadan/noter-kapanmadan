@@ -29,6 +29,8 @@ export default function Ads({ ads, initialFilters, totalPages }) {
   const [fuelType, setFuelType] = useState(filters.fuel_type || '')
   const [gearType, setGearType] = useState(filters.gear_type || '')
 
+  const [autocompleteKey, setAutocompleteKey] = useState(Date.now());
+
   const router = useRouter()
 
   const pushWithFilters = (updatedFilters) => {
@@ -93,6 +95,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
     setFuelType('')
     setGearType('')
     formRef.current.reset()
+    setAutocompleteKey(Date.now()); // reset autocomplete component by changing key
   }
 
   return (
@@ -154,7 +157,7 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                       />
                     </div>
                   </div>
-                    <PlaceAutocomplete isFilter/>
+                    <PlaceAutocomplete isFilter key={autocompleteKey}/>
                   <div className="space-y-2">
                     <Label htmlFor="brand">Brand</Label>
                     <Input
