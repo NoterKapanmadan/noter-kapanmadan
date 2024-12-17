@@ -36,6 +36,7 @@ export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = 
             { height: SMALL_RESIZE_HEIGHT, width: Math.floor(SMALL_RESIZE_HEIGHT * aspectRatio) }
             : { height, width }
         )
+        .jpeg({ quality: 65, progressive: true })
         .toFile(`${folderPath}/small.jpg`)
 
     // Base64 image for blur for medium image
