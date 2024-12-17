@@ -12,10 +12,7 @@ export async function GET(req, context) {
 
   try {
     const user = await query(
-      `SELECT Account.account_id, forename, surname, email, phone_number, registration_date, description, profile_image
-        FROM Users
-        JOIN Account ON Account.account_ID = Users.account_ID
-        WHERE Users.account_ID = $1`,
+      `SELECT * FROM user_profile_view WHERE account_ID = $1`,
       [account_id]
     );
 
