@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getImageSrc } from '@/utils/file';
 
-export default function AdImageCarousel({ images, base64Images }) {
+export default function AdImageCarousel({ images, base64Images, dimensions }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handlePrev = () => {
@@ -36,10 +36,8 @@ export default function AdImageCarousel({ images, base64Images }) {
         alt={`Ad Image ${currentImageIndex + 1}`}
         layout="fill"
         objectFit="contain"
-        blurDataURL={ad.base64Images?.[currentImageIndex]}
-        placeholder={ad.base64Images?.[currentImageIndex] ? 'blur' : 'empty'}
-        width={ad.dimensions?.[currentImageIndex]?.width}
-        height={ad.dimensions?.[currentImageIndex]?.height}
+        blurDataURL={base64Images?.[currentImageIndex]}
+        placeholder={base64Images?.[currentImageIndex] ? 'blur' : 'empty'}
         className="rounded-lg"
       />
       <Button
