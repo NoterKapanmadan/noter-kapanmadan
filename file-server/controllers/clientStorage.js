@@ -122,7 +122,7 @@ export const getBase64 = (req, res) => {
     }
 }
 
-export const getBase64Original = (req, res) => {
+export const getBase64Original = async (req, res) => {
     
     try {
         const files = JSON.parse(req.query.files);
@@ -130,18 +130,19 @@ export const getBase64Original = (req, res) => {
         const base64Map = {};
         const dimensions = {};
     
-        files.forEach((filePath) => {
+       for (const filePath of files) {
 
             try {
             const data = fs.readFileSync(`public/${filePath}/originalBase64`, 'utf8');
                 base64Map[filePath] = data;
-                dimensions[filePath] = getImageDimensionsSync(data);
+                console.log("image dimension: ",  await getImageDimensionsSync(data));
+                dimensions[filePath] = await getImageDimensionsSync(data);
             } catch (e) {
                 base64Map[filePath] = null;
                 dimensions[filePath] = null;
             }
-
-        });
+        }
+    
         res.status(200).json({
             status: "Success!",
             map: base64Map,
