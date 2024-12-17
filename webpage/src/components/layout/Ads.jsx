@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/select"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
-import AuthLink from '@/components/layout/AuthLink'
 import { getImageSrc } from '@/utils/file'
 import { Calendar } from 'lucide-react'
 import PlaceAutocomplete from './PlaceAutocomplete'
