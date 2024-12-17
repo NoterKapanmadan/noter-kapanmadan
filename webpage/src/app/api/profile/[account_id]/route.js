@@ -23,7 +23,7 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     const imageId = user.rows[0].profile_image;
-    const imageSrc = await getImageSrc(imageId);
+    const imageSrc = getImageSrc(imageId);
 
     const userData = {
       ...user.rows[0],

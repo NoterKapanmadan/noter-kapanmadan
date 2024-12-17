@@ -3,6 +3,7 @@ import fs from 'fs';
 
 import { decodeJwt, verifyJwt } from '../utils/jwt.js';
 import { compressImage } from '../utils/compressImage.js';
+import { getImageDimensionsSync } from '../utils/dimensions.js';
 
 
 export const uploadBatch = (req, res) => {
@@ -111,6 +112,41 @@ export const getBase64 = (req, res) => {
         res.status(200).json({
             status: "Success!",
             map: base64Map
+        })
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({
+            status: "Error!",
+            message: e.message
+        })
+    }
+}
+
+export const getBase64Original = async (req, res) => {
+    
+    try {
+        const files = JSON.parse(req.query.files);
+
+        const base64Map = {};
+        const dimensions = {};
+    
+       for (const filePath of files) {
+
+            try {
+            const data = fs.readFileSync(`public/${filePath}/originalBase64`, 'utf8');
+                base64Map[filePath] = data;
+                console.log("image dimension: ",  await getImageDimensionsSync(data));
+                dimensions[filePath] = await getImageDimensionsSync(data);
+            } catch (e) {
+                base64Map[filePath] = null;
+                dimensions[filePath] = null;
+            }
+        }
+    
+        res.status(200).json({
+            status: "Success!",
+            map: base64Map,
+            dimensionsMap: dimensions
         })
     } catch (e) {
         console.error(e)

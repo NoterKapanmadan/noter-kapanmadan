@@ -110,7 +110,7 @@ export async function GET(req, context) {
 
         let imageSrc = null;
         
-        imageSrc = await getImageSrc(profilePhoto);
+        imageSrc = getImageSrc(profilePhoto, 'low');
 
         const adData = {
             ...finalizedAd,

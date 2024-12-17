@@ -47,6 +47,7 @@ BEGIN
 END;
 $$;
 
+
 CREATE TABLE IF NOT EXISTS Account (
     account_ID UUID PRIMARY KEY UNIQUE NOT NULL,
     forename VARCHAR(50) NOT NULL,
@@ -146,10 +147,15 @@ CREATE TABLE IF NOT EXISTS Ad (
     price DECIMAL(10, 2) NOT NULL,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     location VARCHAR(100) NOT NULL,
+    latitude DECIMAL(8,6) NOT NULL,
+    longitude DECIMAL(9,6) NOT NULL,
     status ad_status DEFAULT 'active',
     FOREIGN KEY (vehicle_ID) REFERENCES Vehicle(vehicle_ID),
     FOREIGN KEY (user_ID) REFERENCES Users(account_ID)
 );
+
+CREATE INDEX IF NOT EXISTS idx_latitude ON Ad(latitude);
+CREATE INDEX IF NOT EXISTS idx_longitude ON Ad(longitude);
 
 -- Create AdImage table
 CREATE TABLE IF NOT EXISTS AdImage (
