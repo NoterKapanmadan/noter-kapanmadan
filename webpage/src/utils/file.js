@@ -90,7 +90,7 @@ export async function uploadFilesServer(files) {
             images: rawAd.images ? rawAd.images.split(',') : null
         };
 
-        const base64Images = await fetch(`${FILE_SERVER_URL}/clientStorage/getBase64?files=${JSON.stringify(
+        const base64Images = await fetch(`${FILE_SERVER_URL}/clientStorage/getBase64Original?files=${JSON.stringify(
             ad.images ? ad.images : null
         )}` );
         const base64ImagesData = await base64Images.json();
