@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db';
-import { FILE_SERVER_URL } from '@/utils/constants';
 import { extractImagesFromAds } from '@/utils/file';
 
 export async function GET(request) {

@@ -20,6 +20,8 @@ import AuthLink from '@/components/layout/AuthLink'
 import { getImageSrc } from '@/utils/file'
 import { Calendar } from 'lucide-react'
 import PlaceAutocomplete from './PlaceAutocomplete'
+import AuthLink from '@/components/layout/AuthLink'
+import { formatDate } from '@/utils/date'
 
 export default function Ads({ ads, initialFilters, totalPages }) {
   const [filters, setFilters] = useState(initialFilters)
@@ -106,8 +108,8 @@ export default function Ads({ ads, initialFilters, totalPages }) {
             <Card>
               <CardHeader className="flex flex-col gap-4">
                 <AuthLink href="/add-ad">
-                  <Button className="w-full">
-                    Create Add
+                 <Button className="w-full">
+                    Create Ad
                   </Button>
                 </AuthLink>
                 <CardTitle>Filters</CardTitle>
@@ -276,7 +278,8 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                     <CardTitle className="mb-2">{ad.title}</CardTitle>
                     <div className="space-y-1">
                       <p className="text-2xl font-bold text-primary">${ad.price}</p>
-                      <p className="text-sm text-muted-foreground">{ad.location} - {ad.date}</p>
+                      <p className="text-sm text-muted-foreground">{formatDate(ad.date)}</p>
+                      <p className="text-sm text-muted-foreground">{ad.location}</p>
                       <p className="text-sm">{ad.year} - {ad.km} km</p>
                       <p className="text-sm">{ad.gear_type} - {ad.fuel_type}</p>
                     </div>

@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, ArrowLeftRight, HandCoins, User } from "lucide-react";
+import { LogOut, ArrowLeftRight, HandCoins, User, Landmark } from "lucide-react";
 import { logout, getCurrentUserInfo } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import AuthLink from "@/components/layout/AuthLink";
@@ -27,6 +27,7 @@ export default async function Header() {
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer border-gray-50">
                 <AvatarImage
+                  className="object-cover"
                   src={currentUser.profilePicture || "/avatar.png"}
                 />
               </Avatar>
@@ -38,6 +39,12 @@ export default async function Header() {
                 <Link href={`/profile/${currentUser.account_id}`}>
                   <User size={16} />
                   Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/balance">
+                  <Landmark size={16} />
+                  Balance
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>

@@ -148,8 +148,8 @@ export default function ProfileForm({ user, accountId }) {
             <Label>Registration Date</Label>
             <p className="text-sm">{formatDate(user.registration_date)}</p>
           </div>
-
-          <Button type="submit" disabled={pending} className="w-full">
+          
+          <Button type="submit" disabled={pending} className="w-full mt-2">
             Update Profile
           </Button>
         </form>
