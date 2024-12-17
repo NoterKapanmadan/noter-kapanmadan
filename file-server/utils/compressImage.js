@@ -6,6 +6,7 @@ const MEDIUM_RESIZE_HEIGHT = 500;
 const LARGE_RESIZE_HEIGHT = 1440;
 
 const ASPECT_RATIO = 1.6;
+const FIT_MODE = 'cover'; // it might be contain (add black or white padding) or cover(remove some parts). Both keep aspect ratio
 
 export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = ASPECT_RATIO) {
 
@@ -16,7 +17,7 @@ export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = 
 
     // Image for listing page, aspect ratio according to card size
     await sharp(fileBuffer)
-        .resize({ height: MEDIUM_RESIZE_HEIGHT, width: Math.floor(MEDIUM_RESIZE_HEIGHT * resizeAspectRatio), fit: 'contain' })
+        .resize({ height: MEDIUM_RESIZE_HEIGHT, width: Math.floor(MEDIUM_RESIZE_HEIGHT * resizeAspectRatio), fit: FIT_MODE })
         .jpeg({ quality: 70, progressive: true })
         .toFile(`${folderPath}/medium_resized.jpg`)
 
@@ -39,7 +40,7 @@ export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = 
 
     // Base64 image for blur for medium image
     const resizedBase64 = await sharp(fileBuffer)
-        .resize({height: 10, width: Math.floor(10 * resizeAspectRatio), fit: 'contain'})
+        .resize({height: 10, width: Math.floor(10 * resizeAspectRatio), fit: FIT_MODE})
         .jpeg({ quality: 30 })
         .toBuffer()
 
