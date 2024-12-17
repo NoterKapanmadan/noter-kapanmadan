@@ -147,8 +147,12 @@ export async function GET(request) {
             LIMIT $${paramIndex} OFFSET $${paramIndex + 1};`,
             adsParams
         );
-
-        const finalizedAds = await extractImagesFromAds(ads.rows);
+        let finalizedAds = ads.rows;
+        try {
+        finalizedAds = await extractImagesFromAds(ads.rows);
+        } catch (err) {
+            console.error("Error on image server fetch: ", err);
+        }
 
         return NextResponse.json(
             {
