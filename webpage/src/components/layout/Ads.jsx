@@ -263,11 +263,11 @@ export default function Ads({ ads, initialFilters, totalPages }) {
                       <Image
                         src={getImageSrc(ad.images[0], 'medium_resized')}
                         alt={ad.title}
-                        width={800}
+                        width={667}
                         height={500}
                         blurDataURL={ad.base64Image}
                         placeholder={ad.base64Image ? "blur" : "empty"}
-                        className="w-[19rem] h-48 object-cover rounded-lg" />
+                        className="max-w-64 w-64 h-48 object-cover rounded-lg" />
                       :
                       <div className="w-full h-48 bg-gray-300 rounded-lg" />
                     }

@@ -5,7 +5,7 @@ const SMALL_RESIZE_HEIGHT = 100;
 const MEDIUM_RESIZE_HEIGHT = 500;
 const LARGE_RESIZE_HEIGHT = 1440;
 
-const ASPECT_RATIO = 1.6;
+const ASPECT_RATIO = 1.33;
 const FIT_MODE = 'cover'; // it might be contain (add black or white padding) or cover(remove some parts). Both keep aspect ratio
 
 export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = ASPECT_RATIO) {
