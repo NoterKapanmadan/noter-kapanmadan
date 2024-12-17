@@ -36,8 +36,10 @@ export default function AdImageCarousel({ images, base64Images }) {
         alt={`Ad Image ${currentImageIndex + 1}`}
         layout="fill"
         objectFit="contain"
-        blurDataURL={base64Images?.[currentImageIndex]}
-        placeholder={base64Images?.[currentImageIndex] ? 'blur' : 'empty'}
+        blurDataURL={ad.base64Images?.[currentImageIndex]}
+        placeholder={ad.base64Images?.[currentImageIndex] ? 'blur' : 'empty'}
+        width={ad.dimensions?.[currentImageIndex]?.width}
+        height={ad.dimensions?.[currentImageIndex]?.height}
         className="rounded-lg"
       />
       <Button

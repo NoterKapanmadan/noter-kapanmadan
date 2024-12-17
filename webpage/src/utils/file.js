@@ -98,6 +98,7 @@ export async function uploadFilesServer(files) {
         ad = {
             ...ad,
             base64Images: ad.images ? ad.images.map((image) => base64ImagesData.map[image]) : null,
+            dimensions: ad.images ? ad.images.map((image) => base64ImagesData.dimensionsMap[image]) : null,
         };
 
         return ad;

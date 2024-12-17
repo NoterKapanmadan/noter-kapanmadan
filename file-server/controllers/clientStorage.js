@@ -3,6 +3,7 @@ import fs from 'fs';
 
 import { decodeJwt, verifyJwt } from '../utils/jwt.js';
 import { compressImage } from '../utils/compressImage.js';
+import { getImageDimensionsSync } from '../utils/dimensions.js';
 
 
 export const uploadBatch = (req, res) => {
@@ -127,20 +128,24 @@ export const getBase64Original = (req, res) => {
         const files = JSON.parse(req.query.files);
 
         const base64Map = {};
+        const dimensions = {};
     
         files.forEach((filePath) => {
 
             try {
             const data = fs.readFileSync(`public/${filePath}/originalBase64`, 'utf8');
                 base64Map[filePath] = data;
+                dimensions[filePath] = getImageDimensionsSync(data);
             } catch (e) {
                 base64Map[filePath] = null;
+                dimensions[filePath] = null;
             }
 
         });
         res.status(200).json({
             status: "Success!",
-            map: base64Map
+            map: base64Map,
+            dimensionsMap: dimensions
         })
     } catch (e) {
         console.error(e)
