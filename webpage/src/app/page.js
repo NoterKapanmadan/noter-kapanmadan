@@ -2,6 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import AllAds from "@/components/layout/AllAds";
 import AdFilters from "@/components/layout/AdFilters";
 import { isAuthenticated } from "@/app/actions";
+import { Suspense } from "react";
+import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 
 export default async function HomePage({ searchParams }) {
   const {
@@ -61,7 +63,9 @@ export default async function HomePage({ searchParams }) {
                 )}  
               </TabsList>
               <TabsContent value="allAds">
-                <AllAds filters={filters} />
+                <Suspense fallback={<LoadingSkeleton />}>
+                  <AllAds filters={filters} />
+                </Suspense>
               </TabsContent>
               {isAuth && (
                 <>

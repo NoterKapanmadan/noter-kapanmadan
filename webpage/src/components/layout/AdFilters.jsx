@@ -20,7 +20,6 @@ import AuthLink from '@/components/layout/AuthLink'
 
 export default function AdFilters({ initialFilters }) {
   const [filters, setFilters] = useState(initialFilters)
-  const [isPending, startTransition] = useTransition()
   const formRef = useRef(null)
 
   const [fuelType, setFuelType] = useState(filters.fuel_type || '')
@@ -43,9 +42,7 @@ export default function AdFilters({ initialFilters }) {
   const updateFilter = (updatedFields) => {
     const newFilters = { ...filters, ...updatedFields, page: 1 }
     setFilters(newFilters)
-    startTransition(() => {
-      pushWithFilters(newFilters)
-    })
+    pushWithFilters(newFilters)
   }
 
   const handleSubmit = (formData) => {
