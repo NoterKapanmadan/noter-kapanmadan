@@ -17,11 +17,13 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { SERVER_URL } from "@/utils/constants";
 
-export default function BalancePage({user_balance}) {
+export default function BalancePage({ user_balance }) {
   const { toast } = useToast()
   const [balance, setBalance] = useState(Number(user_balance))
   const [addBalanceAmount, setAddBalanceAmount] = useState('')
   const [withdrawBalanceAmount, setWithdrawBalanceAmount] = useState('')
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false)
 
   const handleAddBalance = () => {
     startTransition(async () => {
@@ -46,6 +48,7 @@ export default function BalancePage({user_balance}) {
       }
       setBalance(prevBalance => prevBalance + amount)
       setAddBalanceAmount('')
+      setIsAddDialogOpen(false)
       return toast({
         title: "Balance added",
         description: `$${amount} has been added to your account.`
@@ -70,7 +73,7 @@ export default function BalancePage({user_balance}) {
         body: JSON.stringify({ diff: -amount }),
       });
       if (!res.ok) {
-        const s =  await res.json()
+        const s = await res.json()
         return toast({
           title: "Error withdrawing balance",
           description: s.message ? s.message : "An error occurred while withdrawing balance."
@@ -78,11 +81,12 @@ export default function BalancePage({user_balance}) {
       }
       setBalance(prevBalance => prevBalance - amount)
       setWithdrawBalanceAmount('')
+      setIsWithdrawDialogOpen(false)
       return toast({
         title: "Balance withdrawn",
         description: `$${amount} has been withdrawn from your account.`
       })
-  })
+    })
   }
   return (
     <div className="min-h-screen bg-gray-50">
@@ -97,7 +101,7 @@ export default function BalancePage({user_balance}) {
               <div className="text-2xl font-bold">${balance}</div>
             </div>
             <div className="flex gap-2">
-              <Dialog>
+              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogTrigger asChild>
                   <Button className="w-full">Add Balance</Button>
                 </DialogTrigger>
@@ -108,7 +112,13 @@ export default function BalancePage({user_balance}) {
                       Enter the amount you want to add to your account balance.
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="grid gap-4 py-4">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault(); // Prevent default form submission
+                      handleAddBalance();
+                    }}
+                    className="grid gap-4 py-4"
+                  >
                     <div className="flex flex-col items-start gap-3">
                       <Label htmlFor="addBalanceAmount" className="text-right">
                         Amount
@@ -119,23 +129,23 @@ export default function BalancePage({user_balance}) {
                         step="0.01"
                         value={addBalanceAmount}
                         onChange={(e) => {
-                          const value = e.target.value
+                          const value = e.target.value;
                           if (/^\d*(\.\d{0,2})?$/.test(value)) {
-                            setAddBalanceAmount(value)
+                            setAddBalanceAmount(value);
                           }
                         }}
                         className="col-span-3"
                         placeholder="Enter amount"
                       />
                     </div>
-                  </div>
-                  <DialogFooter>
-                    <Button onClick={handleAddBalance}>Add Balance</Button>
-                  </DialogFooter>
+                    <DialogFooter>
+                      <Button type="submit">Add Balance</Button>
+                    </DialogFooter>
+                  </form>
                 </DialogContent>
               </Dialog>
 
-              <Dialog>
+              <Dialog open={isWithdrawDialogOpen} onOpenChange={setIsWithdrawDialogOpen}>
                 <DialogTrigger asChild>
                   <Button className="w-full">Withdraw Balance</Button>
                 </DialogTrigger>
@@ -146,7 +156,13 @@ export default function BalancePage({user_balance}) {
                       Enter the amount you want to withdraw from your account balance.
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="grid gap-4 py-4">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault(); // Prevent default form submission
+                      handleWithdrawBalance();
+                    }}
+                    className="grid gap-4 py-4"
+                  >
                     <div className="flex flex-col items-start gap-3">
                       <Label htmlFor="withdrawBalanceAmount" className="text-right">
                         Amount
@@ -157,21 +173,22 @@ export default function BalancePage({user_balance}) {
                         step="0.01"
                         value={withdrawBalanceAmount}
                         onChange={(e) => {
-                          const value = e.target.value
+                          const value = e.target.value;
                           if (/^\d*(\.\d{0,2})?$/.test(value)) {
-                            setWithdrawBalanceAmount(value)
+                            setWithdrawBalanceAmount(value);
                           }
                         }}
                         className="col-span-3"
                         placeholder="Enter amount"
                       />
                     </div>
-                  </div>
-                  <DialogFooter>
-                    <Button onClick={handleWithdrawBalance}>Withdraw Balance</Button>
-                  </DialogFooter>
+                    <DialogFooter>
+                      <Button type="submit">Withdraw Balance</Button>
+                    </DialogFooter>
+                  </form>
                 </DialogContent>
               </Dialog>
+
             </div>
           </CardContent>
         </Card>

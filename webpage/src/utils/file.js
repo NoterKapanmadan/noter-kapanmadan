@@ -90,14 +90,17 @@ export async function uploadFilesServer(files) {
             images: rawAd.images ? rawAd.images.split(',') : null
         };
 
-        const base64Images = await fetch(`${FILE_SERVER_URL}/clientStorage/getBase64?files=${JSON.stringify(
-            ad.images ? ad.images : null
-        )}` );
+        const base64Images = await fetch(`${FILE_SERVER_URL}/clientStorage/getBase64Original?files=${JSON.stringify(
+            ad.images ? ad.images : null,
+        )}`, {
+            cache: 'no-cache',
+        } ); // maybe no cache can be removed
         const base64ImagesData = await base64Images.json();
-
+        console.log("base64", base64ImagesData);
         ad = {
             ...ad,
             base64Images: ad.images ? ad.images.map((image) => base64ImagesData.map[image]) : null,
+            dimensions: ad.images ? ad.images.map((image) => base64ImagesData.dimensionsMap[image]) : null,
         };
 
         return ad;

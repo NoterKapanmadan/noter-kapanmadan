@@ -114,7 +114,7 @@ export async function GET(req, context) {
 
         let imageSrc = null;
         
-        imageSrc = await getImageSrc(profilePhoto);
+        imageSrc = getImageSrc(profilePhoto, 'low');
 
         if (payload?.account_id) {
             const favorite = await query(

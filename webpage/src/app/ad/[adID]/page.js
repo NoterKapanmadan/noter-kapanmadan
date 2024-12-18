@@ -60,6 +60,7 @@ export default async function AdPage({ params }) {
                 <AdImageCarousel
                   images={ad.images || []}
                   base64Images={ad.base64Images || []}
+                  dimensions={ad.dimensions || []}
                 />
               </CardContent>
             </Card>

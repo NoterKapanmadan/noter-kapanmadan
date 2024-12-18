@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { decrypt, getAuthToken } from "@/lib/auth";
 import { SERVER_URL } from "@/utils/constants";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { mapsReverseGeocode } from "@/utils/maps";
 
 export const revalidatePathClient = revalidatePath;
 export const revalidateTagClient = revalidateTag;
@@ -89,6 +90,10 @@ export const getHistory = async () => {
   return res;
 };
 
+export async function getLocationToAddress(lat, lng) {
+  const res = await mapsReverseGeocode(lat, lng);
+  return res;
+}
 export const getBalance = async () => {
   const response = await fetch(`${SERVER_URL}/balance/set-balance`, {
     method: "GET",

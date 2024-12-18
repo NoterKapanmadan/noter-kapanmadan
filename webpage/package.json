@@ -10,6 +10,7 @@
     "migrate": "node src/migrations/migrate.js"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
@@ -30,6 +31,7 @@
     "pg": "^8.13.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-google-autocomplete": "^2.7.3",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.0.3"

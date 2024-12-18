@@ -32,7 +32,7 @@ export async function GET(request) {
     
     const incomingOffers = await Promise.all(
       incomingOffersResult.rows.map(async (offer) => {
-        const imageSrc = offer.profile_image ? await getImageSrc(offer.profile_image) : null;
+        const imageSrc = offer.profile_image ? getImageSrc(offer.profile_image, 'low') : null;
         return {
           ...offer,
           bidder_profile_photo: imageSrc
@@ -42,7 +42,7 @@ export async function GET(request) {
 
     const sentOffers = await Promise.all(
       sentOffersResult.rows.map(async (offer) => {
-        const imageSrc = offer.profile_image ? await getImageSrc(offer.profile_image) : null;
+        const imageSrc = offer.profile_image ? getImageSrc(offer.profile_image, 'low') : null;
         return {
           ...offer,
           owner_profile_photo: imageSrc
