@@ -10,19 +10,19 @@ const FIT_MODE = 'cover'; // it might be contain (add black or white padding) or
 
 export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = ASPECT_RATIO) {
 
-    const image = sharp(fileBuffer);
+    const image = sharp(fileBuffer, { sequentialRead: true, failOn: 'none' });
     const metadata = await image.metadata();
     const { width, height } = metadata;
     const aspectRatio = width / height;
 
     // Image for listing page, aspect ratio according to card size
-    await sharp(fileBuffer)
+    await image
         .resize({ height: MEDIUM_RESIZE_HEIGHT, width: Math.floor(MEDIUM_RESIZE_HEIGHT * resizeAspectRatio), fit: FIT_MODE })
         .jpeg({ quality: 70, progressive: true })
         .toFile(`${folderPath}/medium_resized.jpg`)
 
     // Image for detail page which keeps original image's aspect ratio
-    await sharp(fileBuffer)
+    await image
         .resize(height > LARGE_RESIZE_HEIGHT ?
             { height: LARGE_RESIZE_HEIGHT, width: Math.floor(LARGE_RESIZE_HEIGHT * aspectRatio) }
             : { height, width }
@@ -31,7 +31,7 @@ export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = 
         .toFile(`${folderPath}/large.jpg`)
 
     // Image for maybe profile picture when is small, aspect ratio according to card size
-    await sharp(fileBuffer)
+    await image
         .resize(height > SMALL_RESIZE_HEIGHT ?
             { height: SMALL_RESIZE_HEIGHT, width: Math.floor(SMALL_RESIZE_HEIGHT * aspectRatio) }
             : { height, width }
@@ -40,12 +40,12 @@ export async function compressImage(fileBuffer, folderPath, resizeAspectRatio = 
         .toFile(`${folderPath}/small.jpg`)
 
     // Base64 image for blur for medium image
-    const resizedBase64 = await sharp(fileBuffer)
+    const resizedBase64 = await image
         .resize({height: 10, width: Math.floor(10 * resizeAspectRatio), fit: FIT_MODE})
         .jpeg({ quality: 30 })
         .toBuffer()
 
-    const originalBase64 = await sharp(fileBuffer)
+    const originalBase64 = await image
         .resize({height: 10, width: Math.floor(10 * aspectRatio)})
         .jpeg({ quality: 30 })
         .toBuffer()
