@@ -1,9 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import AllAds from "@/components/layout/AllAds";
-import AdFilters from "@/components/layout/AdFilters";
 import { isAuthenticated } from "@/app/actions";
 import { Suspense } from "react";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
+import AllAds from "@/components/layout/AllAds";
+import AdFilters from "@/components/layout/AdFilters";
+import Favorites from "@/components/layout/Favorites";
 
 export default async function HomePage({ searchParams }) {
   const {
@@ -70,7 +71,11 @@ export default async function HomePage({ searchParams }) {
               {isAuth && (
                 <>
                   <TabsContent value="myAds">My Ads</TabsContent>
-                  <TabsContent value="favorites">Favorites</TabsContent>
+                  <TabsContent value="favorites">
+                    <Suspense fallback={<LoadingSkeleton />}>
+                      <Favorites filters={filters} />
+                    </Suspense>
+                  </TabsContent>
                 </>
               )}  
             </Tabs>
