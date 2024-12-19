@@ -31,6 +31,7 @@ import { SERVER_URL } from "@/utils/constants";
 import Link from "next/link";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
+import { Pencil, Trash2 } from 'lucide-react'
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
@@ -63,7 +64,25 @@ export default async function AdPage({ params }) {
             {/* Ad Details */}
             <Card>
               <CardHeader>
-                <CardTitle>{ad.title || "Ad Title"}</CardTitle>
+              <div className="flex justify-between items-center">
+                <CardTitle className="inline-block">{ad.title || "Ad Title"}</CardTitle>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="text-blue-500 h-8 w-8"
+                  >
+                    <Pencil size={18} />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="text-red-500 h-8 w-8"
+                  >
+                    <Trash2 size={18} />
+                  </Button>
+                </div>
+              </div>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-primary mb-4">
