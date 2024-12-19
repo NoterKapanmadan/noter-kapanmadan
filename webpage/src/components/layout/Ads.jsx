@@ -31,6 +31,7 @@ export default function Ads({ ads }) {
                 <p className="text-2xl font-bold text-primary">${ad.price}</p>
                 <p className="text-sm text-muted-foreground">{formatDate(ad.date)}</p>
                 <p className="text-sm text-muted-foreground">{ad.location}</p>
+                <p className="text-sm">{ad.brand} - {ad.model}</p>
                 <p className="text-sm">{ad.year} - {ad.km} km</p>
                 <p className="text-sm">{ad.gear_type} - {ad.fuel_type}</p>
               </div>
