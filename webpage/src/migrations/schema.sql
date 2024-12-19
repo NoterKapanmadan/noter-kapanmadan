@@ -242,3 +242,17 @@ REFERENCING NEW TABLE AS new_table
 FOR EACH ROW
 EXECUTE FUNCTION update_balance_function();
 
+-- Create view for profile
+CREATE VIEW user_profile_view AS
+SELECT 
+    a.account_ID,
+    a.forename,
+    a.surname,
+    a.email,
+    a.phone_number,
+    a.registration_date,
+    u.description,
+    u.profile_image
+FROM Account a
+INNER JOIN Users u ON a.account_ID = u.account_ID;
+

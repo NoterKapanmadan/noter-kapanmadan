@@ -12,10 +12,7 @@ export async function GET(req, context) {
 
   try {
     const user = await query(
-      `SELECT Account.account_id, forename, surname, email, phone_number, registration_date, description, profile_image
-        FROM Users
-        JOIN Account ON Account.account_ID = Users.account_ID
-        WHERE Users.account_ID = $1`,
+      `SELECT * FROM user_profile_view WHERE account_ID = $1`,
       [account_id]
     );
 
@@ -54,11 +51,6 @@ export async function POST(req, context) {
     const description = formData.get("description");
     const profilePicture = formData.get("profilePicture");
 
-    const profilePictureArr = [profilePicture];
-
-    const { imageIds } = await uploadFilesServer(profilePictureArr);
-    const imageId = imageIds[0];
-
     await query("BEGIN");
 
     await query(
@@ -70,10 +62,23 @@ export async function POST(req, context) {
 
     await query(
       `UPDATE Users
-      SET description = $1, profile_image = $3
-      WHERE account_id = $2`,
-      [description, account_id, imageId]
+       SET description = $1
+       WHERE account_id = $2`,
+      [description, account_id]
     );
+
+    if (profilePicture) {
+      const profilePictureArr = [profilePicture];
+      const { imageIds } = await uploadFilesServer(profilePictureArr);
+      const imageId = imageIds[0];
+
+      await query(
+        `UPDATE Users
+         SET profile_image = $1
+         WHERE account_id = $2`,
+        [imageId, account_id]
+      );
+    }
 
     await query("COMMIT");
 
