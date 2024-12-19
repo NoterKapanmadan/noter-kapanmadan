@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { extractImagesFromAd, getImageSrc } from '@/utils/file';
+import { decrypt } from '@/lib/auth';
 
 export async function GET(req, context) {
+    const payload = await decrypt(req.cookies.get("Authorization")?.value);
     const ad_ID = context.params.ad_ID;
 
     try {
         const ad = await query(
-            `SELECT 
+            `SELECT
+                Ad.ad_ID,
                 Ad.title, 
                 Ad.description, 
                 Ad.price, 
@@ -48,6 +51,7 @@ export async function GET(req, context) {
             LEFT JOIN Motorcycle ON Vehicle.vehicle_ID = Motorcycle.vehicle_ID
             WHERE Ad.ad_ID = $1
             GROUP BY 
+                Ad.ad_ID,
                 Ad.title, 
                 Ad.description, 
                 Ad.price, 
@@ -111,6 +115,15 @@ export async function GET(req, context) {
         let imageSrc = null;
         
         imageSrc = getImageSrc(profilePhoto, 'low');
+
+        if (payload?.account_id) {
+            const favorite = await query(
+                'SELECT * FROM Favorites WHERE ad_ID = $1 AND account_ID = $2',
+                [ad_ID, payload.account_id]
+            );
+
+            finalizedAd.is_favorited = favorite.rows.length > 0;
+        }
 
         const adData = {
             ...finalizedAd,
