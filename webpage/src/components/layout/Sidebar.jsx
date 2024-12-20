@@ -18,7 +18,10 @@ export default function Sidebar() {
 
   return (
     <aside className="w-64 bg-white shadow-md p-4 flex flex-col gap-2">
-      <p className="text-center font-bold text-xl">Admin Panel</p>
+      <div className="flex flex-col">
+        <p className="text-center font-bold text-xl">Admin Panel</p>
+        <p className="text-center text-gray-500 text-xs">noterkapanmadan.com</p>
+      </div>
       <nav className='flex-1 flex flex-col gap-1'>
         {menuItems.map((item) => (
           <Link
