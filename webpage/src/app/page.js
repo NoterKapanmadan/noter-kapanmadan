@@ -1,6 +1,7 @@
 import Ads from "@/components/layout/Ads";
 import { SERVER_URL } from "@/utils/constants"
 import { getAuthToken } from "@/lib/auth";
+import { isAdmin} from "@/app/actions";
 
 export default async function HomePage({ searchParams }) {
   const {
@@ -63,7 +64,8 @@ export default async function HomePage({ searchParams }) {
   const {vehicleAds, totalPages} = await res.json()
 
   // console.log("vehicleAds: ", vehicleAds, totalPages)
-
+  const admin = await isAdmin();
+  console.log("User is admin: ", admin);
   return (
     <Ads
       ads={vehicleAds}
