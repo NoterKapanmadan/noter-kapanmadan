@@ -32,6 +32,7 @@ import Link from "next/link";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
 import { Pencil, Trash2 } from 'lucide-react'
+import { getAuthToken } from "@/lib/auth";
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
@@ -41,6 +42,9 @@ export default async function AdPage({ params }) {
   const res = await fetch(`${SERVER_URL}/ad/get-ad/${ad_ID}`, {
     method: "GET",
     cache: "no-cache",
+    headers: {
+      "Cookie": "Authorization=" + getAuthToken(),
+    }
   });
   const ad = await res.json();
 
@@ -218,7 +222,7 @@ export default async function AdPage({ params }) {
 
             {/* Actions */}
             {isAuth && (
-              <AdActions ad_ID= {ad_ID}/>
+              <AdActions ad={ad} />
             )}
           </div>
         </div>
