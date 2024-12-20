@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Users, BarChart2, FileText, DollarSign, MessageSquare } from 'lucide-react'
+import { Users, BarChart2, FileText, DollarSign, MessageSquare, LogOut, ArrowLeft } from 'lucide-react'
+import { logout } from '@/app/actions'
 
 const menuItems = [
   { name: 'Users', icon: Users, href: '/admin/users' },
@@ -16,21 +17,32 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 bg-white shadow-md">
-      <nav className="mt-5 px-2">
+    <aside className="w-64 bg-white shadow-md p-4 flex flex-col gap-2">
+      <p className="text-center font-bold text-xl">Admin Panel</p>
+      <nav className='flex-1 flex flex-col gap-1'>
         {menuItems.map((item) => (
           <Link
             key={item.name}
             href={item.href}
-            className={`mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-md hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 transition ease-in-out duration-150 ${
-              pathname === item.href ? 'text-gray-900 bg-gray-100' : 'text-gray-600'
-            }`}
+            className="group flex items-center py-2 gap-2 text-base leading-6 font-medium hover:text-black text-gray-500"
           >
-            <item.icon className="mr-4 h-6 w-6 text-gray-500 group-hover:text-gray-500 group-focus:text-gray-600 transition ease-in-out duration-150" />
+            <item.icon className="h-5 w-5 text-gray-500 group-hover:text-black" />
             {item.name}
           </Link>
         ))}
       </nav>
+      <div className="flex flex-col gap-3 text-gray-500">
+        <Link href="/" className="group hover:text-black flex items-center gap-2">
+          <ArrowLeft className="h-5 w-5 group-hover:text-black" />
+          Back to website
+        </Link>
+        <form action={logout}>
+          <button className="w-full flex items-center gap-2 group hover:text-black">
+            <LogOut className="h-5 w-5 group-hover:text-black" />
+            Logout
+          </button>
+        </form>
+      </div>
     </aside>
   )
 }

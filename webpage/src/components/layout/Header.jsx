@@ -9,12 +9,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, ArrowLeftRight, HandCoins, User, Landmark } from "lucide-react";
-import { logout, getCurrentUserInfo } from "@/app/actions";
+import { logout, getCurrentUserInfo, isAdmin } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import AuthLink from "@/components/layout/AuthLink";
 
 export default async function Header() {
   const currentUser = await getCurrentUserInfo();
+  const isAdminUser = await isAdmin();
 
   return (
     <header className="bg-primary text-primary-foreground shadow">
@@ -22,6 +23,14 @@ export default async function Header() {
         <h1 className="text-xl font-bold">
           <Link href="/">NoterKapanmadan</Link>
         </h1>
+        <div className="flex justify-center gap-2">
+            {isAdminUser && (
+              <Link href="/admin">
+                <Button variant="link" className="w-full text-white">
+                  Admin Panel
+                </Button>
+              </Link>
+            )}
         {currentUser ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -70,14 +79,13 @@ export default async function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <div className="flex justify-center">
-            <AuthLink refresh="true">
-              <Button variant="link" className="w-full text-white">
-                Login
-              </Button>
-            </AuthLink>
-          </div>
+          <AuthLink refresh="true">
+            <Button variant="link" className="w-full text-white">
+              Login
+            </Button>
+          </AuthLink>
         )}
+        </div>
       </div>
     </header>
   );
