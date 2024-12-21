@@ -12,8 +12,11 @@ const Home = () => {
   }, []);
 
   const socketInitializer = async () => {
-    socket = io(); // Connect to Socket.IO server
-
+    socket = io(process.env.NEXT_PUBLIC_MESSAGE_SERVER, {
+      path: '/socket.io',
+      transports: ['websocket', 'polling'], // Ensure both transports are available
+      //secure: true, // Use secure connection if your server uses HTTPS
+    });
     socket.on('connect', () => {
       console.log('Connected');
     });
