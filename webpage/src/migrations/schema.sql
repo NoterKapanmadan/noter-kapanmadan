@@ -10,7 +10,7 @@ $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ad_status') THEN
-        CREATE TYPE ad_status AS ENUM ('active', 'sold');
+        CREATE TYPE ad_status AS ENUM ('active', 'sold', 'inactive');
     END IF;
 END;
 $$;
@@ -18,7 +18,7 @@ $$;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'bid_status') THEN
-        CREATE TYPE bid_status AS ENUM ('pending', 'accepted', 'rejected', 'completed');
+        CREATE TYPE bid_status AS ENUM ('pending', 'accepted', 'rejected', 'completed', 'canceled');
     END IF;
 END;
 $$;
@@ -243,7 +243,7 @@ FOR EACH ROW
 EXECUTE FUNCTION update_balance_function();
 
 -- Create view for profile
-CREATE VIEW user_profile_view AS
+CREATE OR REPLACE VIEW user_profile_view AS
 SELECT 
     a.account_ID,
     a.forename,
@@ -255,4 +255,31 @@ SELECT
     u.profile_image
 FROM Account a
 INNER JOIN Users u ON a.account_ID = u.account_ID;
+
+-- Create function for updating ads and bids after ban or unban
+CREATE OR REPLACE FUNCTION update_ads_bids_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.status = 'banned' THEN
+        UPDATE ad
+        SET status = 'inactive'
+        WHERE user_ID = NEW.account_ID AND status = 'active';
+        UPDATE bid
+        SET status = 'canceled'
+        WHERE (user_ID = NEW.account_ID OR ad_ID IN (SELECT ad_ID FROM ad WHERE user_ID = NEW.account_ID)) AND status = 'pending';
+    END IF;
+    IF NEW.status = 'active' THEN
+        UPDATE ad
+        SET status = 'active'
+        WHERE user_ID = NEW.account_ID AND status = 'inactive';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER update_ads_bids AFTER UPDATE ON Users
+REFERENCING NEW TABLE AS new_table
+FOR EACH ROW
+EXECUTE FUNCTION update_ads_bids_function();
+
 
