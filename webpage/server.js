@@ -1,6 +1,7 @@
+
 const { createServer } = require('http');
 const next = require('next');
-const { Server } = require('socket.io');
+const { initServerSocket } = require('./src/socket/socket');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -11,20 +12,7 @@ app.prepare().then(() => {
     handle(req, res);
   });
 
-  const io = new Server(server);
-
-  io.on('connection', (socket) => {
-    console.log('Client connected');
-
-    socket.on('input-change', (msg) => {
-      console.log('Message:', msg);
-      socket.broadcast.emit('update-input', msg);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Client disconnected');
-    });
-  });
+  initServerSocket(server);
 
   server.listen(3000, () => {
     console.log('> Ready on http://localhost:3000');
