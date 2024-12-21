@@ -27,7 +27,7 @@ export default function Sidebar() {
           <Link
             key={item.name}
             href={item.href}
-            className="group flex items-center py-2 gap-2 text-base leading-6 font-medium hover:text-black text-gray-500"
+            className="group flex items-center py-2 gap-2 text-base leading-6 hover:text-black text-gray-500"
           >
             <item.icon className="h-5 w-5 text-gray-500 group-hover:text-black" />
             {item.name}
@@ -35,7 +35,7 @@ export default function Sidebar() {
         ))}
       </nav>
       <div className="flex flex-col gap-3 text-gray-500">
-        <Link href="/" className="group hover:text-black flex items-center gap-2">
+        <Link href="/" className="group hover:text-black flex items-center gap-2 text-base leading-6">
           <ArrowLeft className="h-5 w-5 group-hover:text-black" />
           Back to website
         </Link>
