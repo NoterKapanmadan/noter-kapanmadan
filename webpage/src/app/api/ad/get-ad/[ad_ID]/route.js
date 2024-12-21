@@ -11,11 +11,12 @@ export async function GET(req, context) {
         const ad = await query(
             `SELECT
                 Ad.ad_ID,
+                Ad.user_ID,
                 Ad.title, 
                 Ad.description, 
                 Ad.price, 
                 Ad.location, 
-                Ad.date, 
+                Ad.date,
                 Ad.status, 
                 Vehicle.brand, 
                 Vehicle.model, 
@@ -52,6 +53,7 @@ export async function GET(req, context) {
             WHERE Ad.ad_ID = $1
             GROUP BY 
                 Ad.ad_ID,
+                Ad.user_ID,
                 Ad.title, 
                 Ad.description, 
                 Ad.price, 

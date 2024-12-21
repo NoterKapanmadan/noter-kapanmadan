@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, startTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,9 +12,11 @@ import { Pencil, Trash2 } from "lucide-react";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
 import { revalidateTagClient, updateAd } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast"
 
-export default function AdViewClient({ ad, isAuth}) {
+export default function AdViewClient({ ad, isAuth, currentUserID}) {
   const [editMode, setEditMode] = useState(false);
+  const { toast } = useToast()
 
   const [title, setTitle] = useState(ad.title || "");
   const [price, setPrice] = useState(ad.price || "");
@@ -31,22 +33,42 @@ export default function AdViewClient({ ad, isAuth}) {
   };
 
   const handleUpdateClick = async () => {
-    const updatedData = {
-      title,
-      price,
-      brand,
-      model,
-      year,
-      km,
-      gear_type: gearType,
-      fuel_type: fuelType,
-      description,
-    };
+    startTransition(async () => {
+      const updatedData = {
+        title,
+        price,
+        brand,
+        model,
+        year,
+        km,
+        gear_type: gearType,
+        fuel_type: fuelType,
+        description,
+        adUserID: ad.user_id,
+      };
+  
+      const { msg, error } = await updateAd(ad.ad_id, updatedData);
 
-    await updateAd(ad.ad_id, updatedData);
-    revalidateTagClient(`/ad/${ad.ad_id}`)
-    setEditMode(false);
+      if (error) {
+        return toast({
+          title: 'Something went wrong!',
+          description: error,
+        });
+      }
+
+      if (msg) {
+        toast({
+          title: 'Success!',
+          description: msg,
+        });
+
+        revalidateTagClient(`/ad/${ad.ad_id}`)
+        setEditMode(false);
+      }
+    })
   };
+
+  console.log("ad user id, user id", ad.user_id, currentUserID)
 
   return (
     <div className="flex flex-col lg:flex-row gap-4">
@@ -76,8 +98,8 @@ export default function AdViewClient({ ad, isAuth}) {
               ) : (
                 <CardTitle className="inline-block">{ad.title || "Ad Title"}</CardTitle>
               )}
-              <div className="flex gap-2">
-                {!editMode && (
+              <div className="flex gap-1">
+                {!editMode && (ad.user_id == currentUserID) && (
                   <Button
                     variant="outline"
                     size="icon"
@@ -181,7 +203,7 @@ export default function AdViewClient({ ad, isAuth}) {
                 </div>
 
                 <div className="mt-4 flex gap-2">
-                  <Button onClick={handleUpdateClick} variant="primary">Update</Button>
+                  <Button onClick={handleUpdateClick}>Update</Button>
                   <Button variant="outline" onClick={() => setEditMode(false)}>Cancel</Button>
                 </div>
               </>

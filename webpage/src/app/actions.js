@@ -135,21 +135,29 @@ export const getOffers = async () => {
 }
 
 export async function updateAd(ad_ID, updatedData) {
-  const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad_ID}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Cookie: "Authorization=" + getAuthToken(),
-    },
-    body: JSON.stringify(updatedData),
-    cache: 'no-cache',
-  });
+  const token = getAuthToken();
+  const payload = await decrypt(token);
+
+  const{adUserID} = updatedData;
+
+  if (payload.account_id == adUserID) {
+    const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad_ID}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: "Authorization=" + getAuthToken(),
+      },
+      body: JSON.stringify(updatedData),
+      cache: 'no-cache',
+    });
 
 
-  if (!res.ok) {
-    throw new Error("Failed to update ad");
+    if (!res.ok) {
+      throw new Error("Failed to update ad");
+    }
+
+    const data = await res.json();
+    return data;
   }
-
-  const data = await res.json();
-  return data;
+  return null;
 }
