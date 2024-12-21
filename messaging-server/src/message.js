@@ -52,10 +52,9 @@ export async function fetchMessagesDb(data) {
 }
 
 export async function saveMessageDb(data) {
-    const { message, sender, receiver, date } = data;
+    const { message, sender, receiver, date, messageId } = data;
 
     // Generate a new UUID for the message and chatroom if needed
-    const messageId = uuidv4();
     const chatroomId = uuidv4();
 
     try {

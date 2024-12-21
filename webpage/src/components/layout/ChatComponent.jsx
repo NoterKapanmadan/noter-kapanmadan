@@ -10,7 +10,6 @@ import io from 'socket.io-client';
 export default function ChatComponent( {receiver} )  {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Welcome to the chat!", sender: "bot" },
   ]);
   const [input, setInput] = useState("");
   const [input2, setInput2] = useState("");
@@ -20,13 +19,8 @@ export default function ChatComponent( {receiver} )  {
   const handleSend = () => {
     if (input.trim()) {
       const userMessage = { id: messages.length + 1, text: input, sender: "user" };
-      const botReply = {
-        id: messages.length + 2,
-        text: "Thanks for your message! 😊",
-        sender: "bot",
-      };
 
-      setMessages((prevMessages) => [...prevMessages, userMessage, botReply]);
+      setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput(""); // Clear input after sending
 
       socket.emit('send-message', { message: input, receiver: receiver });
@@ -35,22 +29,28 @@ export default function ChatComponent( {receiver} )  {
 
   
   useEffect(() => {
-    socketInitializer();
-  }, []);
-
-  const socketInitializer = async () => {
     const socketDef = io(process.env.NEXT_PUBLIC_MESSAGE_SERVER, {
       path: '/socket.io',
       transports: ['websocket', 'polling'], // Ensure both transports are available
       //secure: true, // Use secure connection if your server uses HTTPS
     });
+    socketInitializer(socketDef);
+
+    return () => {
+      socketDef.close(); // Clean up the connection when the component unmounts
+    };
+  }, []);
+
+  const socketInitializer =  (socketDef) => {
+
     socketDef.on('connect', () => {
       console.log('Connected');
     });
 
     socketDef.on('receive-message', (data) => {
-      const { message, sender, date } = data;
-      setInput(message); // Update state when message is received
+      const { message, sender, date, messageId } = data;
+      const newMessage = { id: messageId, text: message, sender: sender === receiver ? "receiver" : "user" };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
     setSocket(socketDef);
@@ -85,12 +85,6 @@ export default function ChatComponent( {receiver} )  {
           placeholder="Type your message..."
         />
         <Button onClick={handleSend}>Send</Button>
-        <Input
-          className="flex-1"
-          value={input2}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-        />
       </CardFooter>
     </Card>
   );
