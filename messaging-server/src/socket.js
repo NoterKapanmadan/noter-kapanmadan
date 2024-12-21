@@ -1,10 +1,11 @@
+const { Server } = require("socket.io");
 
-const { Server } = require('socket.io');
 function initServerSocket(server) {
-    const io = new Server(server);
+
+  const io = new Server(server);
 
   io.on('connection', (socket) => {
-    console.log('A user connected');
+    console.log('A user connected', socket.handshake);
 
     socket.on('input-change', (msg) => {
       console.log('Message: ' + msg);
