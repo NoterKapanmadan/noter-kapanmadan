@@ -3,11 +3,14 @@ import { getChatRoom } from "@/app/actions";
 
 export default async function Chat({ params }) {
 
-  const chatRoom = await getChatRoom(params.receiver);
+  const data = await getChatRoom(params.receiver);
+
+  const chatRoom = data.messages;
+  const userDetails = data.userDetails;
 
 
   return (
-    <ChatComponent receiver={params.receiver} chatRoom={chatRoom} />
+    <ChatComponent receiver={params.receiver} chatRoom={chatRoom}  userDetails={userDetails}/>
   );
 
   

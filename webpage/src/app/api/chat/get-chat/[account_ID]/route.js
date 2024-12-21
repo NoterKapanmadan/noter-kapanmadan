@@ -23,7 +23,26 @@ export async function GET(request, context) {
             [currentUser, otherUser]
         );
 
-        return NextResponse.json(result.rows, { status: 200 });
+        const userDetails = await query(
+            `
+            SELECT 
+                a.account_ID,
+                a.forename,
+                a.surname,
+                u.profile_image
+            FROM Account a
+            JOIN Users u ON a.account_ID = u.account_ID
+            WHERE a.account_ID = $1 OR a.account_ID = $2
+            `,
+            [currentUser, otherUser]
+        );
+
+        const data = {
+            messages: result.rows,
+            userDetails: userDetails.rows
+        }
+
+        return NextResponse.json(data, { status: 200 });
     }
     catch (e) {
         console.error(e);

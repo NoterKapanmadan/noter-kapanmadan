@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import io from 'socket.io-client';
+import io from "socket.io-client";
+import { getImageSrc } from "@/utils/file"; // Assume this function is imported and works as a black box
+import {ScrollArea} from "@/components/ui/scroll-area";
 
-export default function ChatComponent({ receiver, chatRoom }) {
+export default function ChatComponent({ receiver, chatRoom, userDetails }) {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([
-    // Prepopulate messages, but reverse the order
     ...chatRoom
       .map(({ message_id, text, sender_id, date }) => ({
         id: message_id,
@@ -16,46 +16,45 @@ export default function ChatComponent({ receiver, chatRoom }) {
         sender: sender_id === receiver ? "receiver" : "user",
         date,
       }))
-      .reverse(), // Reverse the order to show oldest messages first
+      .reverse(),
   ]);
   const [input, setInput] = useState("");
 
-  console.log('ChatComponent', receiver, chatRoom);
-
   const handleSend = (e) => {
-    e.preventDefault(); // Prevent the form from refreshing the page
+    e.preventDefault();
     if (input.trim()) {
       const userMessage = {
         id: messages.length + 1,
         text: input,
         sender: "user",
+        date: new Date().toISOString(),
       };
 
       setMessages((prevMessages) => [...prevMessages, userMessage]);
-      setInput(""); // Clear input after sending
+      setInput("");
 
-      socket.emit('send-message', { message: input, receiver: receiver });
+      socket.emit("send-message", { message: input, receiver: receiver });
     }
   };
 
   useEffect(() => {
     const socketDef = io(process.env.NEXT_PUBLIC_MESSAGE_SERVER, {
-      path: '/socket.io',
-      transports: ['websocket', 'polling'],
+      path: "/socket.io",
+      transports: ["websocket", "polling"],
     });
     socketInitializer(socketDef);
 
     return () => {
-      socketDef.close(); // Clean up the connection when the component unmounts
+      socketDef.close();
     };
   }, []);
 
   const socketInitializer = (socketDef) => {
-    socketDef.on('connect', () => {
-      console.log('Connected');
+    socketDef.on("connect", () => {
+      console.log("Connected");
     });
 
-    socketDef.on('receive-message', (data) => {
+    socketDef.on("receive-message", (data) => {
       const { message, sender, date, messageId } = data;
       const newMessage = {
         id: messageId,
@@ -69,36 +68,58 @@ export default function ChatComponent({ receiver, chatRoom }) {
     setSocket(socketDef);
   };
 
+  const otherUser = userDetails.find((user) => user.account_id === receiver);
+
   return (
-    <Card className="max-w-lg mx-auto border rounded-lg shadow-md">
-      <CardHeader>
-        <CardTitle>Chat</CardTitle>
-      </CardHeader>
-      <CardContent className="h-64 overflow-y-auto bg-gray-100 p-4 rounded-md">
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="flex items-center bg-gray-200 p-4 shadow-sm">
+        <img
+          src={getImageSrc(otherUser?.profile_image)}
+          alt={`${otherUser?.forename} ${otherUser?.surname}`}
+          className="w-12 h-12 rounded-full mr-4"
+        />
+        <h1 className="text-lg font-semibold">{`${otherUser?.forename} ${otherUser?.surname}`}</h1>
+      </div>
+
+      {/* Chat Content */}
+      <ScrollArea className="flex-1 overflow-y-auto bg-white p-4">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`mb-2 p-2 rounded-lg ${
+            className={`mb-4 p-3 rounded-lg max-w-lg ${
               message.sender === "user"
-                ? "bg-blue-500 text-white self-end"
-                : "bg-gray-300 text-black self-start"
+                ? "bg-blue-500 text-white ml-auto"
+                : "bg-gray-100 text-black mr-auto"
             }`}
           >
-            {message.text}
+            <p className="text-sm">{message.text}</p>
+            <p
+              className={`text-xs mt-1 text-right ${
+                message.sender === "user" ? "text-white" : "text-gray-600"
+              }`}
+            >
+              {new Date(message.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true })}
+            </p>
           </div>
         ))}
-      </CardContent>
-      <CardFooter className="flex gap-2 items-center p-4">
-        <form onSubmit={handleSend} className="flex gap-2 w-full items-center">
+      </ScrollArea>
+
+
+      {/* Input Area */}
+      <div className="flex items-center bg-gray-100 p-4 border-t sticky bottom-0">
+        <form onSubmit={handleSend} className="flex gap-4 w-full">
           <Input
-            className="flex-1"
+            className="flex-1 text-sm p-3 border rounded-lg"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
+            placeholder="Type a message..."
           />
-          <Button type="submit">Send</Button>
+          <Button type="submit" className="bg-blue-600 text-white text-sm px-6 py-3 rounded-lg">
+            Send
+          </Button>
         </form>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
