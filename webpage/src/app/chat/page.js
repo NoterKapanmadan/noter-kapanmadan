@@ -1,6 +1,8 @@
-import ChatPage from "@/components/layout/ChatPage";
+import AllChats from "@/components/layout/AllChats";
 
 export default async function Chat() {
 
-  return <ChatPage/>;
+
+
+  return <></>;
 }

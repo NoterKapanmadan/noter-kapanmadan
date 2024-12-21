@@ -40,6 +40,7 @@ export function initServerSocket(server) {
       socket.join(socket.accountId);
 
       socket.on('send-message', (data) => {
+        try {
         const { message, receiver} = data;
         const date = new Date();
         const messageId = uuidv4();
@@ -47,6 +48,10 @@ export function initServerSocket(server) {
         // maybe also send to the user
         socket.to(receiver).emit('receive-message', { message, sender: socket.accountId, date: date, messageId });
         saveMessageDb( {message, sender: socket.accountId, receiver, date, messageId });
+
+        } catch (error) {
+          console.error('Error saving message:', error);
+        }  
 
       });
 
