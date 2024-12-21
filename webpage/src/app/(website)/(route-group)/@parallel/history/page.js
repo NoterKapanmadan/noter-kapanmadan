@@ -1,5 +1,7 @@
 import { Suspense } from "react"
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton"
+import RecentVisitedAds from "@/components/layout/RecentVisitedAds"
+
 
 export default function HistoryParallel({ searchParams }) {
   const {
@@ -42,8 +44,7 @@ export default function HistoryParallel({ searchParams }) {
   
   return (
     <Suspense fallback={<LoadingSkeleton />}>
-      History
-      {/* <Favorites filters={filters} /> */}
+      <RecentVisitedAds filters={filters} />
     </Suspense>
   )
 }
