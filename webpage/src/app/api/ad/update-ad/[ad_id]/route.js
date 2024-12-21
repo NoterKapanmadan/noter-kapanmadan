@@ -22,7 +22,7 @@ export async function POST(request, context) {
       [adID]
     );
 
-    const vehicleID = rows[0]?.vehicle_ID;
+    const vehicleID = rows[0]?.vehicle_id;
     console.log("vehicleID", vehicleID)
 
     await query(
