@@ -53,6 +53,7 @@ export async function uploadFilesServer(files) {
  * @returns {string} The URL of the image with the specified quality
  */
     export const getImageSrc = (imageId, quality = 'high') => {
+        if (!imageId) return "/avatar.png";
         if (quality === 'high') return `${FILE_SERVER_URL}/public/${imageId}/large.jpg`;
         else if (quality === 'medium_resized') return `${FILE_SERVER_URL}/public/${imageId}/medium_resized.jpg`;
         else if (quality === 'low') return `${FILE_SERVER_URL}/public/${imageId}/small.jpg`;
