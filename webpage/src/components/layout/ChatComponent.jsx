@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import { getImageSrc } from "@/utils/file"; // Assume this function is imported and works as a black box
 import {ScrollArea} from "@/components/ui/scroll-area";
 import { SendHorizonal } from "lucide-react";
+import Image from "next/image";
 
 export default function ChatComponent({ receiver, chatRoom, userDetails }) {
   const [socket, setSocket] = useState(null);
@@ -75,11 +76,13 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center bg-gray-200 p-4 shadow-sm">
-        <img
-          src={getImageSrc(otherUser?.profile_image)}
-          alt={`${otherUser?.forename} ${otherUser?.surname}`}
-          className="w-12 h-12 rounded-full mr-4"
-        />
+                <Image
+                  src={getImageSrc(otherUser?.profile_image, "low")}
+                  alt={`${otherUser.fullname} avatar`}
+                  width={40}
+                  height={40}
+                  className="w-12 h-12 rounded-full object-cover mr-4"
+                />
         <h1 className="text-lg font-semibold">{`${otherUser?.forename} ${otherUser?.surname}`}</h1>
       </div>
 
