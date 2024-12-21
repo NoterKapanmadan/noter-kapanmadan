@@ -12,8 +12,8 @@ export default async function Chat({children}) {
   return (
         <div className="flex min-h-screen">
           {/* Sidebar */}
-          <aside className="w-64 bg-white border-r px-4 py-6">
-            <AllChats chatRooms={chatRooms} accountId={accountId}/>
+          <aside className="w-80 bg-white border-r px-2 py-6">
+            <AllChats chatRooms={chatRooms} accountId={accountId} />
           </aside>
 
           {/* Main Content */}

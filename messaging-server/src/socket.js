@@ -45,8 +45,11 @@ export function initServerSocket(server) {
         const date = new Date();
         const messageId = uuidv4();
 
-        // maybe also send to the user
-        socket.to(receiver).emit('receive-message', { message, sender: socket.accountId, date: date, messageId });
+        const publishData = { message, sender: socket.accountId, receiver: receiver, date: date, messageId };
+
+        socket.to(socket.accountId).emit('receive-message', publishData);
+        socket.to(receiver).emit('receive-message', publishData);
+
         saveMessageDb( {message, sender: socket.accountId, receiver, date, messageId });
 
         } catch (error) {
