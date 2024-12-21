@@ -10,15 +10,15 @@ export default async function Chat({children}) {
 
 
   return (
-        <div className="flex min-h-screen">
+        <div className="flex  max-h-[calc(100vh-8rem)] py-4 px-4">
           {/* Sidebar */}
-          <aside className="w-80 bg-white border-r px-2 py-6">
+          <aside className="w-80 bg-white rounder-lg border-r px-2">
             <AllChats chatRooms={chatRooms} accountId={accountId} />
           </aside>
 
           {/* Main Content */}
-          <main className="flex-1 p-4">
-            <div className="border rounded-lg p-4 h-full bg-white shadow-sm">
+          <main className="flex-1 px-4">
+            <div className="border rounded-lg px-4 py-4 h-full bg-white shadow-sm">
               {children}
             </div>
           </main>

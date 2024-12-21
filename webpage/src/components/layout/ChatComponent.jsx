@@ -83,7 +83,7 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
       </div>
 
       {/* Chat Content */}
-      <ScrollArea className="flex-1 overflow-y-auto bg-white p-4">
+      <ScrollArea className="bg-white p-4 max-h-full">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -107,7 +107,7 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
 
 
       {/* Input Area */}
-      <div className="flex items-center bg-gray-100 p-4 border-t sticky bottom-0">
+      <div className="flex items-center bg-gray-100 p-4">
         <form onSubmit={handleSend} className="flex gap-4 w-full">
           <Input
             className="flex-1 text-sm p-3 border rounded-lg"
