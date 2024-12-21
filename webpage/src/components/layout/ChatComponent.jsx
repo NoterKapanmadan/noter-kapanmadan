@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import io from "socket.io-client";
 import { getImageSrc } from "@/utils/file"; // Assume this function is imported and works as a black box
 import {ScrollArea} from "@/components/ui/scroll-area";
+import { SendHorizonal } from "lucide-react";
 
 export default function ChatComponent({ receiver, chatRoom, userDetails }) {
   const [socket, setSocket] = useState(null);
@@ -83,11 +84,12 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
       </div>
 
       {/* Chat Content */}
-      <ScrollArea className="bg-white p-4 max-h-full">
+      <ScrollArea className=" bg-white max-h-full">
+      <div className="px-4 pt-4 pb-2">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`mb-4 p-3 rounded-lg max-w-lg flex flex-row whitespace-normal break-all justify-between ${
+            className={`mb-4 p-3 rounded-lg max-w-lg flex flex-row whitespace-normal break-all justify-between shadow-l ${
               message.sender === "user"
                 ? "bg-blue-500 text-white ml-auto"
                 : "bg-gray-100 text-black mr-auto"
@@ -105,6 +107,7 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
             </div>
           </div>
         ))}
+        </div>
       </ScrollArea>
 
       {/* Input Area */}
@@ -116,8 +119,9 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
           />
-          <Button type="submit" className="bg-black text-white text-sm px-6 py-3 rounded-sm">
+          <Button type="submit" className="bg-blue-500 text-white text-sm px-6 py-3 rounded-sm">
             Send
+            <SendHorizonal size={16} className="ml-1" />
           </Button>
         </form>
       </div>
