@@ -65,7 +65,7 @@ export default function AllChats({chatRooms, accountId}) {
   return (
     <ScrollArea className="h-full">
       <div>
-        <h2 className="mb-4 text-lg font-semibold">Chats</h2>
+        <h2 className="mb-4 text-lg text-center font-semibold">Chats</h2>
         {latestChatRooms.map((chatRoom) => {
           
           const user = accountId !== chatRoom.account1_id ? {
