@@ -1,6 +1,6 @@
-const { Server } = require("socket.io");
+import { Server } from "socket.io";
 
-function initServerSocket(server) {
+export function initServerSocket(server) {
 
   const io = new Server(server);
 
@@ -18,4 +18,3 @@ function initServerSocket(server) {
   });
 }
 
-module.exports = { initServerSocket };

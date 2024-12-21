@@ -1,7 +1,9 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const { initServerSocket } = require('./src/socket');
+import 'dotenv/config';
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
+import { initServerSocket } from './src/socket.js';
+
 
 // Create an Express app
 const app = express();
@@ -15,8 +17,10 @@ const server = http.createServer(app);
 // Serve a simple route
 app.get('/', (req, res) => {
     res.send('Socket server is running');
+
 });
 
+console.log(process.env.DB_USERNAME);
 
 initServerSocket(server);
 
