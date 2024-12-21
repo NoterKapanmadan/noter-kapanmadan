@@ -6,8 +6,11 @@ import { decrypt } from '@/lib/auth';
 export async function POST(request) {
     try {
         const req = await request.json();
-        const { account_id } = await decrypt(request.cookies.get("Authorization").value)
-
+        const { account_id, isAdmin } = await decrypt(request.cookies.get("Authorization").value)
+        if(isAdmin) {
+            console.log('Admins cannot visit ads')
+            return NextResponse.json({ message: 'Admins cannot visit ads' }, { status: 403 });
+        }
         //check if user has already seen the ad
         const history = await query(
             `SELECT * FROM visits WHERE ad_id = $1 AND account_id = $2`,

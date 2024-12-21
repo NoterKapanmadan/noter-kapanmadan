@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,8 @@ export default function AdFilters({ initialFilters }) {
   const [autocompleteKey, setAutocompleteKey] = useState(Date.now());
 
   const router = useRouter()
+  const pathname = usePathname()
+
 
   const pushWithFilters = (updatedFilters) => {
     const params = new URLSearchParams()
@@ -36,7 +39,7 @@ export default function AdFilters({ initialFilters }) {
         params.set(key, String(value))
       }
     })
-    router.replace(`/?${params.toString()}`)
+    router.replace(`${pathname}?${params.toString()}`)
   }
 
   const updateFilter = (updatedFields) => {

@@ -38,7 +38,6 @@ export default function HomePageParallel({ searchParams }) {
     maxDistance,
     page: Number(page),
   }
-
   return (
     <AdFilters initialFilters={filters} />
   )
