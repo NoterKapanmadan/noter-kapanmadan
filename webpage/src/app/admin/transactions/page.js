@@ -1,24 +1,43 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Search } from 'lucide-react'
 import { formatDateAndTime } from "@/utils/date";
-
-const mockTransactions = [
-  { id: '1', userId: '101', amount: 100, date: new Date() },
-  { id: '2', userId: '102', amount: 200, date: new Date() },
-  { id: '3', userId: '101', amount: 150, date: new Date() },
-]
+import { SERVER_URL } from '@/utils/constants'
+import Link from 'next/link'
 
 export default function Transactions() {
-  const [transactions] = useState(mockTransactions)
+  const [transactions, setTransactions] = useState([])
   const [userIdFilter, setUserIdFilter] = useState('')
+  const [loading, setLoading] = useState(true)
 
-  const filteredTransactions = transactions.filter(transaction => 
-    transaction.userId.includes(userIdFilter)
-  )
+  const fetchTransactions = async () => {
+      const response = await fetch(`${SERVER_URL}/admin/get-transactions?searchKey=${userIdFilter}`)
+  
+      if (response.ok) {
+        const data =  await response.json()
+        console.log(data)
+        setTransactions(data)
+        setLoading(false)
+        console.log(data)
+      }
+    }
+  
+    useEffect(() => { 
+      fetchTransactions()
+    } , [])
+  
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        fetchTransactions()
+      }, 120);
+  
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [userIdFilter]);
 
   return (
     <div>
@@ -33,20 +52,54 @@ export default function Transactions() {
           className="pl-10"
         />
       </div>
-      <div className="flex flex-col gap-2">
-        {filteredTransactions.map((transaction) => (
-          <Card key={transaction.id} className="flex flex-col p-4">
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col gap-1">
-                <p className="text-sm text-gray-600">Transaction ID: {transaction.id}</p>
-                <p className="text-sm text-gray-600">User ID: {transaction.userId}</p>
-                <p className="text-sm text-gray-600">Date: {formatDateAndTime(transaction.date)}</p>
+      {loading ? (
+        <div className="font-medium text-center">Loading...</div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {transactions.map((transaction) => (
+            <Card key={transaction.id} className="flex flex-col p-4">
+              <div className="flex justify-between items-start *:w-full">
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm text-gray-600">
+                    Transaction ID: <span className="text-black">{transaction.transaction_id}</span>
+                  </p>
+                  {transaction.sender_id && (<p className="text-sm text-gray-600">
+                    Sender ID: {' '}
+                    <Link 
+                      href={`/profile/${transaction.sender_id}`} 
+                      target="_blank"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {transaction.sender_id}
+                    </Link>
+                  </p>)}
+                  {transaction.receiver_id && (<p className="text-sm text-gray-600">
+                    Receiver ID: {' '}
+                    <Link 
+                      href={`/profile/${transaction.receiver_id}`} 
+                      target="_blank"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {transaction.receiver_id}
+                    </Link>
+                  </p>)}
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm text-gray-600">
+                    Date: <span className="text-black">{formatDateAndTime(transaction.date)}</span>
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Type: <span className="text-black">{transaction.type}</span>
+                  </p>
+                  <p className="text-sm text-gray-600 flex gap-1 items-center">
+                    Amount: <span className="text-black font-semibold">{transaction.amount} TL</span>
+                  </p>  
+                </div>
               </div>
-              <h3 className="text-lg font-semibold">{transaction.amount} TL</h3>
-            </div>
-          </Card>
-        ))}
-      </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

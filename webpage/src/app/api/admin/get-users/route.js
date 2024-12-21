@@ -13,7 +13,7 @@ export async function GET(req) {
 
     const { searchParams } = new URL(req.url);
     const searchKey = searchParams.get('searchKey')?.trim() || '';
-    console.log("aaa", searchKey)
+
     let sql = `
     SELECT 
       Account.forename, 
@@ -37,7 +37,7 @@ export async function GET(req) {
         OR CONCAT(Account.forename, ' ', Account.surname) ILIKE '%' || $1 || '%'
       )
     `;
-    params.push(searchKey);
+        params.push(searchKey);
     }
     
     try {
