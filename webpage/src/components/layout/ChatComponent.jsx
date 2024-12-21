@@ -87,7 +87,7 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
       </div>
 
       {/* Chat Content */}
-      <ScrollArea className=" bg-white max-h-full">
+      <ScrollArea className=" bg-white max-h-full flex-grow">
       <div className="px-4 pt-4 pb-2">
         {messages.map((message) => (
           <div
