@@ -7,6 +7,7 @@ import { getImageSrc } from "@/utils/file";
 import Link from "next/link";
 import { io } from "socket.io-client";
 import { useParams } from "next/navigation";
+import { SERVER_URL } from "@/utils/constants";
 
 
 export default function AllChats({chatRooms, accountId}) {
@@ -28,6 +29,47 @@ export default function AllChats({chatRooms, accountId}) {
       socketDef.close(); // Clean up the connection when the component unmounts
     };
   }, []);
+
+  const fetchProfile = async (selectedReceiver) => {
+
+    const response = await fetch(`${SERVER_URL}/profile/${selectedReceiver}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const user = await response.json();
+    
+    setLatestChatRooms((latestChatRooms) => {
+
+      const chatRoomIndex = latestChatRooms.findIndex((chatRoom) => (selectedReceiver === chatRoom.account1_id && accountId === chatRoom.account2_id) 
+      || (accountId === chatRoom.account1_id && selectedReceiver === chatRoom.account2_id) && selectedReceiver !== accountId );
+      if(chatRoomIndex === -1) {
+        return ([{
+          chatroom_id: 0,
+          account1_id: selectedReceiver,
+          account1_forename: user.forename,
+          account1_surname: user.surname,
+          account1_profile_image: user.profile_image,
+          account2_id: accountId,
+          account2_forename: "",
+          account2_surname: "",
+          account2_profile_image: "",
+          newest_message: "",
+        }, ...latestChatRooms])
+      } else {
+        return latestChatRooms;
+      }
+    })
+  };
+
+  useEffect(() => {
+    fetchProfile(selectedReceiver);
+
+  }, [selectedReceiver]);
 
   const socketInitializer = (socketDef) => {
     socketDef.on('connect', () => {
