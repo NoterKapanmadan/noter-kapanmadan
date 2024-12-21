@@ -40,7 +40,7 @@ export function initServerSocket(server) {
 
       socket.on('send-message', (data) => {
         const { message, receiver} = data;
-        date = new Date();
+        const date = new Date();
 
         socket.to(receiver).emit('receive-message', { message, sender: socket.accountId, date: date });
         saveMessageDb( {message, sender: socket.accountId, receiver, date });

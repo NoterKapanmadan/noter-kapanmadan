@@ -12,6 +12,7 @@ import {
   HandCoins,
   MessageCircle,
 } from "lucide-react";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -28,7 +29,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState, useTransition } from "react";
 import { revalidateTagClient } from "@/app/actions";
 
-export default function AdActions({ ad_ID }) {
+export default function AdActions({ ad_ID, owner_ID }) {
   const { toast } = useToast();
   const [offerOpen, setOfferOpen] = useState(false);
   const [pending, startTransition] = useTransition()
@@ -85,10 +86,12 @@ export default function AdActions({ ad_ID }) {
         <CardTitle>Actions</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
+        <Link href={`/chat/${owner_ID}`}>
         <Button className="w-full" variant="secondary">
           <MessageCircle className={`mr-2 h-4 w-4`} />
           Send Message
         </Button>
+        </Link>
         <Dialog open={offerOpen} onOpenChange={setOfferOpen}>
           <DialogTrigger asChild>
             <Button className="w-full">

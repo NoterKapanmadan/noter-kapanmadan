@@ -81,7 +81,7 @@ export async function saveMessageDb(data) {
             existingChatroomId = chatroomId;
         } else {
             // Use the existing chatroom ID
-            existingChatroomId = chatroomResult.rows[0].chatroom_ID;
+            existingChatroomId = chatroomResult.rows[0].chatroom_id;
         }
 
         // Insert the message into the Message table
