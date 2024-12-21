@@ -17,7 +17,7 @@ export default function AdminHome() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">General Statistics</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
