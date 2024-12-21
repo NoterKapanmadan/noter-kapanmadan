@@ -87,13 +87,14 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`mb-4 p-3 rounded-lg max-w-lg ${
+            className={`mb-4 p-3 rounded-lg max-w-lg flex flex-row whitespace-normal break-all justify-between ${
               message.sender === "user"
                 ? "bg-blue-500 text-white ml-auto"
                 : "bg-gray-100 text-black mr-auto"
             }`}
           >
-            <p className="text-sm">{message.text}</p>
+            <p className="text-base">{message.text}</p>
+            <div className="flex flex-row pr-1 pl-1 items-end min-w-16">
             <p
               className={`text-xs mt-1 text-right ${
                 message.sender === "user" ? "text-white" : "text-gray-600"
@@ -101,10 +102,10 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
             >
               {new Date(message.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true })}
             </p>
+            </div>
           </div>
         ))}
       </ScrollArea>
-
 
       {/* Input Area */}
       <div className="flex items-center bg-gray-100 p-4">
@@ -115,7 +116,7 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
           />
-          <Button type="submit" className="bg-blue-600 text-white text-sm px-6 py-3 rounded-lg">
+          <Button type="submit" className="bg-black text-white text-sm px-6 py-3 rounded-sm">
             Send
           </Button>
         </form>
