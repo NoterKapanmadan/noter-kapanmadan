@@ -11,8 +11,6 @@ export async function POST(req) {
     const body = await req.json();
     const { ad_ID } = body;
 
-    console.log("deneme", body)
-
     const ad = await query('SELECT * FROM Ad WHERE ad_ID = $1', [ad_ID]);
 
     if (ad.rows.length === 0) {

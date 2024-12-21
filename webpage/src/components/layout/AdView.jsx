@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
-import { updateAd } from "@/app/actions";
+import { revalidateTagClient, updateAd } from "@/app/actions";
 
 export default function AdViewClient({ ad, isAuth}) {
   const [editMode, setEditMode] = useState(false);
@@ -44,6 +44,7 @@ export default function AdViewClient({ ad, isAuth}) {
     };
 
     await updateAd(ad.ad_id, updatedData);
+    revalidateTagClient(`/ad/${ad.ad_id}`)
     setEditMode(false);
   };
 

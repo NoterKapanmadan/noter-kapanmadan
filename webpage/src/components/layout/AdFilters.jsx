@@ -48,7 +48,6 @@ export default function AdFilters({ initialFilters }) {
   const handleSubmit = (formData) => {
     const newFilters = {}
     for (const pair of formData) {
-      console.log(pair[0], pair[1])
       newFilters[pair[0]] = pair[1];
     }
 

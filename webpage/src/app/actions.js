@@ -145,6 +145,7 @@ export async function updateAd(ad_ID, updatedData) {
     cache: 'no-cache',
   });
 
+
   if (!res.ok) {
     throw new Error("Failed to update ad");
   }

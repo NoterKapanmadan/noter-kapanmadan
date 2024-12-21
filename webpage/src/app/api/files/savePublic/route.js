@@ -3,7 +3,6 @@ import { FILE_SERVER_URL, JWT_SECRET } from '@/utils/constants';
 
 export async function POST(request) {
     try {
-        console.log("request.body", request.body);
         const body = await request.json();
         const jwt = body.jwt;
         const response = await fetch(`${FILE_SERVER_URL}/serverStorage/saveRequest`, {
@@ -19,8 +18,6 @@ export async function POST(request) {
             return NextResponse.json('Failed to request token', { status: 500 });
         }
         const data = await response.json();
-
-        console.log("save data: ", data);
 
         return NextResponse.json({filePaths: data.filePaths}, { status: 200 });
 

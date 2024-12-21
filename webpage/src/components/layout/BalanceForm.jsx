@@ -66,7 +66,7 @@ export default function BalancePage({ user_balance }) {
           description: "Please enter a valid amount."
         })
       }
-      console.log("withdraw amount:", amount);
+      //console.log("withdraw amount:", amount);
       const res = await fetch(`${SERVER_URL}/balance/set-balance`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

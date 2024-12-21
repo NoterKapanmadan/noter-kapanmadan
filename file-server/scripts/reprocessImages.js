@@ -36,7 +36,6 @@ async function reprocessImages(aspectRatio) {
 
             if(!originalFile) continue;
 
-            console.log(`public/${request}/${imageFolder}/${originalFile}`);
             const fileBuffer = fs.readFileSync(`public/${request}/${imageFolder}/${originalFile}`);
 
             const type = await fileTypeFromBuffer(fileBuffer);

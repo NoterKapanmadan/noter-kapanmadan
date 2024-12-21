@@ -20,12 +20,12 @@ export default function Component({ favorites: initialFavorites }) {
   const handleRemoveFavorite = (id) => {
     setFavorites(favorites.filter((favorite) => favorite.id !== id));
     // Here you would typically make an API call to remove the favorite
-    console.log(`Removed favorite ${id}`);
+    //console.log(`Removed favorite ${id}`);
   };
 
   const handleViewDetails = (id) => {
     // Here you would typically navigate to the car details page
-    console.log(`Viewing details for ${id}`);
+    //console.log(`Viewing details for ${id}`);
   };
 
   return (

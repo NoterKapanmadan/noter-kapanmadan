@@ -7,7 +7,6 @@ export async function POST(request) {
     try {
         const req = await request.json();
         const { account_id } = await decrypt(request.cookies.get("Authorization").value)
-        console.log(req.diff)
         const diff = req.diff;
         const transaction_id = uuidv4();
         if(diff < 0) {

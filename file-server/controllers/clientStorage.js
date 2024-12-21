@@ -135,7 +135,6 @@ export const getBase64Original = async (req, res) => {
             try {
             const data = fs.readFileSync(`public/${filePath}/originalBase64`, 'utf8');
                 base64Map[filePath] = data;
-                console.log("image dimension: ",  await getImageDimensionsSync(data));
                 dimensions[filePath] = await getImageDimensionsSync(data);
             } catch (e) {
                 base64Map[filePath] = null;

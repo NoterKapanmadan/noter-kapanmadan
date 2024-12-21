@@ -38,7 +38,7 @@ export async function uploadFilesServer(files) {
     });
     
     const data = await response.json(); // { filePaths: [string], imageIds: [string] }
-    console.log("data", data);
+    //console.log("data", data);
     return { filePaths: data.filePaths, imageIds: data.imageIds };
     
     }
@@ -96,7 +96,7 @@ export async function uploadFilesServer(files) {
             cache: 'no-cache',
         } ); // maybe no cache can be removed
         const base64ImagesData = await base64Images.json();
-        console.log("base64", base64ImagesData);
+        //console.log("base64", base64ImagesData);
         ad = {
             ...ad,
             base64Images: ad.images ? ad.images.map((image) => base64ImagesData.map[image]) : null,

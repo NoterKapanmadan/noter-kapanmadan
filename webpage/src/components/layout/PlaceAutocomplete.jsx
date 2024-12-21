@@ -27,7 +27,7 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
     const [isLocationPending, setLocationPending] = useState();
 
     const handlePlaceSelected = (place) => {
-        console.log("Place: ", place)
+        //console.log("Place: ", place)
         setSelectedLatitude(place.geometry.location.lat());
         setSelectedLongitude(place.geometry.location.lng());
         setLocationText(place.formatted_address);
@@ -63,7 +63,7 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
                     // update the value of userlocation variable
 
                     const address = await getLocationToAddress(latitude, longitude);
-                    console.log("Address:", address)
+                    //console.log("Address:", address)
 
                     ref.current.value = address;
                     setLocationText(address);
