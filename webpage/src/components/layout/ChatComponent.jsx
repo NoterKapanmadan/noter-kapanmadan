@@ -1,24 +1,35 @@
-
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import io from 'socket.io-client';
 
-export default function ChatComponent( {receiver} )  {
+export default function ChatComponent({ receiver, chatRoom }) {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([
+    // Prepopulate messages, but reverse the order
+    ...chatRoom
+      .map(({ message_id, text, sender_id, date }) => ({
+        id: message_id,
+        text,
+        sender: sender_id === receiver ? "receiver" : "user",
+        date,
+      }))
+      .reverse(), // Reverse the order to show oldest messages first
   ]);
   const [input, setInput] = useState("");
-  const [input2, setInput2] = useState("");
 
+  console.log('ChatComponent', receiver, chatRoom);
 
-  
-  const handleSend = () => {
+  const handleSend = (e) => {
+    e.preventDefault(); // Prevent the form from refreshing the page
     if (input.trim()) {
-      const userMessage = { id: messages.length + 1, text: input, sender: "user" };
+      const userMessage = {
+        id: messages.length + 1,
+        text: input,
+        sender: "user",
+      };
 
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInput(""); // Clear input after sending
@@ -27,12 +38,10 @@ export default function ChatComponent( {receiver} )  {
     }
   };
 
-  
   useEffect(() => {
     const socketDef = io(process.env.NEXT_PUBLIC_MESSAGE_SERVER, {
       path: '/socket.io',
-      transports: ['websocket', 'polling'], // Ensure both transports are available
-      //secure: true, // Use secure connection if your server uses HTTPS
+      transports: ['websocket', 'polling'],
     });
     socketInitializer(socketDef);
 
@@ -41,22 +50,24 @@ export default function ChatComponent( {receiver} )  {
     };
   }, []);
 
-  const socketInitializer =  (socketDef) => {
-
+  const socketInitializer = (socketDef) => {
     socketDef.on('connect', () => {
       console.log('Connected');
     });
 
     socketDef.on('receive-message', (data) => {
       const { message, sender, date, messageId } = data;
-      const newMessage = { id: messageId, text: message, sender: sender === receiver ? "receiver" : "user" };
+      const newMessage = {
+        id: messageId,
+        text: message,
+        sender: sender === receiver ? "receiver" : "user",
+        date,
+      };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
     });
 
     setSocket(socketDef);
-
   };
-
 
   return (
     <Card className="max-w-lg mx-auto border rounded-lg shadow-md">
@@ -78,14 +89,16 @@ export default function ChatComponent( {receiver} )  {
         ))}
       </CardContent>
       <CardFooter className="flex gap-2 items-center p-4">
-        <Input
-          className="flex-1"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
-        />
-        <Button onClick={handleSend}>Send</Button>
+        <form onSubmit={handleSend} className="flex gap-2 w-full items-center">
+          <Input
+            className="flex-1"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type your message..."
+          />
+          <Button type="submit">Send</Button>
+        </form>
       </CardFooter>
     </Card>
   );
-};
+}
