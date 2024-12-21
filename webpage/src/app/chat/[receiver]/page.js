@@ -7,7 +7,7 @@ export default async function Chat({ params }) {
 
 
   return (
-    <ChatComponent receiver={params.receiver} />
+    <ChatComponent receiver={params.receiver} chatRoom={chatRoom} />
   );
 
   
