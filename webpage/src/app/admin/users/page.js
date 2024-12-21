@@ -39,6 +39,18 @@ export default function Users() {
     };
   }, [search]);
 
+  const handleBan = async (id) => {
+    const response = await fetch(`${SERVER_URL}/admin/ban`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id })
+    })
+
+    if (response.ok) {
+      fetchUsers()
+    }
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Users</h1>
@@ -79,7 +91,7 @@ export default function Users() {
               </div>
               <div>
                 <Button
-                  onClick={() => console.log("asd")}
+                  onClick={() => handleBan(user.account_id)}
                   variant={user.status === 'active' ? 'destructive' : 'default'}
                   className="h-8"
                 > 

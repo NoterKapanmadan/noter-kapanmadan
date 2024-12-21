@@ -27,7 +27,7 @@ export default async function RecentVisitedAds({ filters }) {
   return (
     <>
       <Ads
-        ads={vehicleAds}
+        ads={vehicleAds || []}
         initialFilters={filters}
         totalPages={totalPages}
       />
