@@ -108,7 +108,7 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="flex items-center bg-gray-100 p-4">
+      <div className="flex items-center bg-gray-100 p-4 rounded-lg">
         <form onSubmit={handleSend} className="flex gap-4 w-full">
           <Input
             className="flex-1 text-sm p-3 border rounded-lg"
