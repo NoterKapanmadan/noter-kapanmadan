@@ -12,13 +12,18 @@ export async function POST(request) {
     const hashedPassword = hashWithSalt(password, process.env.PASSWORD_SALT);
  
     const user = await query(
-      `SELECT account_id
-      FROM Account 
+      `SELECT Account.account_id, Users.status
+      FROM Account
+      LEFT JOIN Users ON Account.account_id = Users.account_id
       WHERE email = $1 and hashed_password = $2
       LIMIT 1;`,
       [email, hashedPassword]);
 
     if (user.rowCount > 0) {
+      if (user.rows[0].status === 'banned') {
+        return NextResponse.json({ error: 'This account has been banned!' }, { status: 403 })
+      }
+
       const admin = await query(
         `SELECT account_id
         FROM Admin

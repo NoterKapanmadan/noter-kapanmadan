@@ -68,7 +68,7 @@ export const getCurrentUserInfo = async () => {
 };
 
 export const sendHistory = async (adID) => {
-  if (!isAuthenticated()) return;
+  if (!isAuthenticated() || isAdmin()) return;
 
   const response = await fetch(`${SERVER_URL}/history/add-history`, {
     method: "POST",

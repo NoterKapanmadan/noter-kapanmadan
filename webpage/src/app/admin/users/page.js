@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -13,6 +13,8 @@ export default function Users() {
   const [users, setUsers] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [transitioningUser, setTransitioningUser] = useState(null)
+  const [pending, startTransition] = useTransition()
 
   const fetchUsers = async () => {
     const response = await fetch(`${SERVER_URL}/admin/get-users?searchKey=${search}`)
@@ -40,15 +42,18 @@ export default function Users() {
   }, [search]);
 
   const handleBan = async (id) => {
-    const response = await fetch(`${SERVER_URL}/admin/ban`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: id })
+    setTransitioningUser(id)
+    startTransition(async () => {
+      const response = await fetch(`${SERVER_URL}/admin/ban`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id })
+      })
+  
+      if (response.ok) {
+        fetchUsers()
+      }
     })
-
-    if (response.ok) {
-      fetchUsers()
-    }
   }
 
   return (
@@ -73,7 +78,7 @@ export default function Users() {
               <div className="flex-grow">
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="flex flex-col">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                      <h3 className="font-semibold flex items-center gap-2">
                         <Link className="hover:underline" href={`/profile/${user.account_id}`} target="_blank">
                           {user.forename} {user.surname}
                         </Link>
@@ -94,6 +99,7 @@ export default function Users() {
                   onClick={() => handleBan(user.account_id)}
                   variant={user.status === 'active' ? 'destructive' : 'default'}
                   className="h-8"
+                  disabled={pending && transitioningUser === user.account_id}
                 > 
                   {user.status === 'active' ? (<UserX size={20} />) : <UserCheck size={20} />}
                   {user.status === 'active' ? 'Ban' : 'Unban'}
