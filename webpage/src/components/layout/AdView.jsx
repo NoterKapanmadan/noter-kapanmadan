@@ -11,8 +11,9 @@ import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
-import { revalidateTagClient, updateAd } from "@/app/actions";
+import { revalidateTagClient } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast"
+import { SERVER_URL } from "@/utils/constants";
 
 export default function AdViewClient({ ad, isAuth, currentUserID}) {
   const [editMode, setEditMode] = useState(false);
@@ -44,10 +45,23 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
         gear_type: gearType,
         fuel_type: fuelType,
         description,
-        adUserID: ad.user_id,
       };
-  
-      const { msg, error } = await updateAd(ad.ad_id, updatedData);
+
+      const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad.ad_id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+          cache: 'no-cache',
+        });
+      
+      
+        if (!res.ok) {
+          throw new Error("Failed to update ad");
+        }
+      
+        const { msg, error } = await res.json();
 
       if (error) {
         return toast({

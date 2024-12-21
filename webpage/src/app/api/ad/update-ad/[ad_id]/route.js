@@ -1,10 +1,30 @@
 import { NextResponse } from 'next/server';
-import { getAuthToken, verifyToken } from '@/lib/auth';
+import { decrypt, getAuthToken } from "@/lib/auth";
 import { query } from '@/lib/db';
 
 export async function POST(request, context) {
   try {
+    const token = getAuthToken();
+    const payload = await decrypt(token);
+
     const adID = context.params.ad_id;
+
+    const { rows } = await query(
+      `SELECT vehicle_ID, user_ID FROM Ad WHERE ad_ID = $1`,
+      [adID]
+    );
+
+    const {
+      user_id: adUserID,
+      vehicle_id: vehicleID
+    } = rows[0];
+
+    if (payload.account_id !== adUserID) {
+      return NextResponse.json(
+        { error: "You are not authorized to edit this ad" },
+        { status: 403 }
+      );
+    }
 
     const {title, price, brand, model, year, km, gear_type, fuel_type, description} = await request.json();
 
@@ -16,14 +36,6 @@ export async function POST(request, context) {
       WHERE ad_ID = $4`,
       [title, price, description, adID]
     );
-
-    const { rows } = await query(
-      `SELECT vehicle_ID FROM Ad WHERE ad_ID = $1`,
-      [adID]
-    );
-
-    const vehicleID = rows[0]?.vehicle_id;
-    console.log("vehicleID", vehicleID)
 
     await query(
       `UPDATE Vehicle
