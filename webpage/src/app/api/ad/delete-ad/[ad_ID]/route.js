@@ -26,15 +26,49 @@ export async function POST(request, context) {
       );
     }
 
+    const {rows: typeRows} = await query(
+      `SELECT 'car' AS type FROM Car WHERE vehicle_ID = $1
+        UNION
+        SELECT 'truck' FROM Truck WHERE vehicle_ID = $1
+        UNION
+        SELECT 'van' FROM Van WHERE vehicle_ID = $1
+        UNION
+        SELECT 'motorcycle' FROM Motorcycle WHERE vehicle_ID = $1;`,
+        [vehicleID]
+      );
+
+      const {type} = typeRows[0];
+
     await query("BEGIN");
 
-    console.log("merhaba selam")
-
-    await query(
-      `DELETE FROM Car
-      WHERE vehicle_ID = $1`,
-      [vehicleID]
-    );
+    switch (type) {
+      case 'car':
+        await query(
+          `DELETE FROM Car WHERE vehicle_ID = $1`,
+          [vehicleID]
+        );
+        break;
+      case 'truck':
+        await query(
+          `DELETE FROM Truck WHERE vehicle_ID = $1`,
+          [vehicleID]
+        );
+        break;
+      case 'van':
+        await query(
+          `DELETE FROM Van WHERE vehicle_ID = $1`,
+          [vehicleID]
+        );
+        break;
+      case 'motorcyle':
+        await query(
+          `DELETE FROM Motorcycle WHERE vehicle_ID = $1`,
+          [vehicleID]
+        );
+        break;
+      default:
+        throw new Error("Unknown vehicle type");
+    }
 
     await query(
       `DELETE FROM AdImage 
