@@ -28,8 +28,10 @@ export async function POST(request, context) {
 
     await query("BEGIN");
 
+    console.log("merhaba selam")
+
     await query(
-      `DELETE FROM Vehicle
+      `DELETE FROM Car
       WHERE vehicle_ID = $1`,
       [vehicleID]
     );
@@ -41,9 +43,27 @@ export async function POST(request, context) {
     );
 
     await query(
+      `DELETE FROM Favorites
+      WHERE ad_ID = $1`,
+      [adID]
+    );
+
+    await query(
+      `DELETE FROM Visits
+      WHERE ad_ID = $1`,
+      [adID]
+    );
+
+    await query(
       `DELETE FROM Ad
       WHERE ad_ID = $1`,
       [adID]
+    );
+
+    await query(
+      `DELETE FROM Vehicle
+      WHERE vehicle_ID = $1`,
+      [vehicleID]
     );
 
     await query("COMMIT");
