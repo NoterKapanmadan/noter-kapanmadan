@@ -87,7 +87,7 @@ export async function saveMessageDb(data) {
         await query(
             `INSERT INTO Message (chatroom_ID, message_ID, sender_ID, text, date) 
              VALUES ($1, $2, $3, $4, $5)`,
-            [existingChatroomId, messageId, sender, message, date]
+            [existingChatroomId, messageId, sender, message, date.toISOString()]
         );
 
         await query('COMMIT'); // Commit the transaction
