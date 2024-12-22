@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, startTransition } from "react";
+import { useState, useTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,13 +22,49 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useRouter } from "next/navigation";
 
 export default function AdViewClient({ ad, isAuth, currentUserID}) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
+  const [pending, startTransition] = useTransition();
+
+  const router = useRouter();
+
   const handleEditClick = () => {
     setEditMode(true);
+  };
+
+  const handleDelete = () => {
+    startTransition(async () => {
+      const res = await fetch(`${SERVER_URL}/ad/delete-ad/${ad.ad_id}`, {
+          method: "POST",
+          cache: 'no-cache',
+      });
+      
+      
+      if (!res.ok) {
+        throw new Error("Failed to update ad");
+      }
+    
+      const { msg, error } = await res.json();
+
+      if (error) {
+        return toast({
+          title: 'Something went wrong!',
+          description: error,
+        });
+      }
+
+      if (msg) {
+        toast({
+          title: 'Success!',
+          description: msg,
+        });
+        router.push("/");
+      }
+    })
   };
 
   const handleSubmit = (formData) => {
@@ -42,7 +78,6 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
       
       
       if (!res.ok) {
-        console.log("merhaba")
         throw new Error("Failed to update ad");
       }
     
@@ -112,7 +147,12 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
                         <Pencil size={18} />
                       </Button>
                       
-                      <Button variant="outline" size="icon" className="text-red-500 h-8 w-8">
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        className="text-red-500 h-8 w-8"
+                        onClick={handleDelete}
+                      >
                         <Trash2 size={18} />
                       </Button>
                     </div>
@@ -224,8 +264,8 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
                   </div>
 
                   <div className="mt-4 flex gap-2">
-                    <Button type="submit">Update</Button>
-                    <Button variant="outline" onClick={() => setEditMode(false)}>
+                    <Button type="submit" disabled={pending}>Update</Button>
+                    <Button variant="outline" disabled={pending} onClick={() => setEditMode(false)}>
                       Cancel
                     </Button>
                   </div>
