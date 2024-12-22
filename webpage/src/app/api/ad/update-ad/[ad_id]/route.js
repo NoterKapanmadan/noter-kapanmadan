@@ -26,7 +26,22 @@ export async function POST(request, context) {
       );
     }
 
-    const {title, price, brand, model, year, km, gear_type, fuel_type, description} = await request.json();
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData.entries());
+    const {
+      title,
+      price,
+      brand,
+      model,
+      year,
+      km,
+      gearType: gear_type,
+      fuelType: fuel_type,
+      location,
+      latitude,
+      longitude,
+      description
+    } = data;
 
     await query("BEGIN");
 

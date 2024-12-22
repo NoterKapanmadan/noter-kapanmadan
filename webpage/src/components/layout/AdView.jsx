@@ -14,54 +14,32 @@ import { formatDate } from "@/utils/date";
 import { revalidateTagClient } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast"
 import { SERVER_URL } from "@/utils/constants";
+import PlaceAutocomplete from './PlaceAutocomplete'
 
 export default function AdViewClient({ ad, isAuth, currentUserID}) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
-  const [title, setTitle] = useState(ad.title || "");
-  const [price, setPrice] = useState(ad.price || "");
-  const [brand, setBrand] = useState(ad.brand || "");
-  const [model, setModel] = useState(ad.model || "");
-  const [year, setYear] = useState(ad.year || "");
-  const [km, setKm] = useState(ad.km || "");
-  const [gearType, setGearType] = useState(ad.gear_type || "");
-  const [fuelType, setFuelType] = useState(ad.fuel_type || "");
-  const [description, setDescription] = useState(ad.description || "");
-
   const handleEditClick = () => {
     setEditMode(true);
   };
 
-  const handleUpdateClick = async () => {
+  const handleSubmit = (formData) => {
     startTransition(async () => {
-      const updatedData = {
-        title,
-        price,
-        brand,
-        model,
-        year,
-        km,
-        gear_type: gearType,
-        fuel_type: fuelType,
-        description,
-      };
 
       const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad.ad_id}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedData),
+          body: formData,
           cache: 'no-cache',
         });
       
       
-        if (!res.ok) {
-          throw new Error("Failed to update ad");
-        }
-      
-        const { msg, error } = await res.json();
+      if (!res.ok) {
+        console.log("merhaba")
+        throw new Error("Failed to update ad");
+      }
+    
+      const { msg, error } = await res.json();
 
       if (error) {
         return toast({
@@ -103,15 +81,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
         <Card>
           <CardHeader>
             <div className="flex justify-between items-center">
-              {editMode ? (
-                <Input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Ad Title"
-                />
-              ) : (
-                <CardTitle className="inline-block">{ad.title || "Ad Title"}</CardTitle>
-              )}
+              <CardTitle className="inline-block">{ad.title || "Ad Title"}</CardTitle>
               <div className="flex gap-1">
                 {!editMode && (ad.user_id == currentUserID) && (
                   <Button
@@ -135,10 +105,17 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
           </CardHeader>
           <CardContent>
             {editMode ? (
-              <>
+              <form action={handleSubmit}>
                 <Input
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
+                  name="title"
+                  defaultValue={ad.title}
+                  placeholder="Ad Title"
+                />
+                <Input
+                  id="price"
+                  name="price"
+                  type="text"
+                  defaultValue={ad.price}
                   placeholder="Price ($)"
                   className="mb-4"
                 />
@@ -147,80 +124,86 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
                   <div>
                     <p className="text-sm font-semibold">Brand</p>
                     <Input
-                      value={brand}
-                      onChange={(e) => setBrand(e.target.value)}
+                      id="brand"
+                      name="brand"
+                      defaultValue={ad.brand}
                       placeholder="Brand"
                     />
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Model</p>
                     <Input
-                      value={model}
-                      onChange={(e) => setModel(e.target.value)}
+                      id="model"
+                      name="model"
+                      defaultValue={ad.model}
                       placeholder="Model"
                     />
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Year</p>
                     <Input
+                      id="year"
+                      name="year"
                       type="number"
-                      value={year}
-                      onChange={(e) => setYear(e.target.value)}
+                      defaultValue={ad.year}
                       placeholder="Year"
                     />
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Mileage</p>
                     <Input
+                      id="km"
+                      name="km"
                       type="number"
-                      value={km}
-                      onChange={(e) => setKm(e.target.value)}
+                      defaultValue={ad.km}
                       placeholder="Mileage (km)"
                     />
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Transmission</p>
                     <Input
-                      value={gearType}
-                      onChange={(e) => setGearType(e.target.value)}
+                      id="gearType"
+                      name="gearType"
+                      defaultValue={ad.gear_type}
                       placeholder="Transmission"
                     />
                   </div>
                   <div>
                     <p className="text-sm font-semibold">Fuel Type</p>
                     <Input
-                      value={fuelType}
-                      onChange={(e) => setFuelType(e.target.value)}
+                      id="fuelType"
+                      name="fuelType"
+                      defaultValue={ad.fuel_type}
                       placeholder="Fuel Type"
                     />
                   </div>
 
                   <div>
                     <p className="text-sm font-semibold">Listed On</p>
-                    <p>
-                      {ad.date ? formatDate(ad.date) : "Date Not Available"}
-                    </p>
+                    <p>{ad.date ? formatDate(ad.date) : "Date Not Available"}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">Location</p>
-                    <p>{ad.location || "Location Not Specified"}</p>
+                    <PlaceAutocomplete required/>
                   </div>
                 </div>
 
                 <div className="mt-4">
                   <p className="text-sm font-semibold">Description</p>
                   <Input
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    id="description"
+                    name="description"
+                    defaultValue={ad.description}
                     placeholder="Description"
                   />
                 </div>
 
                 <div className="mt-4 flex gap-2">
-                  <Button onClick={handleUpdateClick}>Update</Button>
-                  <Button variant="outline" onClick={() => setEditMode(false)}>Cancel</Button>
+                  <Button type="submit">Update</Button>
+                  <Button variant="outline" onClick={() => setEditMode(false)}>
+                    Cancel
+                  </Button>
                 </div>
-              </>
+              </form>
             ) : (
               <>
                 <p className="text-2xl font-bold text-primary mb-4">
