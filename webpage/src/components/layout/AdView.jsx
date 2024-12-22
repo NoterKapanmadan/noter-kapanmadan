@@ -249,7 +249,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
                       <p>{ad.date ? formatDate(ad.date) : "Date Not Available"}</p>
                     </div>
                     <div>
-                      <PlaceAutocomplete required />
+                      <PlaceAutocomplete required defaultLocation={ad.location} oldLatitude={ad.latitude} oldLongitude={ad.longitude}/>
                     </div>
                   </div>
 
