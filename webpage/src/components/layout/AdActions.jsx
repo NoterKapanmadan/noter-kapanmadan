@@ -26,13 +26,27 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SERVER_URL } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useTransition } from "react";
-import { revalidateTagClient } from "@/app/actions";
+import { useState, useTransition, useEffect } from "react";
+import { getAccountID, revalidateTagClient } from "@/app/actions";
 
 export default function AdActions({ ad_ID, owner_ID }) {
   const { toast } = useToast();
   const [offerOpen, setOfferOpen] = useState(false);
   const [pending, startTransition] = useTransition()
+
+  const [account_ID, setAccount_ID] = useState(null);
+
+  useEffect(() => {
+    const fetchAccountID = async () => {
+      const id = await getAccountID();
+      setAccount_ID(id);
+      console.log("Account ID: ", id);
+    };
+
+    fetchAccountID();
+  }, []);
+
+
 
   const handleSendOffer = async (formData) => {
     startTransition(async () => {
@@ -80,21 +94,23 @@ export default function AdActions({ ad_ID, owner_ID }) {
     })
   };
 
+  const isOwner = account_ID === owner_ID;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Actions</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <Link href={`/chat/${owner_ID}`}>
-        <Button className="w-full" variant="secondary">
+        <Link href={isOwner ? "#" : `/chat/${owner_ID}`} passHref>
+        <Button className="w-full" variant="secondary" disabled={isOwner}>
           <MessageCircle className={`mr-2 h-4 w-4`} />
           Send Message
         </Button>
         </Link>
         <Dialog open={offerOpen} onOpenChange={setOfferOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full">
+            <Button className="w-full" disabled={isOwner}>
               <HandCoins className={`mr-2 h-4 w-4`} />
               Make an Offer
             </Button>
