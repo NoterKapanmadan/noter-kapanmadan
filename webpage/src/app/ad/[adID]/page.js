@@ -31,6 +31,7 @@ import { SERVER_URL } from "@/utils/constants";
 import Link from "next/link";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
+import { getAuthToken } from "@/lib/auth";
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
@@ -40,6 +41,9 @@ export default async function AdPage({ params }) {
   const res = await fetch(`${SERVER_URL}/ad/get-ad/${ad_ID}`, {
     method: "GET",
     cache: "no-cache",
+    headers: {
+      "Cookie": "Authorization=" + getAuthToken(),
+    }
   });
   const ad = await res.json();
 
@@ -199,7 +203,7 @@ export default async function AdPage({ params }) {
 
             {/* Actions */}
             {isAuth && (
-              <AdActions ad_ID= {ad_ID} owner_ID ={ad.account_id}/>
+              <AdActions ad_ID= {ad_ID} owner_ID = {ad.account_id} ad= {ad}/>
             )}
           </div>
         </div>

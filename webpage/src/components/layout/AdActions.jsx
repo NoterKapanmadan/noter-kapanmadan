@@ -27,12 +27,13 @@ import { Input } from "@/components/ui/input";
 import { SERVER_URL } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useTransition, useEffect } from "react";
-import { getAccountID, revalidateTagClient } from "@/app/actions";
+import { getAccountID, revalidateTagClient, revalidatePathClient } from "@/app/actions";
 
-export default function AdActions({ ad_ID, owner_ID }) {
+export default function AdActions({ ad_ID, owner_ID, ad }) {
   const { toast } = useToast();
   const [offerOpen, setOfferOpen] = useState(false);
-  const [pending, startTransition] = useTransition()
+  const [pendingOffer, startOfferTransition] = useTransition()
+  const [pendingFavorite, startFavoriteTransition] = useTransition()
 
   const [account_ID, setAccount_ID] = useState(null);
 
@@ -48,8 +49,38 @@ export default function AdActions({ ad_ID, owner_ID }) {
 
 
 
+  const handleFavorite = async () => {
+    startFavoriteTransition(async () => {
+      try {
+        const res = await fetch(`${SERVER_URL}/favorites`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ad_ID: ad.ad_id }),
+        });
+
+        if (res.ok) {
+          revalidatePathClient(`/ad/${ad.ad_id}`);
+        } else {
+          const error = await res.json();
+          toast({
+            title: "Error",
+            description: error.message,
+          });
+        }
+      } catch (error) {
+        console.error("Error toggling favorite:", error);
+        toast({
+          title: "Unexpected Error",
+          description: "An unexpected error occurred. Please try again.",
+        });
+      }
+    })
+  };
+
   const handleSendOffer = async (formData) => {
-    startTransition(async () => {
+    startOfferTransition(async () => {
       const offerAmount = formData.get("offer");
 
       if (!offerAmount || offerAmount <= 0) {
@@ -66,7 +97,7 @@ export default function AdActions({ ad_ID, owner_ID }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ad_id: ad_ID, amount: offerAmount }),
+          body: JSON.stringify({ ad_id: ad.ad_id, amount: offerAmount }),
         });
 
         if (res.ok) {
@@ -139,14 +170,19 @@ export default function AdActions({ ad_ID, owner_ID }) {
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit" disabled={pending}>Send Offer</Button>
+                <Button type="submit" disabled={pendingOffer}>Send Offer</Button>
               </DialogFooter>
             </form>
           </DialogContent>
         </Dialog>
-        <Button variant="outline" className="w-full">
-          <Heart className={`mr-2 h-4 w-4`} />
-          Add to Favorites
+        <Button 
+          onClick={handleFavorite}
+          variant="outline"
+          className="w-full" 
+          disabled={pendingFavorite}
+        >
+          <Heart fill={ad.is_favorited ? "black" : "transparent"} className={`mr-2 h-4 w-4 `} />
+          {ad.is_favorited ? "Remove from Favorites" : "Add to Favorites"}
         </Button>
       </CardContent>
     </Card>

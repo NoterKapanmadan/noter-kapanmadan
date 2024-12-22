@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server'
 import { query } from '@/lib/db';
 import { extractImagesFromAds } from '@/utils/file';
+import { decrypt } from '@/lib/auth';
 
 export async function GET(request) {
+    const payload = await decrypt(request.cookies.get("Authorization")?.value);
+
+    if (!payload?.account_id) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
     const url = new URL(request.url);
 
     const title = url.searchParams.get('title');
@@ -26,7 +33,7 @@ export async function GET(request) {
     const limit = 9;
     const offset = (page - 1) * limit;
 
-    const conditions = ["status = 'active'"];
+    const conditions = ["status = 'active'", `Favorites.account_ID = '${payload.account_id}'`];
     const params = [];
     let paramIndex = 1;
 
@@ -127,6 +134,7 @@ export async function GET(request) {
             SELECT COUNT(*) as total_count
             FROM Ad
             JOIN Vehicle ON Ad.vehicle_ID = Vehicle.vehicle_ID
+            JOIN Favorites ON Ad.ad_ID = Favorites.ad_ID
             ${whereClause};`,
             params
         );
@@ -139,6 +147,7 @@ export async function GET(request) {
                    string_agg(image, ',') as images
             FROM Ad
             JOIN Vehicle ON Ad.vehicle_ID = Vehicle.vehicle_ID
+            JOIN Favorites ON Ad.ad_ID = Favorites.ad_ID
             LEFT JOIN AdImage ON Ad.ad_ID = AdImage.ad_ID
             ${whereClause}
             GROUP BY Ad.ad_ID, title, description, price, location, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type
