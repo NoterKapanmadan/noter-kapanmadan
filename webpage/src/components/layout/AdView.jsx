@@ -79,184 +79,189 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
 
         {/* Ad Details */}
         <Card>
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="inline-block">{ad.title || "Ad Title"}</CardTitle>
-              <div className="flex gap-1">
-                {!editMode && (ad.user_id == currentUserID) && (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="text-blue-500 h-8 w-8"
-                    onClick={handleEditClick}
-                  >
-                    <Pencil size={18} />
-                  </Button>
-                )}
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="text-red-500 h-8 w-8"
-                >
-                  <Trash2 size={18} />
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {editMode ? (
-              <form action={handleSubmit}>
-                <Input
-                  name="title"
-                  defaultValue={ad.title}
-                  placeholder="Ad Title"
-                />
-                <Input
-                  id="price"
-                  name="price"
-                  type="text"
-                  defaultValue={ad.price}
-                  placeholder="Price ($)"
-                  className="mb-4"
-                />
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-sm font-semibold">Brand</p>
-                    <Input
-                      id="brand"
-                      name="brand"
-                      defaultValue={ad.brand}
-                      placeholder="Brand"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Model</p>
-                    <Input
-                      id="model"
-                      name="model"
-                      defaultValue={ad.model}
-                      placeholder="Model"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Year</p>
-                    <Input
-                      id="year"
-                      name="year"
-                      type="number"
-                      defaultValue={ad.year}
-                      placeholder="Year"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Mileage</p>
-                    <Input
-                      id="km"
-                      name="km"
-                      type="number"
-                      defaultValue={ad.km}
-                      placeholder="Mileage (km)"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Transmission</p>
-                    <Input
-                      id="gearType"
-                      name="gearType"
-                      defaultValue={ad.gear_type}
-                      placeholder="Transmission"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Fuel Type</p>
-                    <Input
-                      id="fuelType"
-                      name="fuelType"
-                      defaultValue={ad.fuel_type}
-                      placeholder="Fuel Type"
-                    />
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-semibold">Listed On</p>
-                    <p>{ad.date ? formatDate(ad.date) : "Date Not Available"}</p>
-                  </div>
-                  <div>
-                    <PlaceAutocomplete required/>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <p className="text-sm font-semibold">Description</p>
+        <form action={handleSubmit}>
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                {editMode ? (
                   <Input
-                    id="description"
-                    name="description"
-                    defaultValue={ad.description}
-                    placeholder="Description"
+                    name="title"
+                    defaultValue={ad.title}
+                    placeholder="Ad Title"
+                    className="w-full"
                   />
-                </div>
+                ) : (
+                  <CardTitle className="inline-block">
+                    {ad.title || "Ad Title"}
+                  </CardTitle>
+                )}
+                  {!editMode && ad.user_id === currentUserID && (
+                    <div className="flex gap-1">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="text-blue-500 h-8 w-8"
+                        onClick={handleEditClick}
+                      >
+                        <Pencil size={18} />
+                      </Button>
+                      
+                      <Button variant="outline" size="icon" className="text-red-500 h-8 w-8">
+                        <Trash2 size={18} />
+                      </Button>
+                    </div>
+                  )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {editMode ? (
+                <>
+                  <div className="space-y-2">  
+                    <p className="text-sm font-semibold">Price</p>
+                    <Input
+                      id="price"
+                      name="price"
+                      type="text"
+                      defaultValue={ad.price}
+                      placeholder="Price ($)"
+                      className="mb-4"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold">Brand</p>
+                      <Input
+                        id="brand"
+                        name="brand"
+                        defaultValue={ad.brand}
+                        placeholder="Brand"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold">Model</p>
+                      <Input
+                        id="model"
+                        name="model"
+                        defaultValue={ad.model}
+                        placeholder="Model"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold">Year</p>
+                      <Input
+                        id="year"
+                        name="year"
+                        type="number"
+                        defaultValue={ad.year}
+                        placeholder="Year"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold">Mileage</p>
+                      <Input
+                        id="km"
+                        name="km"
+                        type="number"
+                        defaultValue={ad.km}
+                        placeholder="Mileage (km)"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold">Transmission</p>
+                      <Input
+                        id="gearType"
+                        name="gearType"
+                        defaultValue={ad.gear_type}
+                        placeholder="Transmission"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold">Fuel Type</p>
+                      <Input
+                        id="fuelType"
+                        name="fuelType"
+                        defaultValue={ad.fuel_type}
+                        placeholder="Fuel Type"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold">Listed On</p>
+                      <p>{ad.date ? formatDate(ad.date) : "Date Not Available"}</p>
+                    </div>
+                    <div>
+                      <PlaceAutocomplete required />
+                    </div>
+                  </div>
 
-                <div className="mt-4 flex gap-2">
-                  <Button type="submit">Update</Button>
-                  <Button variant="outline" onClick={() => setEditMode(false)}>
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            ) : (
-              <>
-                <p className="text-2xl font-bold text-primary mb-4">
-                  {ad.price ? `$${ad.price}` : "Price Not Available"}
-                </p>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-sm font-semibold">Brand</p>
-                    <p>{capitalizeFirstLetters(ad.brand) || "Not Specified"}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Model</p>
-                    <p>{capitalizeFirstLetters(ad.model) || "Not Specified"}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Year</p>
-                    <p>{ad.year || "Not Specified"}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Mileage</p>
-                    <p>{ad.km ? `${ad.km} km` : "Not Specified"}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Transmission</p>
-                    <p>{capitalizeFirstLetters(ad.gear_type) || "Not Specified"}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">Fuel Type</p>
-                    <p>{capitalizeFirstLetters(ad.fuel_type) || "Not Specified"}</p>
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold">Description</p>
+                    <Input
+                      id="description"
+                      name="description"
+                      defaultValue={ad.description}
+                      placeholder="Description"
+                    />
                   </div>
 
-                  <div>
-                    <p className="text-sm font-semibold">Listed On</p>
-                    <p>
-                      {ad.date
-                        ? formatDate(ad.date)
-                        : "Date Not Available"}
-                    </p>
+                  <div className="mt-4 flex gap-2">
+                    <Button type="submit">Update</Button>
+                    <Button variant="outline" onClick={() => setEditMode(false)}>
+                      Cancel
+                    </Button>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold">Location</p>
-                    <p>{ad.location || "Location Not Specified"}</p>
-                  </div>
-                </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-2xl font-bold text-primary mb-4">
+                    {ad.price ? `$${ad.price}` : "Price Not Available"}
+                  </p>
 
-                <div className="mt-4">
-                  <p className="text-sm font-semibold">Description</p>
-                  <p>{ad.description || "No Description Available"}</p>
-                </div>
-              </>
-            )}
-          </CardContent>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-sm font-semibold">Brand</p>
+                      <p>{capitalizeFirstLetters(ad.brand) || "Not Specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Model</p>
+                      <p>{capitalizeFirstLetters(ad.model) || "Not Specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Year</p>
+                      <p>{ad.year || "Not Specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Mileage</p>
+                      <p>{ad.km ? `${ad.km} km` : "Not Specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Transmission</p>
+                      <p>{capitalizeFirstLetters(ad.gear_type) || "Not Specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Fuel Type</p>
+                      <p>{capitalizeFirstLetters(ad.fuel_type) || "Not Specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Listed On</p>
+                      <p>
+                        {ad.date
+                          ? formatDate(ad.date)
+                          : "Date Not Available"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Location</p>
+                      <p>{ad.location || "Location Not Specified"}</p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-sm font-semibold">Description</p>
+                    <p>{ad.description || "No Description Available"}</p>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </form>
         </Card>
       </div>
 

@@ -47,9 +47,9 @@ export async function POST(request, context) {
 
     await query(
       `UPDATE Ad
-      SET title = $1, price = $2, description = $3
+      SET title = $1, price = $2, description = $3, location = $5, latitude = $6, longitude = $7
       WHERE ad_ID = $4`,
-      [title, price, description, adID]
+      [title, price, description, adID, location, latitude, longitude]
     );
 
     await query(
