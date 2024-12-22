@@ -15,6 +15,13 @@ import { revalidateTagClient } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast"
 import { SERVER_URL } from "@/utils/constants";
 import PlaceAutocomplete from './PlaceAutocomplete'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function AdViewClient({ ad, isAuth, currentUserID}) {
   const [editMode, setEditMode] = useState(false);
@@ -167,21 +174,35 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-semibold">Transmission</p>
-                      <Input
+                      <Select
                         id="gearType"
                         name="gearType"
-                        defaultValue={ad.gear_type}
-                        placeholder="Transmission"
-                      />
+                        defaultValue={ad.gear_type}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Gear Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="manual">Manual</SelectItem>
+                          <SelectItem value="automatic">Automatic</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-semibold">Fuel Type</p>
-                      <Input
+                      <Select
                         id="fuelType"
                         name="fuelType"
-                        defaultValue={ad.fuel_type}
-                        placeholder="Fuel Type"
-                      />
+                        defaultValue={ad.fuel_type}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Fuel Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="petrol">Petrol</SelectItem>
+                          <SelectItem value="diesel">Diesel</SelectItem>
+                          <SelectItem value="electric">Electric</SelectItem>
+                          <SelectItem value="hybrid">Hybrid</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-semibold">Listed On</p>
