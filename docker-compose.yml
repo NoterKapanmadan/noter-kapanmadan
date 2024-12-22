@@ -13,6 +13,15 @@ services:
       - ./file-server/.env
     restart: unless-stopped
 
+  messaging-server:
+    build:
+      context: ./messaging-server
+    ports:
+      - "8654:8654"
+    env_file:
+      - ./messaging-server/.env
+    restart: unless-stopped
+
   webpage:
     build:
       context: ./webpage

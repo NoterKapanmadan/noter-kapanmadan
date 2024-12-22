@@ -203,7 +203,7 @@ export default async function AdPage({ params }) {
 
             {/* Actions */}
             {isAuth && (
-              <AdActions ad={ad} />
+              <AdActions ad_ID= {ad_ID} owner_ID = {ad.account_id} ad= {ad}/>
             )}
           </div>
         </div>

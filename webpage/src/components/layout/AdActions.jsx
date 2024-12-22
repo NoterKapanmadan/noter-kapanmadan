@@ -12,6 +12,7 @@ import {
   HandCoins,
   MessageCircle,
 } from "lucide-react";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -25,14 +26,28 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { SERVER_URL } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useTransition } from "react";
-import { revalidateTagClient, revalidatePathClient } from "@/app/actions";
+import { useState, useTransition, useEffect } from "react";
+import { getAccountID, revalidateTagClient, revalidatePathClient } from "@/app/actions";
 
-export default function AdActions({ ad }) {
+export default function AdActions({ ad_ID, owner_ID, ad }) {
   const { toast } = useToast();
   const [offerOpen, setOfferOpen] = useState(false);
   const [pendingOffer, startOfferTransition] = useTransition()
   const [pendingFavorite, startFavoriteTransition] = useTransition()
+
+  const [account_ID, setAccount_ID] = useState(null);
+
+  useEffect(() => {
+    const fetchAccountID = async () => {
+      const id = await getAccountID();
+      setAccount_ID(id);
+      console.log("Account ID: ", id);
+    };
+
+    fetchAccountID();
+  }, []);
+
+
 
   const handleFavorite = async () => {
     startFavoriteTransition(async () => {
@@ -110,19 +125,23 @@ export default function AdActions({ ad }) {
     })
   };
 
+  const isOwner = account_ID === owner_ID;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Actions</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <Button className="w-full" variant="secondary">
+        <Link href={isOwner ? "#" : `/chat/${owner_ID}`} passHref>
+        <Button className="w-full" variant="secondary" disabled={isOwner}>
           <MessageCircle className={`mr-2 h-4 w-4`} />
           Send Message
         </Button>
+        </Link>
         <Dialog open={offerOpen} onOpenChange={setOfferOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full">
+            <Button className="w-full" disabled={isOwner}>
               <HandCoins className={`mr-2 h-4 w-4`} />
               Make an Offer
             </Button>
