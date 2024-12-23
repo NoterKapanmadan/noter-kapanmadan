@@ -7,7 +7,6 @@ import { extractImagesFromAds } from '@/utils/file';
 export async function GET(request) {
     try{
         const { account_id } = await decrypt(request.cookies.get("Authorization").value)
-        console.log(account_id);
         const ads = await query(
             `SELECT Ad.ad_ID, title, description, price, location, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type, visit_date,
             string_agg(image, ',') as images
@@ -19,7 +18,6 @@ export async function GET(request) {
             LIMIT 10;`
             , [account_id]
         );
-        console.log(ads);
         const finalizedAds = await extractImagesFromAds(ads.rows);
         return NextResponse.json(finalizedAds, { status: 200 })
     } 

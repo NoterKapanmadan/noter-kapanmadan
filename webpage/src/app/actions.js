@@ -161,3 +161,23 @@ export const getChatRooms = async () => {
   const res = await response.json();
   return res;
 }
+
+/*export async function updateAd(ad_ID, updatedData) {
+  const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad_ID}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+    body: JSON.stringify(updatedData),
+    cache: 'no-cache',
+  });
+
+
+  if (!res.ok) {
+    throw new Error("Failed to update ad");
+  }
+
+  const data = await res.json();
+  return data;
+}*/

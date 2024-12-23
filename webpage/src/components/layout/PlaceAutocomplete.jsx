@@ -18,16 +18,16 @@ import { X, MapPinned } from "lucide-react";
 // not needed to send location form in formdata +++ fixed
 
 
-export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistance = 10 }) {
+export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistance = 10, defaultLocation = null, oldLatitude = null, oldLongitude = null}) {
 
-    const [locationText, setLocationText] = useState('');
-    const [selectedLatitude, setSelectedLatitude] = useState('');
-    const [selectedLongitude, setSelectedLongitude] = useState('');
+    const [locationText, setLocationText] = useState(defaultLocation || '');
+    const [selectedLatitude, setSelectedLatitude] = useState(oldLatitude || '');
+    const [selectedLongitude, setSelectedLongitude] = useState(oldLongitude || '');
     const [maxDistance, setMaxDistance] = useState(defaultMaxDistance ? defaultMaxDistance : '');
     const [isLocationPending, setLocationPending] = useState();
 
     const handlePlaceSelected = (place) => {
-        console.log("Place: ", place)
+        //console.log("Place: ", place)
         setSelectedLatitude(place.geometry.location.lat());
         setSelectedLongitude(place.geometry.location.lng());
         setLocationText(place.formatted_address);
@@ -46,8 +46,6 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
     });
 
 
-
-
     // define the function that finds the users geolocation
     const getUserLocation = (e) => {
         e.preventDefault();
@@ -57,13 +55,9 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
             setLocationPending(true);
             navigator.geolocation.getCurrentPosition(
                 async (position) => {
-
-                    // save the geolocation coordinates in two variables
                     const { latitude, longitude } = position.coords;
-                    // update the value of userlocation variable
 
                     const address = await getLocationToAddress(latitude, longitude);
-                    console.log("Address:", address)
 
                     ref.current.value = address;
                     setLocationText(address);
@@ -72,14 +66,12 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
                     setLocationPending(false);
 
                 },
-                // if there was an error getting the users location
                 (error) => {
                     console.error('Error getting user location:', error);
                     setLocationPending(false);
                 }
             );
         }
-        // if geolocation is not supported by the users browser
         else {
             console.error('Geolocation is not supported by this browser.');
         }
@@ -99,8 +91,6 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
                 ref.current.setCustomValidity('Please select a location');
             }
         }
-
-
     }, [selectedLatitude, selectedLongitude]);
 
     const isSelected = selectedLatitude && selectedLongitude ? true : false;
@@ -112,7 +102,7 @@ export default function PlaceAutocomplete({ required, isFilter, defaultMaxDistan
 
                 <Label htmlFor="location">Location</Label>
                 <div className="relative">
-                    <Input ref={ref} id="location-select" required={required} className="pr-8" />
+                    <Input ref={ref} id="location-select" required={required} defaultValue = {defaultLocation ? defaultLocation : ""} className="pr-8" />
                     {isSelected ? (
                         <button
                             type="button"
