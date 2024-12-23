@@ -26,6 +26,8 @@ export async function POST(request, context) {
       );
     }
 
+    console.log(vehicleID)
+
     const {rows: typeRows} = await query(
       `SELECT 'car' AS type FROM Car WHERE vehicle_ID = $1
         UNION
@@ -35,9 +37,10 @@ export async function POST(request, context) {
         UNION
         SELECT 'motorcycle' FROM Motorcycle WHERE vehicle_ID = $1;`,
         [vehicleID]
-      );
+    );
 
-      const {type} = typeRows[0];
+    const {type} = typeRows[0];
+    console.log(type)
 
     await query("BEGIN");
 
@@ -60,7 +63,7 @@ export async function POST(request, context) {
           [vehicleID]
         );
         break;
-      case 'motorcyle':
+      case 'motorcycle':
         await query(
           `DELETE FROM Motorcycle WHERE vehicle_ID = $1`,
           [vehicleID]
