@@ -354,7 +354,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
 
         {/* Actions */}
         {isAuth && (
-          <AdActions ad={ad} />
+          <AdActions ad={ad} owner_ID={ad.account_id} />
         )}
       </div>
     </div>
