@@ -112,6 +112,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
         <Card>
           <CardContent className="p-0">
             <AdImageCarousel
+              adID={ad.ad_id}
               images={ad.images || []}
               base64Images={ad.base64Images || []}
               dimensions={ad.dimensions || []}

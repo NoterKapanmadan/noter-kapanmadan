@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { decrypt, getAuthToken } from "@/lib/auth";
 import { query } from '@/lib/db';
+import { uploadFilesServer } from '@/utils/file';
 
 export async function POST(request, context) {
   try {
@@ -27,6 +28,35 @@ export async function POST(request, context) {
     }
 
     const formData = await request.formData();
+    const images = formData.getAll("images");
+    console.log(images)
+
+    if(images) {
+      const { imageIds } = await uploadFilesServer(images);
+
+      await query("BEGIN");
+
+      await query(
+        `DELETE FROM AdImage
+        WHERE ad_ID = $1`,
+        [adID]
+      );
+
+      await query(
+        `INSERT INTO AdImage (ad_ID, image)
+        VALUES 
+        ${imageIds.map((_, index) => `($1, $${index + 2})`).join(', ')};`,
+        [adID, ...imageIds]
+    );
+
+      await query("COMMIT");
+
+      return NextResponse.json(
+        { msg: "Ad is updated successfully!" },
+        { status: 200 }
+      );
+    }
+
     const data = Object.fromEntries(formData.entries());
     const {
       title,
