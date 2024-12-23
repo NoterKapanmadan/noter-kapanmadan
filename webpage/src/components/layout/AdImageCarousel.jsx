@@ -9,7 +9,7 @@ import { SERVER_URL } from "@/utils/constants";
 import { revalidateTagClient } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast"
 
-export default function AdImageCarousel({ images, base64Images, dimensions, adID }) {
+export default function AdImageCarousel({ images, base64Images, dimensions, adID, adUserID, currentUserID }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [uploadError, setUploadError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -117,30 +117,31 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
           className="rounded-lg"
         />
 
-        {/* Overlay for Hover Effect */}
-        <div
-          className="absolute inset-0 flex items-center justify-center bg-transparent group-hover:bg-black group-hover:bg-opacity-30 transition duration-300 rounded-lg cursor-pointer"
-          onClick={handleEdit}
-        >
-          <Pencil className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" size={32} />
-        </div>
+        {adUserID == currentUserID ? (
+          <>
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-transparent group-hover:bg-black group-hover:bg-opacity-30 transition duration-300 rounded-lg cursor-pointer"
+              onClick={handleEdit}
+            >
+              <Pencil className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" size={32} />
+            </div>
 
-        {/* Uploading Indicator */}
-        {isUploading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
-            <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
-          </div>
-        )}
+            {/* Uploading Indicator */}
+            {isUploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
+                <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+              </div>
+            )}
 
-        {/* Error Message */}
-        {uploadError && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded">
-            {uploadError}
-          </div>
-        )}
+            {uploadError && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded">
+                {uploadError}
+              </div>
+            )}
+        </>
+        ): (<></>)}
       </div>
 
-      {/* Previous Button */}
       <Button
         variant="outline"
         size="icon"
@@ -151,7 +152,6 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
         <ChevronLeft className="h-4 w-4" />
       </Button>
 
-      {/* Next Button */}
       <Button
         variant="outline"
         size="icon"
