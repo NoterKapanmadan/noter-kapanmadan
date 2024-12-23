@@ -3,17 +3,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-import { startTransition, useState } from "react"
+import { useEffect, useState } from "react"
+import { formatYearAndMonth } from "@/utils/date"
 
 export default function AdminHome() {
   const [data, setData] = useState([])
-  startTransition(async () => {
+
+  const fetchStatistics = async () => {
     const response = await fetch('/api/admin/get-statistics')
-    const data = await response.json()
-    setData(data)
-    console.log(data)
+
+    if (response.ok) {
+      const data =  await response.json()
+      setData(data)
+    }
   }
-  )
+
+  useEffect(() => { 
+    fetchStatistics()
+  } , [])
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">General Statistics</h1>
@@ -75,6 +83,7 @@ export default function AdminHome() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
+                  tickFormatter={(value) => formatYearAndMonth(value)}
                 />
                 <YAxis
                   stroke="hsl(var(--foreground))"
