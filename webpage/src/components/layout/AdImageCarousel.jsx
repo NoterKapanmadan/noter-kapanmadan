@@ -40,9 +40,9 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
       setUploadError(null);
 
       const formData = new FormData();
-    Array.from(files).forEach((file) => {
-      formData.append('images', file);
-    });
+      Array.from(files).forEach((file) => {
+        formData.append('images', file);
+      });
 
       try {
         const response = await fetch(`${SERVER_URL}/ad/update-ad/${adID}`, {
@@ -54,10 +54,7 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
         if (!response.ok) {
           throw new Error('Image upload failed');
         }
-
-        const data = await response.json();
-
-        const updatedImageUrl = data.imageUrl;
+        
       } catch (error) {
         console.error('Error uploading image:', error);
         setUploadError(error.message || 'Something went wrong');
