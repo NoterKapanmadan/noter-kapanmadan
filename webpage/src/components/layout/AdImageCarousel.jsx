@@ -73,9 +73,10 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
             description: msg,
           });
   
-          revalidateTagClient(`/ad/${adID}`)
           setIsUploading(false);
           e.target.value = '';
+
+          revalidateTagClient(`/ad/${adID}`)
         }
 
       } catch (error) {
