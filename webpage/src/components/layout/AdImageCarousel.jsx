@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
 import { getImageSrc } from '@/utils/file';
 import { SERVER_URL } from "@/utils/constants";
+import { revalidateTagClient } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast"
 
 export default function AdImageCarousel({ images, base64Images, dimensions, adID }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -13,7 +15,8 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Navigate to the previous image
+  const { toast } = useToast()
+
   const handlePrev = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
@@ -54,13 +57,30 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
         if (!response.ok) {
           throw new Error('Image upload failed');
         }
-        
+
+        const { msg, error } = await response.json();
+
+        if (error) {
+          return toast({
+            title: 'Something went wrong!',
+            description: error,
+          });
+        }
+  
+        if (msg) {
+          toast({
+            title: 'Success!',
+            description: msg,
+          });
+  
+          revalidateTagClient(`/ad/${adID}`)
+          setIsUploading(false);
+          e.target.value = '';
+        }
+
       } catch (error) {
         console.error('Error uploading image:', error);
         setUploadError(error.message || 'Something went wrong');
-      } finally {
-        setIsUploading(false);
-        e.target.value = '';
       }
     }
   };

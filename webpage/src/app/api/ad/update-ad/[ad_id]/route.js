@@ -31,7 +31,7 @@ export async function POST(request, context) {
     const images = formData.getAll("images");
     console.log(images)
 
-    if(images) {
+    if(images.length > 0) {
       const { imageIds } = await uploadFilesServer(images);
 
       await query("BEGIN");
