@@ -32,6 +32,7 @@ import Link from "next/link";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
 import { getAuthToken } from "@/lib/auth";
+import { notFound } from "next/navigation";
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
@@ -45,7 +46,14 @@ export default async function AdPage({ params }) {
       "Cookie": "Authorization=" + getAuthToken(),
     }
   });
+  if (!res.ok) {
+    return notFound();
+  }
   const ad = await res.json();
+
+  if(!ad || ad.status === "inactive") {
+    return notFound();
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -15,6 +15,7 @@ export default function Transactions() {
 
   const fetchTransactions = async () => {
       const response = await fetch(`${SERVER_URL}/admin/get-transactions?searchKey=${userIdFilter}`)
+      const stats = await fetch('/api/admin/get-statistics')
   
       if (response.ok) {
         const data =  await response.json()

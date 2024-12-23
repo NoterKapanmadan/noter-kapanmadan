@@ -3,17 +3,17 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
-
-const data = [
-  { name: 'Jan', users: 4000, transactions: 2400, ads: 2400 },
-  { name: 'Feb', users: 3000, transactions: 1398, ads: 2210 },
-  { name: 'Mar', users: 2000, transactions: 9800, ads: 2290 },
-  { name: 'Apr', users: 2780, transactions: 3908, ads: 2000 },
-  { name: 'May', users: 1890, transactions: 4800, ads: 2181 },
-  { name: 'Jun', users: 2390, transactions: 3800, ads: 2500 },
-]
+import { startTransition, useState } from "react"
 
 export default function AdminHome() {
+  const [data, setData] = useState([])
+  startTransition(async () => {
+    const response = await fetch('/api/admin/get-statistics')
+    const data = await response.json()
+    setData(data)
+    console.log(data)
+  }
+  )
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">General Statistics</h1>
@@ -23,7 +23,7 @@ export default function AdminHome() {
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">10,000</div>
+            <div className="text-2xl font-bold">{data.total_users}</div>
           </CardContent>
         </Card>
         <Card>
@@ -31,7 +31,7 @@ export default function AdminHome() {
             <CardTitle className="text-sm font-medium">Active Ads</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">500</div>
+            <div className="text-2xl font-bold">{data.active_ads}</div>
           </CardContent>
         </Card>
         <Card>
@@ -39,7 +39,7 @@ export default function AdminHome() {
             <CardTitle className="text-sm font-medium">Total Transactions</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">25,000</div>
+            <div className="text-2xl font-bold">{data.total_transactions}</div>
           </CardContent>
         </Card>
       </div>
@@ -67,10 +67,10 @@ export default function AdminHome() {
             className="h-[300px] w-full"
           >
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data}>
+              <LineChart data={data.monthly_counts}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
-                  dataKey="name" 
+                  dataKey="month" 
                   stroke="hsl(var(--foreground))"
                   fontSize={12}
                   tickLine={false}

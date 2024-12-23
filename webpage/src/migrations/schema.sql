@@ -282,4 +282,21 @@ REFERENCING NEW TABLE AS new_table
 FOR EACH ROW
 EXECUTE FUNCTION update_ads_bids_function();
 
+CREATE OR REPLACE FUNCTION update_bid_status_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.status = 'inactive' THEN
+        UPDATE bid
+        SET status = 'canceled'
+        WHERE ad_ID = NEW.ad_ID AND status = 'pending' OR status = 'accepted';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER update_bid_status AFTER UPDATE ON Ad
+REFERENCING NEW TABLE AS new_table
+FOR EACH ROW
+EXECUTE FUNCTION update_bid_status_function();
+
 
