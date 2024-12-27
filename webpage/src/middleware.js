@@ -38,7 +38,8 @@ export default async function middleware(req) {
   const isAuthenticated = payload?.account_id;
 
   const adRoutePattern = /^\/ad\/[^/]+$/;
-  const isUnprotectedRoute = adRoutePattern.test(pathname) || pathname === '/'
+  const profileRoutePattern = /^\/profile\/[^/]+$/;
+  const isUnprotectedRoute = adRoutePattern.test(pathname) || profileRoutePattern.test(pathname) || pathname === '/'
 
   if (isUnprotectedRoute) {
     return NextResponse.next()
