@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Users, BarChart2, FileText, DollarSign, MessageSquare, LogOut, ArrowLeft } from 'lucide-react'
+import { Home, Users, BarChart2, FileText, DollarSign, Ticket, LogOut, ArrowLeft } from 'lucide-react'
 import { logout } from '@/app/actions'
 import { cn } from '@/lib/utils'
 
@@ -12,7 +12,7 @@ const menuItems = [
   { name: 'Ads', icon: BarChart2, href: '/admin/ads' },
   { name: 'Transactions', icon: DollarSign, href: '/admin/transactions' },
   { name: 'Statistics', icon: FileText, href: '/admin/statistics' },
-  { name: 'User Requests', icon: MessageSquare, href: '/admin/requests' },
+  { name: 'Tickets', icon: Ticket, href: '/admin/tickets' },
 ]
 
 export default function Sidebar() {
