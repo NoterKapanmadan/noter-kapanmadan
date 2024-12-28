@@ -21,6 +21,13 @@ export const getAccountID = async () => {
   return payload?.account_id;
 };
 
+export const isAdmin = async () => {
+  const token = getAuthToken();
+  const payload = await decrypt(token);
+
+  return !!payload?.account_id && !!payload.isAdmin;
+};
+
 export const updateProfile = async (formData, account_id) => {
   const response = await fetch(`${SERVER_URL}/profile/${account_id}`, {
     method: "POST",
@@ -61,7 +68,7 @@ export const getCurrentUserInfo = async () => {
 };
 
 export const sendHistory = async (adID) => {
-  if (!isAuthenticated()) return;
+  if (!isAuthenticated() || isAdmin()) return;
 
   const response = await fetch(`${SERVER_URL}/history/add-history`, {
     method: "POST",

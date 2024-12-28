@@ -3,7 +3,7 @@ import Pagination from "./Pagination";
 import { SERVER_URL } from "@/utils/constants"
 import { getAuthToken } from "@/lib/auth";
 
-export default async function Facorites({ filters }) {
+export default async function Favorites({ filters }) {
   const filteredFilters = {};
   
   for (const key of Object.keys(filters)) {
@@ -32,7 +32,7 @@ export default async function Facorites({ filters }) {
         initialFilters={filters}
         totalPages={totalPages}
       />
-      {totalPages > 1 && <Pagination filters={filters} totalPages={totalPages} />}
+      {totalPages > 1 && <Pagination filters={filters} totalPages={totalPages} parentURL={"/favorites"}/>}
     </>
   );
 }

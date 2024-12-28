@@ -31,7 +31,7 @@ export default async function ProfilePage({ params }) {
 
   const authorizationID = await getAccountID();
 
-  if (!user) {
+  if (!user && user.status === "banned") {
     notFound();
   }
 

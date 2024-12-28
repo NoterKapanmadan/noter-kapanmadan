@@ -1,14 +1,14 @@
 import { SERVER_URL } from "@/utils/constants";
-import { sendHistory, isAuthenticated, getCurrentUserInfo } from "@/app/actions";
+import { sendHistory, isAuthenticated, getAccountID } from "@/app/actions";
 import { getAuthToken } from "@/lib/auth";
+import { notFound } from "next/navigation";
 import AdView from "@/components/layout/AdView"
-import { redirect } from 'next/navigation';
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
   sendHistory(params.adID);
 
-  const {account_id} = await getCurrentUserInfo();
+  const account_id = await getAccountID();
 
   const ad_ID = params.adID;
   const res = await fetch(`${SERVER_URL}/ad/get-ad/${ad_ID}`, {
@@ -18,12 +18,14 @@ export default async function AdPage({ params }) {
       "Cookie": "Authorization=" + getAuthToken(),
     }
   });
-  
   if (!res.ok) {
-    redirect("/not-found");
+    return notFound();
   }
-  
   const ad = await res.json();
+
+  if(!ad || ad.status === "inactive") {
+    return notFound();
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

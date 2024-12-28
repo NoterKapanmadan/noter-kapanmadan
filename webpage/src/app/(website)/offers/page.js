@@ -11,6 +11,7 @@ import CompletePayment from "@/components/layout/CompletePayment"
 
 export default async function OffersPage() {
   const offers = await getOffers()
+  console.log(offers)
 
   return (
     <div className="bg-gray-50 min-h-screen">    
@@ -59,13 +60,18 @@ export default async function OffersPage() {
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge className="bg-green-600 text-white hover:bg-green-700">Accepted</Badge>
                       </div>
-                    ) : offer.status === "rejected" ? (
+                    ) : offer.status === "rejected" ?(
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge variant="destructive">Rejected</Badge>
                       </div>
-                    ) : offer.status === "completed" && (
+                    ) : offer.status === "completed" ? (
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge>Completed</Badge>
+                      </div>
+                    )
+                    : offer.status === "canceled" && (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge variant="destructive">Canceled</Badge>
                       </div>
                     )}
                   </CardFooter>
@@ -81,7 +87,7 @@ export default async function OffersPage() {
                 <Card className="flex flex-col" key={offer.bid_id}>
                   <CardHeader>
                     <CardTitle>{offer.title}</CardTitle>
-                    <CardDescription>Offer from {`${offer.owner_forename} ${offer.owner_surname}`}</CardDescription>
+                    <CardDescription>Offer to {`${offer.owner_forename} ${offer.owner_surname}`}</CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1">
                     <Link href={`/profile/${offer.owner_id}`} className="flex items-center space-x-2 mb-4">
@@ -117,9 +123,13 @@ export default async function OffersPage() {
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge variant="destructive">Rejected</Badge>
                       </div>
-                    ) : offer.status === "completed" && (
+                    ) : offer.status === "completed" ? (
                       <div className="flex flex-col w-full justify-between items-start gap-2">
                         <Badge>Completed</Badge>
+                      </div>
+                    ) : offer.status === "canceled" && (
+                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                        <Badge variant="destructive">Canceled</Badge>
                       </div>
                     )}
                   </CardFooter>

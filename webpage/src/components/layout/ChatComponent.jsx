@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { SendHorizonal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import LocalTime from "@/components/layout/LocalTime";
 
 export default function ChatComponent({ receiver, chatRoom, userDetails }) {
   const [socket, setSocket] = useState(null);
@@ -110,17 +111,13 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
               }`}
             >
               <p className="text-base">{message.text}</p>
-              <div className="flex flex-row pr-1 pl-1 items-end min-w-16">
+              <div className="flex flex-row pr-1 pl-1 items-end min-w-8">
                 <p
                   className={`text-xs mt-1 text-right ${
                     message.sender === "user" ? "text-white" : "text-gray-600"
                   }`}
                 >
-                  {new Date(message.date).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}
+                  <LocalTime time={message.date} />
                 </p>
               </div>
             </div>
