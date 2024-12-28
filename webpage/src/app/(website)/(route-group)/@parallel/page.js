@@ -40,7 +40,6 @@ export default function AllAdsParallel({ searchParams }) {
     maxDistance,
     page: Number(page),
   }
-
   return (
     <Suspense fallback={<LoadingSkeleton />}>
       <AllAds filters={filters} />

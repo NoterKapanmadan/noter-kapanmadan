@@ -32,7 +32,7 @@ export default async function AllAds({ filters }) {
         initialFilters={filters}
         totalPages={totalPages}
       />
-      {totalPages > 1 && <Pagination filters={filters} totalPages={totalPages} />}
+      {totalPages > 1 && <Pagination filters={filters} totalPages={totalPages} parentURL={""} />}
     </>
   );
 }

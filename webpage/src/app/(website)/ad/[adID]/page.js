@@ -1,8 +1,8 @@
 import { SERVER_URL } from "@/utils/constants";
 import { sendHistory, isAuthenticated, getAccountID } from "@/app/actions";
 import { getAuthToken } from "@/lib/auth";
+import { notFound } from "next/navigation";
 import AdView from "@/components/layout/AdView"
-import { redirect } from 'next/navigation';
 
 export default async function AdPage({ params }) {
   const isAuth = await isAuthenticated();
@@ -18,12 +18,14 @@ export default async function AdPage({ params }) {
       "Cookie": "Authorization=" + getAuthToken(),
     }
   });
-  
   if (!res.ok) {
-    redirect("/not-found");
+    return notFound();
   }
-  
   const ad = await res.json();
+
+  if(!ad || ad.status === "inactive") {
+    return notFound();
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -1,6 +1,9 @@
-import AdFilters from "@/components/layout/AdFilters"
+import { Suspense } from "react"
+import LoadingSkeleton from "@/components/layout/LoadingSkeleton"
+import RecentVisitedAds from "@/components/layout/RecentVisitedAds"
 
-export default function HomePageParallel({ searchParams }) {
+
+export default function HistoryParallel({ searchParams }) {
   const {
     title = '',
     minPrice = '',
@@ -38,8 +41,10 @@ export default function HomePageParallel({ searchParams }) {
     maxDistance,
     page: Number(page),
   }
-
+  
   return (
-    <AdFilters initialFilters={filters} />
+    <Suspense fallback={<LoadingSkeleton />}>
+      <RecentVisitedAds filters={filters} />
+    </Suspense>
   )
 }
