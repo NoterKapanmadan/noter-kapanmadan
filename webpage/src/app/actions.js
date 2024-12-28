@@ -140,3 +140,51 @@ export const getOffers = async () => {
   const res = await response.json();
   return res;
 }
+
+export const getChatRoom = async (account_ID) => {
+  const response = await fetch(`${SERVER_URL}/chat/get-chat/${account_ID}`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+
+  const res = await response.json();
+  return res;
+}
+
+export const getChatRooms = async () => {
+  const response = await fetch(`${SERVER_URL}/chat/get-chats`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+
+  const res = await response.json();
+  return res;
+}
+
+/*export async function updateAd(ad_ID, updatedData) {
+  const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad_ID}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+    body: JSON.stringify(updatedData),
+    cache: 'no-cache',
+  });
+
+
+  if (!res.ok) {
+    throw new Error("Failed to update ad");
+  }
+
+  const data = await res.json();
+  return data;
+}*/

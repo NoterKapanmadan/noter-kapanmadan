@@ -52,9 +52,8 @@ export default function ProfileForm({ user, accountId }) {
 
       const { msg, error } = await res.json();
 
-      console.log(msg, error);
-
       if (error) {
+        console.log(error);
         toast({
           title: "Something went wrong!",
           description: error,

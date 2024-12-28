@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation"
 
 export default function TabListClient() {
   const pathname = usePathname()
-  console.log(pathname)
   let defaultValue = "allAds"
   if (pathname === "/deneme") {
     defaultValue = "allAds"

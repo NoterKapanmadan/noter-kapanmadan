@@ -24,7 +24,6 @@ export default function AuthLink({ href = "/", children, refresh = false }) {
     e.preventDefault();
 
     const isAuth = await isAuthenticated();
-    console.log(isAuth);
 
     if (!isAuth) {
       setLoginOpen(true);

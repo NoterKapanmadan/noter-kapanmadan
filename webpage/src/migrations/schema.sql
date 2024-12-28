@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS Message (
     message_ID UUID PRIMARY KEY UNIQUE NOT NULL,
     sender_ID UUID NOT NULL,
     text TEXT NOT NULL,
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date TIMESTAMPTZ DEFAULT now(),
     FOREIGN KEY (chatroom_ID) REFERENCES ChatRoom(chatroom_ID),
     FOREIGN KEY (sender_ID) REFERENCES Account(account_ID)
 );
