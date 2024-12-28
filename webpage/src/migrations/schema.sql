@@ -274,7 +274,7 @@ FOR EACH ROW
 EXECUTE FUNCTION update_balance_function();
 
 -- Create view for profile
-CREATE VIEW user_profile_view AS
+CREATE OR REPLACE VIEW user_profile_view AS
 SELECT 
     a.account_ID,
     a.forename,
