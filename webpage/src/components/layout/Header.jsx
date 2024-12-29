@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, ArrowLeftRight, HandCoins, User, Landmark, MessageCircleIcon } from "lucide-react";
+import { LogOut, ArrowLeftRight, HandCoins, User, Landmark, MessageCircleIcon, Ticket } from "lucide-react";
 import { logout, getCurrentUserInfo, isAdmin } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import AuthLink from "@/components/layout/AuthLink";
@@ -72,6 +72,12 @@ export default async function Header() {
                 <Link href="/transactions">
                   <ArrowLeftRight size={16} />
                   Transactions
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/tickets">
+                  <Ticket size={16} />
+                  Tickets
                 </Link>
               </DropdownMenuItem>
               <form action={logout}>

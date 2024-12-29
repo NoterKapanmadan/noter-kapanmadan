@@ -21,7 +21,6 @@ const stats = [
   { id: 1, name: 'Total Tickets', value: '83457', icon: CircleDot, color: 'bg-blue-100 text-blue-600' },
   { id: 2, name: 'Pending Tickets', value: '21457', icon: Mail, color: 'bg-orange-100 text-orange-600' },
   { id: 3, name: 'Closed Tickets', value: '31457', icon: Lock, color: 'bg-green-100 text-green-600' },
-  { id: 4, name: 'Deleted Tickets', value: '23419', icon: Trash2, color: 'bg-red-100 text-red-600' },
 ]
 
 const tickets = [
@@ -41,14 +40,13 @@ const tickets = [
     status: 'Closed',
     createDate: '01/02/2021',
   },
-  // Add more ticket data as needed
 ]
 
 export default function TicketsPage() {
   return (
       <div className="flex-1 space-y-4">
         <h1 className="text-2xl font-bold mb-4">Tickets</h1>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {stats.map((stat) => (
             <div
               key={stat.id}
