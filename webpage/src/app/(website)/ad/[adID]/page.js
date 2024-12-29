@@ -1,5 +1,5 @@
 import { SERVER_URL } from "@/utils/constants";
-import { sendHistory, isAuthenticated, getAccountID } from "@/app/actions";
+import { sendHistory, isAuthenticated, getAccountID, getBrands, getModels } from "@/app/actions";
 import { getAuthToken } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import AdView from "@/components/layout/AdView"
@@ -27,10 +27,13 @@ export default async function AdPage({ params }) {
     return notFound();
   }
 
+  const brands = await getBrands();
+  const models = await getModels(ad.brand);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <AdView ad={ad} isAuth={isAuth} currentUserID={account_id}/>
+        <AdView ad={ad} isAuth={isAuth} currentUserID={account_id} brands={brands} defaultBrandModels={models}/>
       </main>
     </div>
   );

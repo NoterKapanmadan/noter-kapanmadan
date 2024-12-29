@@ -1,6 +1,7 @@
+import { getBrands } from "@/app/actions"
 import AdFilters from "@/components/layout/AdFilters"
 
-export default function HomePageParallel({ searchParams }) {
+export default async function HomePageParallel({ searchParams }) {
   const {
     title = '',
     minPrice = '',
@@ -39,7 +40,9 @@ export default function HomePageParallel({ searchParams }) {
     page: Number(page),
   }
 
+  const brands = await getBrands();
+
   return (
-    <AdFilters initialFilters={filters} />
+    <AdFilters initialFilters={filters} brands={brands}/>
   )
 }
