@@ -47,6 +47,22 @@ BEGIN
 END;
 $$;
 
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ticket_status') THEN
+        CREATE TYPE ticket_status AS ENUM ('Open', 'Pending', 'Closed');
+    END IF;
+END;
+$$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ticket_priority') THEN
+        CREATE TYPE ticket_priority AS ENUM ('Low', 'Medium', 'High', 'Not Decided');
+    END IF;
+END;
+$$;
+
 
 CREATE TABLE IF NOT EXISTS Account (
     account_ID UUID PRIMARY KEY UNIQUE NOT NULL,
@@ -236,6 +252,16 @@ CREATE TABLE IF NOT EXISTS VehicleModel (
     FOREIGN KEY (brand) REFERENCES vehiclebrand(brand) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS Tickets (
+  ticket_ID UUID PRIMARY KEY UNIQUE NOT NULL,
+  account_ID UUID NOT NULL,
+  subject VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  priority ticket_priority NOT NULL DEFAULT 'Not Decided',
+  status ticket_status NOT NULL DEFAULT 'Open',
+  created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (account_ID) REFERENCES Account(account_ID)
+);
 
 -- Create function for inserting car brands
 CREATE OR REPLACE FUNCTION insert_brand_function()

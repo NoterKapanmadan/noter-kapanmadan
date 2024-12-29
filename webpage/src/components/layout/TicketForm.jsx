@@ -1,31 +1,58 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useTransition, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from "@/hooks/use-toast"
+import { SERVER_URL } from "@/utils/constants";
+import { useRouter } from "next/navigation";
+
 
 export default function TicketForm() {
   const { toast } = useToast()
   const [pending, startTransition] = useTransition();
 
+  const formRef = useRef(null)
+
+  const router = useRouter();
+
   const handleSubmit = (formData) => {
     startTransition(async () => {
-      
+      const response = await fetch(`${SERVER_URL}/admin/send-ticket`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      const { msg, error } = await response.json();
+    
+      if (error) {
+        return toast({
+          title: 'Something went wrong!',
+          description: error,
+        });
+      }
+
+      if (msg) {
+        toast({
+          title: 'Success!',
+          description: msg,
+        });
+        formRef.current.reset()
+      }
     })
   }
 
   return (
-    <form action={handleSubmit} className="space-y-4">
+    <form ref={formRef} action={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
           Title
         </label>
         <Input
           type="text"
-          id="title"
-          name="title"
+          id="subject"
+          name="subject"
           required
           className="mt-1"
         />

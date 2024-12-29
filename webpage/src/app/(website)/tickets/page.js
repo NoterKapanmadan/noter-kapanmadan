@@ -1,10 +1,12 @@
 import TicketForm from '@/components/layout/TicketForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { SERVER_URL } from "@/utils/constants";
+import { getAuthToken } from "@/lib/auth";
 
 export default async function TicketPage() {
 
-  /*const res = await fetch(`${SERVER_URL}/ad/get-ads?${queryParams}`, {
+  /*const res = await fetch(`${SERVER_URL}/admin/get-user-ticket`, {
       method: "GET",
       cache: "no-cache",
       headers: {
@@ -13,35 +15,9 @@ export default async function TicketPage() {
       },
     });
   
-  const {tickets} = await res.json()*/
+  const {faketickets} = await res.json()*/
 
-  const tickets = [
-    {
-      id: 1,
-      title: "Merhaba",
-      subject: "Issue with Login",
-      description: "I cannot log into my account. Please help!",
-      createdAt: new Date().toISOString(),
-      status: "open",
-    },
-    {
-      id: 2,
-      title: "Merhaba",
-      subject: "Payment Problem",
-      description: "Payment not going through for the premium plan.",
-      createdAt: new Date().toISOString(),
-      status: "open",
-    },
-    {
-      id: 3,
-      title: "Merhaba",
-      subject: "Feature Request",
-      description: "It would be great to have a dark mode for the app.",
-      createdAt: new Date().toISOString(),
-      status: "closed",
-    },
-  ];
-    
+  const tickets = []
 
   return (
     <div className="container mx-auto py-8">
