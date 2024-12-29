@@ -188,3 +188,29 @@ export const getChatRooms = async () => {
   const data = await res.json();
   return data;
 }*/
+
+export const getBrands = async () => {
+  const response = await fetch(`${SERVER_URL}/vehicles/get-brands`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const res = await response.json();
+  return res.brands;
+}
+
+export const getModels = async (brand) => {
+  const response = await fetch(`${SERVER_URL}/vehicles/get-models/${brand}`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const res = await response.json();
+  return res.models;
+}

@@ -102,7 +102,9 @@ CREATE TABLE IF NOT EXISTS Vehicle (
     km INTEGER NOT NULL,
     gear_type gear_type NOT NULL,
     fuel_type fuel_type NOT NULL,
-    expertise_report VARCHAR(255)
+    expertise_report VARCHAR(255),
+    FOREIGN KEY (brand) REFERENCES vehiclebrand(brand),
+    FOREIGN KEY (brand, model) REFERENCES vehiclemodel(brand, model)
 );
 
 -- Create Car table
@@ -220,6 +222,38 @@ CREATE TABLE IF NOT EXISTS Favorites (
     FOREIGN KEY (ad_ID) REFERENCES Ad(ad_ID),
     FOREIGN KEY (account_ID) REFERENCES Users(account_ID)
 );
+
+-- Create car brands table
+CREATE TABLE IF NOT EXISTS VehicleBrand (
+    brand VARCHAR(50) PRIMARY KEY UNIQUE NOT NULL
+);
+
+-- Create car models table
+CREATE TABLE IF NOT EXISTS VehicleModel (
+    brand VARCHAR(50) NOT NULL,
+    model VARCHAR(80) NOT NULL,
+    PRIMARY KEY (brand, model),
+    FOREIGN KEY (brand) REFERENCES vehiclebrand(brand) ON DELETE CASCADE
+);
+
+
+-- Create function for inserting car brands
+CREATE OR REPLACE FUNCTION insert_brand_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NOT EXISTS (SELECT * FROM VehicleBrand WHERE brand = NEW.brand) THEN
+        INSERT INTO VehicleBrand (brand)
+        VALUES (NEW.brand);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create trigger for inserting car brands when instering a model
+CREATE OR REPLACE TRIGGER insert_brand_trigger
+BEFORE INSERT ON VehicleModel
+FOR EACH ROW
+EXECUTE FUNCTION insert_brand_function();
 
 
 -- Create function for updating balance

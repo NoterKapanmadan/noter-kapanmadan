@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
 import { capitalizeFirstLetters } from "@/utils/helpers";
 import { formatDate } from "@/utils/date";
-import { revalidateTagClient } from "@/app/actions";
+import { getModels, revalidateTagClient } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast"
 import { SERVER_URL } from "@/utils/constants";
 import PlaceAutocomplete from './PlaceAutocomplete'
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation";
 
-export default function AdViewClient({ ad, isAuth, currentUserID}) {
+export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaultBrandModels}) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
@@ -32,7 +32,27 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
 
   const router = useRouter();
 
+  const [models, setModels] = useState(defaultBrandModels)
+  const [modelKey, setModelKey] = useState(0) // to reset the select component
+  const [modelChanged, setModelChanged] = useState(false)
+
+
+  const handleBrandChange = async (value) => {
+    setModelChanged(true);
+    setModelKey((value) => value + 1) // to reset the select component
+    setModels([])
+    const newModels = await getModels(value);
+    setModels(newModels)
+  }
+
+  const handleModelChange = (value) => {
+    setModelChanged(true);
+  }
+
   const handleEditClick = () => {
+    setModelChanged(false);
+    setModels(defaultBrandModels)
+    setModelKey((value) => value + 1) // to reset the select component
     setEditMode(true);
   };
 
@@ -179,21 +199,43 @@ export default function AdViewClient({ ad, isAuth, currentUserID}) {
                   <div className="grid grid-cols-2 gap-3 mt-3">
                     <div className="space-y-2">
                       <p className="text-sm font-semibold">Brand</p>
-                      <Input
-                        id="brand"
+                      <Select
                         name="brand"
+                        id="brand"
+                        onValueChange={(value) => handleBrandChange(value)}
+                        required
                         defaultValue={ad.brand}
-                        placeholder="Brand"
-                      />
+                        >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Brand" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {brands.map((brand) => 
+                            <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                          )}
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-semibold">Model</p>
-                      <Input
-                        id="model"
+                      <Select
                         name="model"
-                        defaultValue={ad.model}
-                        placeholder="Model"
-                      />
+                        id="model"
+                        disabled={models.length === 0 || models == null}
+                        key={modelKey}
+                        defaultValue={modelChanged ? undefined : ad.model}
+                        onValueChange={(value) => handleModelChange(value)}
+                        required
+                        >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Model" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {models && models.map((model) => 
+                            <SelectItem key={model} value={model}>{model}</SelectItem>
+                          )}
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div className="space-y-2">
                       <p className="text-sm font-semibold">Year</p>
