@@ -18,15 +18,21 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Calendar } from 'lucide-react'
 import PlaceAutocomplete from './PlaceAutocomplete'
 import AuthLink from '@/components/layout/AuthLink'
+import { getModels } from '@/app/actions'
+import { set } from 'date-fns'
 
-export default function AdFilters({ initialFilters }) {
+export default function AdFilters({ initialFilters, brands }) {
   const [filters, setFilters] = useState(initialFilters)
   const formRef = useRef(null)
 
   const [fuelType, setFuelType] = useState(filters.fuel_type || '')
   const [gearType, setGearType] = useState(filters.gear_type || '')
+  const [brand, setBrand] = useState(filters.brand || '')
+  const [model, setModel] = useState(filters.model || '')
 
   const [autocompleteKey, setAutocompleteKey] = useState(Date.now());
+
+  const [models, setModels] = useState([])
 
   const router = useRouter()
   const pathname = usePathname()
@@ -56,8 +62,18 @@ export default function AdFilters({ initialFilters }) {
 
     newFilters["gear_type"] = gearType
     newFilters["fuel_type"] = fuelType
+    newFilters["brand"] = brand
+    newFilters["model"] = model
 
     updateFilter(newFilters)
+  }
+
+  const handleBrandChange = async (value) => {
+    setBrand(value)
+    setModel('')
+    setModels([])
+    const newModels = await getModels(value);
+    setModels(newModels)
   }
 
   const handleReset = () => {
@@ -82,6 +98,11 @@ export default function AdFilters({ initialFilters }) {
     updateFilter(resetFilters)
     setFuelType('')
     setGearType('')
+    setBrand('')
+    setModel('')
+
+    setModels([])
+
     formRef.current.reset()
     setAutocompleteKey(Date.now()); // reset autocomplete component by changing key
   }
@@ -145,19 +166,40 @@ export default function AdFilters({ initialFilters }) {
               <PlaceAutocomplete isFilter key={autocompleteKey}/>
             <div className="space-y-2">
               <Label htmlFor="brand">Brand</Label>
-              <Input
-                id="brand"
+                <Select
                 name="brand"
-                defaultValue={filters.brand}
-              />
+                id="brand"
+                value={brand}
+                onValueChange={(value) => handleBrandChange(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Brand" />
+                </SelectTrigger>
+                <SelectContent>
+                  {brands.map((brand) => 
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+
             </div>
             <div className="space-y-2">
               <Label htmlFor="model">Model</Label>
-              <Input
-                id="model"
+              <Select
                 name="model"
-                defaultValue={filters.model}
-              />
+                id="model"
+                value={model}
+                disabled={models.length === 0 || models == null}
+                onValueChange={(value) => setModel(value)}
+                >
+                <SelectTrigger>
+                  <SelectValue placeholder="Model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {models && models.map((model) => 
+                    <SelectItem key={model} value={model}>{model}</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label>Year Range</Label>
