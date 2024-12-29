@@ -102,7 +102,9 @@ CREATE TABLE IF NOT EXISTS Vehicle (
     km INTEGER NOT NULL,
     gear_type gear_type NOT NULL,
     fuel_type fuel_type NOT NULL,
-    expertise_report VARCHAR(255)
+    expertise_report VARCHAR(255),
+    FOREIGN KEY (brand) REFERENCES vehiclebrand(brand),
+    FOREIGN KEY (brand, model) REFERENCES vehiclemodel(brand, model)
 );
 
 -- Create Car table
@@ -230,7 +232,8 @@ CREATE TABLE IF NOT EXISTS VehicleBrand (
 CREATE TABLE IF NOT EXISTS VehicleModel (
     brand VARCHAR(50) NOT NULL,
     model VARCHAR(80) NOT NULL,
-    PRIMARY KEY (brand, model)
+    PRIMARY KEY (brand, model),
+    FOREIGN KEY (brand) REFERENCES vehiclebrand(brand) ON DELETE CASCADE
 );
 
 
