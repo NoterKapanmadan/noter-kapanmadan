@@ -3,10 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { SERVER_URL } from "@/utils/constants";
 import { getAuthToken } from "@/lib/auth";
+import { formatDate } from "@/utils/date";
+import { revalidatePathClient } from "@/app/actions";
 
 export default async function TicketPage() {
 
-  /*const res = await fetch(`${SERVER_URL}/admin/get-user-ticket`, {
+  const res = await fetch(`${SERVER_URL}/admin/get-user-ticket`, {
       method: "GET",
       cache: "no-cache",
       headers: {
@@ -15,9 +17,7 @@ export default async function TicketPage() {
       },
     });
   
-  const {faketickets} = await res.json()*/
-
-  const tickets = []
+  const {tickets} = await res.json()
 
   return (
     <div className="container mx-auto py-8">
@@ -36,9 +36,9 @@ export default async function TicketPage() {
               tickets.map((ticket) => (
                 <Card>
                   <CardHeader>
-                    <CardTitle>{ticket.title}</CardTitle>
+                    <CardTitle>{ticket.subject}</CardTitle>
                     <CardDescription>
-                      Submitted on {new Date(ticket.createdAt).toLocaleDateString()}
+                      Submitted on {formatDate(new Date(ticket.created_date))}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

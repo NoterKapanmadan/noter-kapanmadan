@@ -16,38 +16,53 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown, MoreHorizontal, Lock, Mail, Trash2, CircleDot } from 'lucide-react'
 import { cn } from "@/lib/utils"
+import { SERVER_URL } from "@/utils/constants";
+import { getAuthToken } from "@/lib/auth";
+import { getImageSrc } from '@/utils/file';
+import { formatDate } from "@/utils/date"
 
-const stats = [
-  { id: 1, name: 'Total Tickets', value: '83457', icon: CircleDot, color: 'bg-blue-100 text-blue-600' },
-  { id: 2, name: 'Pending Tickets', value: '21457', icon: Mail, color: 'bg-orange-100 text-orange-600' },
-  { id: 3, name: 'Closed Tickets', value: '31457', icon: Lock, color: 'bg-green-100 text-green-600' },
-]
+export default async function TicketsPage() {
+  const res = await fetch(`${SERVER_URL}/admin/get-all-tickets`, {
+      method: "GET",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: "Authorization=" + getAuthToken(),
+      },
+    });
+  
+  const {stats, tickets} = await res.json()
 
-const tickets = [
-  {
-    id: '98765',
-    requester: { name: 'Jose D.', avatar: '/avatar.png' },
-    subject: 'Support for theme',
-    priority: 'Medium',
-    status: 'Open',
-    createDate: '01/01/2021',
-  },
-  {
-    id: '98767',
-    requester: { name: 'E. Brown', avatar: '/avatar.png' },
-    subject: 'Your application received',
-    priority: 'Low',
-    status: 'Closed',
-    createDate: '01/02/2021',
-  },
-]
 
-export default function TicketsPage() {
+  const statsArray = [
+    {
+      id: 1,
+      name: 'Total Tickets',
+      value: stats.totalTickets?.toString() ?? '0',
+      icon: CircleDot,
+      color: 'bg-blue-100 text-blue-600',
+    },
+    {
+      id: 2,
+      name: 'Pending Tickets',
+      value: stats.pendingTickets?.toString() ?? '0',
+      icon: Mail,
+      color: 'bg-orange-100 text-orange-600',
+    },
+    {
+      id: 3,
+      name: 'Closed Tickets',
+      value: stats.closedTickets?.toString() ?? '0',
+      icon: Lock,
+      color: 'bg-green-100 text-green-600',
+    },
+  ]
+
   return (
       <div className="flex-1 space-y-4">
         <h1 className="text-2xl font-bold mb-4">Tickets</h1>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {stats.map((stat) => (
+          {statsArray.map((stat) => (
             <div
               key={stat.id}
               className="rounded-lg border bg-white p-6 shadow-sm"
@@ -82,16 +97,16 @@ export default function TicketsPage() {
             </TableHeader>
             <TableBody>
               {tickets.map((ticket) => (
-                <TableRow key={ticket.id}>
-                  <TableCell className="font-medium">#{ticket.id}</TableCell>
+                <TableRow key={ticket.ticket_id}>
+                  <TableCell className="font-medium">#{ticket.ticket_id}</TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-2">
                       <img
-                        src={ticket.requester.avatar}
-                        alt={ticket.requester.name}
+                        src={getImageSrc(ticket.profile_image)}
+                        alt={ticket.forename}
                         className="h-6 w-6 rounded-full"
                       />
-                      <span>{ticket.requester.name}</span>
+                      <span>{ticket.forename}</span>
                     </div>
                   </TableCell>
                   <TableCell>{ticket.subject}</TableCell>
@@ -118,7 +133,7 @@ export default function TicketsPage() {
                       {ticket.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>{ticket.createDate}</TableCell>
+                  <TableCell>{formatDate(ticket.created_date)}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

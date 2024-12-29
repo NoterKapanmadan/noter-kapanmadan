@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from "@/hooks/use-toast"
 import { SERVER_URL } from "@/utils/constants";
 import { useRouter } from "next/navigation";
+import { revalidatePathClient } from "@/app/actions";
 
 
 export default function TicketForm() {
@@ -39,6 +40,7 @@ export default function TicketForm() {
           description: msg,
         });
         formRef.current.reset()
+        revalidatePathClient(`/tickets`);
       }
     })
   }
