@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -21,10 +21,16 @@ import { cn } from "@/lib/utils"
 import { getImageSrc } from "@/utils/file"
 import { formatDate } from "@/utils/date"
 import EditTicketModal from "@/components/layout/EditTicketModal"
+import { revalidatePathClient } from "@/app/actions";
+import { SERVER_URL } from "@/utils/constants";
+import { useToast } from "@/hooks/use-toast"
 
 export default function TicketsPageClient({ tickets }) {
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [selectedTicket, setSelectedTicket] = useState(null)
+
+  const { toast } = useToast()
+  const [pending, startTransition] = useTransition();
 
   const handleEditClick = (ticket) => {
     setSelectedTicket(ticket)
@@ -34,6 +40,37 @@ export default function TicketsPageClient({ tickets }) {
   const handleEditModalClose = () => {
     setSelectedTicket(null)
     setEditModalOpen(false)
+  }
+
+  const handleDelete = (event, ticketID) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    startTransition(async () => {
+      const response = await fetch(`${SERVER_URL}/admin/delete-ticket`, {
+        method: 'POST',
+        body: JSON.stringify({
+          ticketID: ticketID
+        }),
+      })
+
+      const { msg, error } = await response.json();
+    
+      if (error) {
+        return toast({
+          title: 'Something went wrong!',
+          description: error,
+        });
+      }
+
+      if (msg) {
+        toast({
+          title: 'Success!',
+          description: msg,
+        });
+        revalidatePathClient(`/admin/tickets`);
+      }
+    })
   }
 
   return (
@@ -108,10 +145,10 @@ export default function TicketsPageClient({ tickets }) {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleEditClick(ticket)}>
+                      <DropdownMenuItem disabled={pending} onClick={() => handleEditClick(ticket)}>
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="text-red-600">
+                      <DropdownMenuItem className="text-red-600" disabled={pending} onClick={(e) => handleDelete(e, ticket.ticket_id)}>
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

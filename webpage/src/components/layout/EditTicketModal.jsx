@@ -64,10 +64,26 @@ export default function EditTicketModal({ isOpen, ticket, onClose}) {
                 <SelectValue placeholder="Select Priority" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="High">High</SelectItem>
-                <SelectItem value="Medium">Medium</SelectItem>
-                <SelectItem value="Low">Low</SelectItem>
-                <SelectItem value="Not Decided">Not Decided</SelectItem>
+                <SelectItem value="High">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                    High
+                  </span>
+                </SelectItem>
+                <SelectItem value="Medium">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-orange-100 text-orange-800">
+                    Medium
+                  </span>
+                </SelectItem>
+                <SelectItem value="Low">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    Low
+                  </span>
+                </SelectItem>
+                <SelectItem value="Not Decided">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                    Not Decided
+                  </span>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -78,14 +94,22 @@ export default function EditTicketModal({ isOpen, ticket, onClose}) {
                 <SelectValue placeholder="Select Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Open">Open</SelectItem>
-                <SelectItem value="Closed">Closed</SelectItem>
+                <SelectItem value="Open">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    Open
+                  </span>
+                </SelectItem>
+                <SelectItem value="Closed">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                    Closed
+                  </span>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">
-            <Button disabled={pending} type="submit">Save</Button>
+            <Button disabled={pending} type="submit">Save Changes</Button>
             <Button variant="outline" disabled={pending} onClick={onClose}>
               Cancel
             </Button>

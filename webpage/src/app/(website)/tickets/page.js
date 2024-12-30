@@ -5,6 +5,7 @@ import { SERVER_URL } from "@/utils/constants";
 import { getAuthToken } from "@/lib/auth";
 import { formatDate } from "@/utils/date";
 import { revalidatePathClient } from "@/app/actions";
+import { cn } from "@/lib/utils"
 
 export default async function TicketPage() {
 
@@ -44,7 +45,15 @@ export default async function TicketPage() {
                   <CardContent>
                     <p>{ticket.description}</p>
                     <div className="mt-2">
-                      <Badge variant={ticket.status === 'open' ? 'default' : ticket.status === 'in-progress' ? 'secondary' : 'outline'}>
+                      <Badge
+                        variant="secondary"
+                        className={cn(
+                          ticket.status === "Open" &&
+                            "bg-green-100 text-green-700",
+                          ticket.status === "Closed" &&
+                            "bg-gray-100 text-gray-700"
+                        )}
+                      >
                         {ticket.status}
                       </Badge>
                     </div>
