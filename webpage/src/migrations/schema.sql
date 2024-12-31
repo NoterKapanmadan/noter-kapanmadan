@@ -47,6 +47,22 @@ BEGIN
 END;
 $$;
 
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ticket_status') THEN
+        CREATE TYPE ticket_status AS ENUM ('Open', 'Pending', 'Closed');
+    END IF;
+END;
+$$;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'ticket_priority') THEN
+        CREATE TYPE ticket_priority AS ENUM ('Low', 'Medium', 'High', 'Not Decided');
+    END IF;
+END;
+$$;
+
 
 CREATE TABLE IF NOT EXISTS Account (
     account_ID UUID PRIMARY KEY UNIQUE NOT NULL,
@@ -236,6 +252,16 @@ CREATE TABLE IF NOT EXISTS VehicleModel (
     FOREIGN KEY (brand) REFERENCES vehiclebrand(brand) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS Tickets (
+  ticket_ID UUID PRIMARY KEY UNIQUE NOT NULL,
+  account_ID UUID NOT NULL,
+  subject VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  priority ticket_priority NOT NULL DEFAULT 'Not Decided',
+  status ticket_status NOT NULL DEFAULT 'Open',
+  created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (account_ID) REFERENCES Account(account_ID)
+);
 
 -- Create function for inserting car brands
 CREATE OR REPLACE FUNCTION insert_brand_function()
@@ -289,6 +315,23 @@ SELECT
     u.profile_image
 FROM Account a
 INNER JOIN Users u ON a.account_ID = u.account_ID;
+
+-- Create view for profile
+CREATE OR REPLACE VIEW ticket_view AS
+SELECT
+    a.forename,
+    a.surname,
+    t.ticket_ID,
+    t.subject,
+    t.created_date,
+    t.status,
+    t.priority,
+    t.description,
+    t.account_ID,
+    u.profile_image
+FROM Tickets t
+INNER JOIN Users u ON t.account_ID = u.account_ID
+INNER JOIN Account a ON t.account_ID = a.account_ID;
 
 -- Create function for updating ads and bids after ban or unban
 CREATE OR REPLACE FUNCTION update_ads_bids_function()
