@@ -35,6 +35,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-google-autocomplete": "^2.7.3",
+    "react-multi-carousel": "^2.8.5",
     "recharts": "^2.15.0",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",

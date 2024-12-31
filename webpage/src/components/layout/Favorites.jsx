@@ -2,6 +2,7 @@ import Ads from "@/components/layout/Ads";
 import Pagination from "./Pagination";
 import { SERVER_URL } from "@/utils/constants"
 import { getAuthToken } from "@/lib/auth";
+import { getRecommendedAds } from "@/app/actions";
 
 export default async function Favorites({ filters }) {
   const filteredFilters = {};
@@ -22,6 +23,9 @@ export default async function Favorites({ filters }) {
       Cookie: "Authorization=" + getAuthToken(),
     },
   });
+  const response = await getRecommendedAds();
+
+  console.log(response);
 
   const {vehicleAds, totalPages} = await res.json()
 

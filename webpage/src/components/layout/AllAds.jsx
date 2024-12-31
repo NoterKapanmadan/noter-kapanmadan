@@ -22,7 +22,7 @@ export default async function AllAds({ filters }) {
       Cookie: "Authorization=" + getAuthToken(),
     },
   });
-
+  
   const {vehicleAds, totalPages} = await res.json()
 
   return (

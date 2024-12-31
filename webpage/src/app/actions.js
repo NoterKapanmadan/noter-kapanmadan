@@ -172,6 +172,20 @@ export const getChatRooms = async () => {
   return res;
 }
 
+export const getRecommendedAds = async () => {
+  const response = await fetch(`${SERVER_URL}/ad/recommended-ads`, {
+    method: "GET",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: "Authorization=" + getAuthToken(),
+    },
+  });
+
+  const res = await response.json();
+  return res;
+}
+
 /*export async function updateAd(ad_ID, updatedData) {
   const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad_ID}`, {
     method: "POST",
