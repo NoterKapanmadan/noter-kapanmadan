@@ -316,6 +316,23 @@ SELECT
 FROM Account a
 INNER JOIN Users u ON a.account_ID = u.account_ID;
 
+-- Create view for profile
+CREATE OR REPLACE VIEW ticket_view AS
+SELECT
+    a.forename,
+    a.surname,
+    t.ticket_ID,
+    t.subject,
+    t.created_date,
+    t.status,
+    t.priority,
+    t.description,
+    t.account_ID,
+    u.profile_image
+FROM Tickets t
+INNER JOIN Users u ON t.account_ID = u.account_ID
+INNER JOIN Account a ON t.account_ID = a.account_ID;
+
 -- Create function for updating ads and bids after ban or unban
 CREATE OR REPLACE FUNCTION update_ads_bids_function()
 RETURNS TRIGGER AS $$
