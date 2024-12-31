@@ -2,13 +2,6 @@ import TicketDetailsClient from "@/components/layout/TicketDetailsClient";
 import { SERVER_URL } from "@/utils/constants";
 import { getAuthToken } from "@/lib/auth";
 
-/**
- * Server Component to fetch ticket details and render the Client Component.
- *
- * @param {Object} props
- * @param {Object} props.params
- * @param {string} props.params.ticketID
- */
 export default async function TicketDetails({ params }) {
   const { ticketID } = params;
 
