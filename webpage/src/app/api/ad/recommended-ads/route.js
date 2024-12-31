@@ -117,7 +117,7 @@ export async function GET(req) {
         let finalizedAds = res.rows;
         console.log(finalizedAds);
         try {
-        finalizedAds = await extractImagesFromAds(ads.rows);
+        finalizedAds = await extractImagesFromAds(res.rows);
         } catch (err) {
             console.error("Error on image server fetch: ", err);
         }

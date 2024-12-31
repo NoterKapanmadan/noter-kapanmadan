@@ -29,7 +29,7 @@ export default async function RecommendedAds() {
         {ads.map(ad => (
         <div>
             <Card key={ad.ad_id} className="flex flex-col">
-            {/* <CardHeader className="p-3">
+            <CardHeader className="p-3">
                 {ad.images ?
                 <Image
                     src={getImageSrc(ad.images[0], 'medium_resized')}
@@ -42,7 +42,7 @@ export default async function RecommendedAds() {
                 :
                 <div className="w-full h-48 bg-gray-300 rounded-lg" />
                 }
-            </CardHeader> */}
+            </CardHeader>
             <CardContent className="flex-grow p-3">
                 <CardTitle className="mb-2">{ad.title}</CardTitle>
                 <div className="space-y-1">
