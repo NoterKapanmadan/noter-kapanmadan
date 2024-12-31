@@ -24,6 +24,7 @@ import EditTicketModal from "@/components/layout/EditTicketModal"
 import { revalidatePathClient } from "@/app/actions";
 import { SERVER_URL } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
 
 export default function TicketsPageClient({ tickets }) {
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -32,7 +33,10 @@ export default function TicketsPageClient({ tickets }) {
   const { toast } = useToast()
   const [pending, startTransition] = useTransition();
 
-  const handleEditClick = (ticket) => {
+  const router = useRouter()
+
+  const handleEditClick = (event, ticket) => {
+    event.stopPropagation();
     setSelectedTicket(ticket)
     setEditModalOpen(true)
   }
@@ -73,6 +77,10 @@ export default function TicketsPageClient({ tickets }) {
     })
   }
 
+  const handleRowClick = (ticketID) => {
+    router.push(`tickets/${ticketID}`)
+  }
+
   return (
     <>
       <div className="rounded-lg border bg-white shadow">
@@ -90,7 +98,11 @@ export default function TicketsPageClient({ tickets }) {
           </TableHeader>
           <TableBody>
             {tickets.map((ticket) => (
-              <TableRow key={ticket.ticket_id}>
+              <TableRow 
+                key={ticket.ticket_id}
+                onClick={() => handleRowClick(ticket.ticket_id)}
+                className="cursor-pointer hover:bg-gray-100"
+              >
                 <TableCell className="font-medium">
                   #{ticket.ticket_id}
                 </TableCell>
@@ -145,7 +157,7 @@ export default function TicketsPageClient({ tickets }) {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem disabled={pending} onClick={() => handleEditClick(ticket)}>
+                      <DropdownMenuItem disabled={pending} onClick={(e) => handleEditClick(e, ticket)}>
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem className="text-red-600" disabled={pending} onClick={(e) => handleDelete(e, ticket.ticket_id)}>
