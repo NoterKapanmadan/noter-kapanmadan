@@ -111,7 +111,7 @@ export default function TicketsPageClient({ tickets }) {
                     <img
                       src={getImageSrc(ticket.profile_image)}
                       alt={ticket.forename}
-                      className="h-6 w-6 rounded-full"
+                      className="h-8 w-8 rounded-full"
                     />
                     <span>
                       {ticket.forename} {ticket.surname}
