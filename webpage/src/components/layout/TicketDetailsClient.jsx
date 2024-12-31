@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { ArrowLeft, Check, ChevronDown, Clock, User } from 'lucide-react';
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -16,22 +16,58 @@ import {
 import PropTypes from 'prop-types';
 import { getImageSrc } from '@/utils/file';
 import { formatDate } from '@/utils/date';
+import { useToast } from "@/hooks/use-toast";
+import { revalidatePathClient } from "@/app/actions";
 
 export default function TicketDetailsClient({ ticket }) {
-  const [status, setStatus] = useState(ticket.status);
-  const [priority, setPriority] = useState(ticket.priority);
-  const [isChanged, setIsChanged] = useState(false);
   const [newStatus, setNewStatus] = useState(ticket.status);
   const [newPriority, setNewPriority] = useState(ticket.priority);
 
+  const [pending, startTransition] = useTransition()
+
+  const { toast } = useToast();
+
   const handleStatusChange = (updatedStatus) => {
     setNewStatus(updatedStatus);
-    setIsChanged(true);
   };
 
   const handlePriorityChange = (updatedPriority) => {
     setNewPriority(updatedPriority);
-    setIsChanged(true);
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      startTransition(async () => {
+        const response = await fetch('/api/admin/update-ticket', {
+          method: 'POST',
+          body: JSON.stringify({
+            ticket_id: ticket.ticket_id,
+            status: newStatus,
+            priority: newPriority,
+          }),
+        });
+  
+        const {msg, error} = await response.json();
+  
+        if (error) {
+          return toast({
+            title: 'Something went wrong!',
+            description: error,
+          });
+        }
+  
+        if (msg) {
+          toast({
+            title: 'Success!',
+            description: msg,
+          });
+          revalidatePathClient(`tickets/${ticket.ticket_ID}`);
+        }
+      })
+    } catch (error) {
+      console.error('Error updating ticket:', error);
+      toast.error('An unexpected error occurred');
+    }
   };
 
   return (
@@ -139,7 +175,8 @@ export default function TicketDetailsClient({ ticket }) {
 
                 {/* Save Changes Button */}
                 <Button
-                  disabled={!isChanged}
+                  onClick={handleSaveChanges}
+                  disabled={pending}
                   className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   Save Changes
