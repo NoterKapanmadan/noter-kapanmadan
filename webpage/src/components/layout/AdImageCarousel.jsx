@@ -9,7 +9,7 @@ import { SERVER_URL } from "@/utils/constants";
 import { revalidateTagClient } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast"
 
-export default function AdImageCarousel({ images, base64Images, dimensions, adID, adUserID, currentUserID }) {
+export default function AdImageCarousel({ images, base64Images, dimensions, adID, adUserID, currentUserID, metricsData }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [uploadError, setUploadError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -120,11 +120,11 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
         <div className="absolute bottom-2 right-2 flex space-x-4 bg-black/50 text-white px-3 py-1 rounded-full">
           <div className="flex items-center">
             <Eye className="h-4 w-4 mr-1" />
-            <span className="text-sm">1234</span>
+            <span className="text-sm">{metricsData[0]}</span>
           </div>
           <div className="flex items-center">
             <Heart className="h-4 w-4 mr-1" />
-            <span className="text-sm">56</span>
+            <span className="text-sm">{metricsData[1]}</span>
           </div>
         </div>
 
