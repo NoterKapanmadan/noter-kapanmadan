@@ -3,11 +3,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect, useState } from "react"
 
-export default function TabsArea({ parallel, isAuth }) {
+export default function TabsArea({ parallel }) {
   const pathname = usePathname()
 
-  let defaultValue = "allAds"
+  let defaultValue = 'allAds'
   if (pathname === "/") {
     defaultValue = "allAds"
   } else if (pathname === "/my-ads") {
@@ -18,8 +19,22 @@ export default function TabsArea({ parallel, isAuth }) {
     defaultValue = "history"
   }
 
+  const [value, setValue] = useState(defaultValue)
+
+  useEffect(() => {
+    if (pathname === "/") {
+      setValue("allAds")
+    } else if (pathname === "/my-ads") {
+      setValue("myAds")
+    } else if (pathname === "/favorites") {
+      setValue("favorites")
+    } else if (pathname === "/history") {
+      setValue("history")
+    }
+  }, [pathname])  
+
   return (
-    <Tabs defaultValue={defaultValue}>
+    <Tabs value={value}>
       <TabsList className="bg-gray-200 w-full flex *:w-full">
         <TabsTrigger value="allAds" asChild>
           <Link href="/">All Ads</Link>

@@ -71,19 +71,17 @@ export default function TicketDetailsClient({ ticket }) {
   };
 
   return (
-    <div className="container mx-auto py-6 max-w-5xl">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
           <Link href="/admin/tickets">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
+            <ArrowLeft className="h-5 w-5" />
           </Link>
           <h1 className="text-2xl font-bold">Ticket Details</h1>
         </div>
       </div>
 
-      <Card className="mb-6">
+      <Card className="mb-4">
         <CardHeader>
           <CardTitle>Ticket Information</CardTitle>
         </CardHeader>
@@ -185,16 +183,15 @@ export default function TicketDetailsClient({ ticket }) {
             </div>
             <Separator />
             <div className="flex flex-col sm:flex-row justify-between gap-4">
-              <div className="flex items-center gap-2">
+              <Link target="_blank" href={`/profile/${ticket.account_id}`} className="flex items-center gap-2 group">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={getImageSrc(ticket.profile_image)} />
-                  <AvatarFallback>{ticket.forename}</AvatarFallback>
+                  <AvatarImage src={getImageSrc(ticket.profile_image) || "/avatar.png"} />
                 </Avatar>
                 <div>
-                  <p className="text-sm font-medium">{ticket.forename} {ticket.surname}</p>
+                  <p className="text-sm font-medium group-hover:text-blue-500">{ticket.forename} {ticket.surname}</p>
                   <p className="text-xs text-muted-foreground">Requester</p>
                 </div>
-              </div>
+              </Link>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-muted-foreground" />
                 <div>

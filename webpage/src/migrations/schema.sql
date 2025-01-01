@@ -168,12 +168,21 @@ CREATE TABLE IF NOT EXISTS Ad (
     latitude DECIMAL(8,6) NOT NULL,
     longitude DECIMAL(9,6) NOT NULL,
     status ad_status DEFAULT 'active',
+    views_count INTEGER DEFAULT 0,
     FOREIGN KEY (vehicle_ID) REFERENCES Vehicle(vehicle_ID),
     FOREIGN KEY (user_ID) REFERENCES Users(account_ID)
 );
 
 CREATE INDEX IF NOT EXISTS idx_latitude ON Ad(latitude);
 CREATE INDEX IF NOT EXISTS idx_longitude ON Ad(longitude);
+CREATE INDEX IF NOT EXISTS idx_gear_type ON Vehicle(gear_type);
+CREATE INDEX IF NOT EXISTS idx_fuel_type ON Vehicle(fuel_type);
+CREATE INDEX IF NOT EXISTS idx_price ON Ad(price);
+CREATE INDEX IF NOT EXISTS idx_status ON Ad(status);
+CREATE INDEX IF NOT EXISTS idx_year ON Vehicle(year);
+CREATE INDEX IF NOT EXISTS idx_km ON Vehicle(km);
+CREATE INDEX IF NOT EXISTS idx_brand ON Vehicle(brand);
+CREATE INDEX IF NOT EXISTS idx_model ON Vehicle(model);
 
 -- Create AdImage table
 CREATE TABLE IF NOT EXISTS AdImage (

@@ -25,7 +25,7 @@ import {
 import { useRouter } from "next/navigation";
 import Ratings from "@/components/layout/Ratings";
 
-export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brands, defaultBrandModels}) {
+export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData}) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
@@ -139,6 +139,7 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
               images={ad.images || []}
               base64Images={ad.base64Images || []}
               dimensions={ad.dimensions || []}
+              metricsData={metricsData}
             />
           </CardContent>
         </Card>

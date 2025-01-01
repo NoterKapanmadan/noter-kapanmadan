@@ -41,10 +41,20 @@ export default function HistoryParallel({ searchParams }) {
     maxDistance,
     page: Number(page),
   }
+
+  const {
+    sortBy = '',
+    order = ''
+  } = searchParams
+
+  const sort = {
+    sortBy,
+    order
+  } 
   
   return (
     <Suspense fallback={<LoadingSkeleton />}>
-      <RecentVisitedAds filters={filters} />
+      <RecentVisitedAds sort={sort} filters={filters} />
     </Suspense>
   )
 }

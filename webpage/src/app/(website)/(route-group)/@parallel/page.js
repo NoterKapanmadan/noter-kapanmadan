@@ -40,9 +40,20 @@ export default function AllAdsParallel({ searchParams }) {
     maxDistance,
     page: Number(page),
   }
+
+  const {
+    sortBy = '',
+    order = ''
+  } = searchParams
+
+  const sort = {
+    sortBy,
+    order
+  } 
+
   return (
     <Suspense fallback={<LoadingSkeleton />}>
-      <AllAds filters={filters} />
+      <AllAds sort={sort} filters={filters} />
     </Suspense>
   )
 }

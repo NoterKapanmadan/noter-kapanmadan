@@ -3,12 +3,18 @@ import Pagination from "./Pagination";
 import { SERVER_URL } from "@/utils/constants"
 import { getAuthToken } from "@/lib/auth";
 
-export default async function MyAds({ filters }) {
+export default async function MyAds({ sort, filters }) {
   const filteredFilters = {};
   
   for (const key of Object.keys(filters)) {
     if (filters[key]) {
       filteredFilters[key] = filters[key]
+    }
+  }
+
+  for (const key of Object.keys(sort)) {
+    if (sort[key]) {
+      filteredFilters[key] = sort[key]
     }
   }
   
@@ -32,7 +38,7 @@ export default async function MyAds({ filters }) {
         initialFilters={filters}
         totalPages={totalPages}
       />
-      {totalPages > 1 && <Pagination filters={filters} totalPages={totalPages} />}
+      {totalPages > 1 && <Pagination sort={sort} filters={filters} totalPages={totalPages} parentURL="/my-ads" />}
     </>
   );
 }
