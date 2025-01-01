@@ -386,7 +386,6 @@ BEGIN
         SELECT 1
         FROM Transaction
         WHERE (sender_ID = NEW.evaluater_ID AND receiver_ID = NEW.evaluated_ID)
-           OR (sender_ID = NEW.evaluated_ID AND receiver_ID = NEW.evaluater_ID)
     ) THEN
         RAISE EXCEPTION 'Evaluation not allowed. No transaction exists between the users.';
     END IF;
