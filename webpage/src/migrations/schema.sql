@@ -175,6 +175,14 @@ CREATE TABLE IF NOT EXISTS Ad (
 
 CREATE INDEX IF NOT EXISTS idx_latitude ON Ad(latitude);
 CREATE INDEX IF NOT EXISTS idx_longitude ON Ad(longitude);
+CREATE INDEX IF NOT EXISTS idx_gear_type ON Vehicle(gear_type);
+CREATE INDEX IF NOT EXISTS idx_fuel_type ON Vehicle(fuel_type);
+CREATE INDEX IF NOT EXISTS idx_price ON Ad(price);
+CREATE INDEX IF NOT EXISTS idx_status ON Ad(status);
+CREATE INDEX IF NOT EXISTS idx_year ON Vehicle(year);
+CREATE INDEX IF NOT EXISTS idx_km ON Vehicle(km);
+CREATE INDEX IF NOT EXISTS idx_brand ON Vehicle(brand);
+CREATE INDEX IF NOT EXISTS idx_model ON Vehicle(model);
 
 -- Create AdImage table
 CREATE TABLE IF NOT EXISTS AdImage (
