@@ -21,8 +21,9 @@ import AuthLink from '@/components/layout/AuthLink'
 import { getModels } from '@/app/actions'
 import { set } from 'date-fns'
 
-export default function AdFilters({ initialFilters, brands }) {
+export default function AdFilters({ initialSort, initialFilters, brands }) {
   const [filters, setFilters] = useState(initialFilters)
+  const [sort, setSort] = useState(initialSort)
   const formRef = useRef(null)
 
   const [fuelType, setFuelType] = useState(filters.fuel_type || '')
@@ -51,7 +52,11 @@ export default function AdFilters({ initialFilters, brands }) {
   const updateFilter = (updatedFields) => {
     const newFilters = { ...filters, ...updatedFields, page: 1 }
     setFilters(newFilters)
-    pushWithFilters(newFilters)
+  }
+
+  const updateSort = (updatedFields) => {
+    const newSort = { ...sort, ...updatedFields }
+    setSort(newSort)
   }
 
   const handleSubmit = (formData) => {
@@ -66,6 +71,7 @@ export default function AdFilters({ initialFilters, brands }) {
     newFilters["model"] = model
 
     updateFilter(newFilters)
+    pushWithFilters({ ...newFilters, ...sort})
   }
 
   const handleBrandChange = async (value) => {
@@ -93,9 +99,10 @@ export default function AdFilters({ initialFilters, brands }) {
       maxDistance: '',
       latitude: '',
       longitude: '',
-
     }
+
     updateFilter(resetFilters)
+    pushWithFilters({ ...resetFilters, ...sort })
     setFuelType('')
     setGearType('')
     setBrand('')
@@ -107,6 +114,22 @@ export default function AdFilters({ initialFilters, brands }) {
     setAutocompleteKey(Date.now()); // reset autocomplete component by changing key
   }
 
+  const handleSortBySelectChange = (value) => {
+    const newValue = value == "date" ? '' : value
+    
+    updateSort({ "sortBy": newValue })
+    console.log(sort)
+    pushWithFilters({ ...filters, ...sort, sortBy: newValue })
+  }
+
+  const handleOrderSelectChange = (value) => {
+    const newValue = value == "desc" ? '' : value
+    
+    updateSort({ "order": newValue })
+    console.log(sort)
+    pushWithFilters({ ...filters, ...sort, order: newValue })
+  }
+
   return (
     <div className="w-full lg:w-80 space-y-4">
       <Card>
@@ -116,10 +139,49 @@ export default function AdFilters({ initialFilters, brands }) {
               Create Ad
             </Button>
           </AuthLink>
-          <CardTitle>Filters</CardTitle>
         </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="font-semibold text-2xl">Sort</p>
+          <div className="space-y-2">
+            <Label htmlFor="sort-by">Sort By</Label>
+            <Select
+              name="sort-by"
+              id="sort-by"
+              defaultValue={initialSort.sortBy || "date"}
+              onValueChange={(value) => handleSortBySelectChange(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sort By" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="date">Date</SelectItem>
+                <SelectItem value="price">Price</SelectItem>
+                <SelectItem value="year">Year</SelectItem>
+                <SelectItem value="km">Kilometers</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="order">Order</Label>
+            <Select
+              name="order"
+              id="order"
+              defaultValue={initialSort.order || "desc"}
+              onValueChange={(value) => handleOrderSelectChange(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Order" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="desc">Descending</SelectItem>
+                <SelectItem value="asc">Ascending</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
         <form ref={formRef} action={handleSubmit}>
           <CardContent className="space-y-4">
+            <p className="font-semibold text-2xl">Filters</p>
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input
@@ -166,7 +228,7 @@ export default function AdFilters({ initialFilters, brands }) {
               <PlaceAutocomplete isFilter key={autocompleteKey}/>
             <div className="space-y-2">
               <Label htmlFor="brand">Brand</Label>
-                <Select
+              <Select
                 name="brand"
                 id="brand"
                 value={brand}
@@ -180,7 +242,6 @@ export default function AdFilters({ initialFilters, brands }) {
                   )}
                 </SelectContent>
               </Select>
-
             </div>
             <div className="space-y-2">
               <Label htmlFor="model">Model</Label>
