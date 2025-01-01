@@ -12,7 +12,7 @@ import Stars from "@/components/layout/Stars"
 
 export default async function OffersPage() {
   const offers = await getOffers()
-  console.log(offers.sentOffers)
+  
   return (
     <div className="bg-gray-50 min-h-screen">    
       <div className="container mx-auto p-4">

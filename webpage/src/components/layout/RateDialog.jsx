@@ -67,6 +67,7 @@ export default function RateDialog({ offer }) {
           description: message,
         });
         revalidateTagClient("offers")
+        revalidateTagClient("ratings")
         setIsOpen(false)
       } else {
         toast({

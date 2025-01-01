@@ -218,3 +218,17 @@ export const getModels = async (brand) => {
   const res = await response.json();
   return res.models;
 }
+
+export const getRatings = async (account_id) => {
+  const response = await fetch(`${SERVER_URL}/rating/get-ratings/${account_id}`, {
+    method: "GET",
+    cache: "no-cache",
+    next: { tags: ["ratings"] },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const res = await response.json();
+  return res;
+}
