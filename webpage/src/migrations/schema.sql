@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS Evaluates (
     evaluated_ID UUID NOT NULL,
     comment TEXT,
     comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    point INTEGER CHECK (point >= 1 AND point <= 5),
+    point INTEGER CHECK (point >= 1 AND point <= 5) NOT NULL,
     PRIMARY KEY (evaluater_ID, evaluated_ID),
     FOREIGN KEY (evaluater_ID) REFERENCES Users(account_ID),
     FOREIGN KEY (evaluated_ID) REFERENCES Users(account_ID)
