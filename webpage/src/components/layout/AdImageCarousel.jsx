@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Pencil } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pencil, Eye, Heart } from 'lucide-react';
 import { getImageSrc } from '@/utils/file';
 import { SERVER_URL } from "@/utils/constants";
 import { revalidateTagClient } from "@/app/actions";
@@ -116,6 +116,17 @@ export default function AdImageCarousel({ images, base64Images, dimensions, adID
           placeholder={base64Images?.[currentImageIndex] ? 'blur' : 'empty'}
           className="rounded-lg"
         />
+
+        <div className="absolute bottom-2 right-2 flex space-x-4 bg-black/50 text-white px-3 py-1 rounded-full">
+          <div className="flex items-center">
+            <Eye className="h-4 w-4 mr-1" />
+            <span className="text-sm">1234</span>
+          </div>
+          <div className="flex items-center">
+            <Heart className="h-4 w-4 mr-1" />
+            <span className="text-sm">56</span>
+          </div>
+        </div>
 
         {adUserID == currentUserID ? (
           <>
