@@ -23,7 +23,7 @@ export async function POST(req) {
         );
 
         // Return success response
-        return NextResponse.json({ message: 'Rating added successfully' });
+        return NextResponse.json({ message: 'Rating added successfully' }, { status: 200 });
     } catch (e) {
         console.error(e);
 

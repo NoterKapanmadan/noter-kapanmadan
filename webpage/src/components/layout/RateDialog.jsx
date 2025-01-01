@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -12,9 +12,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Check, CircleDollarSign, X, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { SERVER_URL } from '@/utils/constants'
+import { useToast } from '@/hooks/use-toast'
+import { revalidateTagClient } from '@/app/actions'
 
 export function StarRating({ rating, onRatingChange }) {
   return (
@@ -35,14 +38,43 @@ export function StarRating({ rating, onRatingChange }) {
 export default function RateDialog({ offer }) {
   const [rating, setRating] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
+  const [pending, startTransition] = useTransition()
+  const { toast } = useToast()
 
   const handleRatingChange = (newRating) => {
     setRating(newRating)
   }
 
-  const handleSubmit = () => {
-    console.log(`Submitting rating: ${rating}`)
-    setIsOpen(false)
+  const handleSubmit = async (formData) => {
+    startTransition(async () => {
+      const res = await fetch(`${SERVER_URL}/rating/add-rating`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          evaluated_id: offer.owner_id,
+          comment: formData.get("comment"),
+          point: rating,
+        })
+      })
+  
+      const { message } = await res.json()
+  
+      if (res.ok) {
+        toast({
+          title: "Success!",
+          description: message,
+        });
+        revalidateTagClient("offers")
+        setIsOpen(false)
+      } else {
+        toast({
+          title: "Error!",
+          description: message,
+        });
+      }
+    })
   }
 
   return (
@@ -60,21 +92,23 @@ export default function RateDialog({ offer }) {
             How was your experience with {`${offer.bidder_forename} ${offer.bidder_surname}`}
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-1">
-            <Label>Rating</Label>
-            <StarRating rating={rating} onRatingChange={handleRatingChange} />
+        <form action={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-1">
+              <Label>Rating</Label>
+              <StarRating rating={rating} onRatingChange={handleRatingChange} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <Label>Comment</Label>
+              <Textarea name="comment" placeholder="Leave a comment..." />
+            </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <Label>Comment</Label>
-            <Textarea placeholder="Leave a comment..." />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit" onClick={handleSubmit} disabled={rating === 0}>
-            Save
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="submit" disabled={pending}>
+              Submit
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

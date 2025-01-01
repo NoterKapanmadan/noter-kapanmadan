@@ -18,11 +18,12 @@ export async function GET(request) {
     `;
 
     const sentOffersQuery = `
-      SELECT b.*, a.title, a.price, acc.account_ID as owner_id, a.location, acc.email AS owner_email, acc.forename AS owner_forename, acc.surname AS owner_surname, u.profile_image AS profile_image
+      SELECT b.*, a.title, a.price, acc.account_ID as owner_id, a.location, acc.email AS owner_email, acc.forename AS owner_forename, acc.surname AS owner_surname, u.profile_image AS profile_image, e.point
       FROM Bid b
       JOIN Ad a ON b.ad_ID = a.ad_ID
       JOIN Account acc ON a.user_ID = acc.account_ID
       JOIN Users u ON u.account_ID = acc.account_ID
+      LEFT JOIN Evaluates e ON a.user_ID = e.evaluated_id AND b.user_ID = e.evaluater_id
       WHERE b.user_ID = $1
       ORDER BY b.date DESC;
     `;
