@@ -89,7 +89,7 @@ export async function GET(req) {
             FROM Ad a
             INNER JOIN Vehicle v ON a.vehicle_ID = v.vehicle_ID
             CROSS JOIN ad_attributes u
-            WHERE a.ad_ID NOT IN (SELECT ad_ID FROM user_interactions)
+            WHERE a.ad_ID NOT IN (SELECT ad_ID FROM user_interactions) AND a.status = 'active' AND a.user_ID != $1
         ),
         distinct_ads AS (
             SELECT 

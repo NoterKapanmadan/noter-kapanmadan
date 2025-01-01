@@ -9,12 +9,18 @@ import Link from 'next/link'
 import { getImageSrc } from '@/utils/file'
 import { formatDate } from '@/utils/date'
 
+function getTruncatedLocation(loc) {
+    if (!loc) return '';
+    if (loc.length > 41) return loc.substring(0, 39) + '..';
+    return loc;
+}
+
 export default async function RecommendedAds() {
     const responsive = {
-        superLargeDesktop: { breakpoint: { max: 4000, min: 1536 }, items: 3 },
-        desktop: { breakpoint: { max: 1536, min: 1024 }, items: 3 },
-        tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
-        mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+        superLargeDesktop: { breakpoint: { max: 4000, min: 1536 }, items: 4 },
+        desktop: { breakpoint: { max: 1536, min: 1024 }, items: 4 },
+        tablet: { breakpoint: { max: 1024, min: 464 }, items: 3 },
+        mobile: { breakpoint: { max: 464, min: 0 }, items: 2 },
     };
     const res = await getRecommendedAds();
     const ads = res.finalizedAds
@@ -47,6 +53,13 @@ export default async function RecommendedAds() {
                 <CardTitle className="mb-2">{ad.title}</CardTitle>
                 <div className="space-y-1">
                 <p className="text-2xl font-bold text-primary">${ad.price}</p>
+                <p className="text-sm text-muted-foreground">{formatDate(ad.date)}</p>
+                <p className="text-sm text-muted-foreground">
+                    {getTruncatedLocation(ad.location)}
+                </p>
+                <p className="text-sm">{ad.brand} - {ad.model}</p>
+                <p className="text-sm">{ad.year} - {ad.km} km</p>
+                <p className="text-sm">{ad.gear_type} - {ad.fuel_type}</p>
                 </div>
             </CardContent>
             <CardFooter className="p-3">
