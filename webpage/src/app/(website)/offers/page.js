@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Check, CircleDollarSign, X } from 'lucide-react'
+import { Check, CircleDollarSign, X, Star } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getOffers } from "@/app/actions"
 import OfferActions from "@/components/layout/OfferActions"
 import Link from "next/link"
 import CompletePayment from "@/components/layout/CompletePayment"
+import RateDialog from "@/components/layout/RateDialog"
 
 export default async function OffersPage() {
   const offers = await getOffers()
@@ -65,8 +66,9 @@ export default async function OffersPage() {
                         <Badge variant="destructive">Rejected</Badge>
                       </div>
                     ) : offer.status === "completed" ? (
-                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                      <div className="flex w-full items-start gap-2">
                         <Badge>Completed</Badge>
+                        <RateDialog offer={offer} />
                       </div>
                     )
                     : offer.status === "canceled" && (
