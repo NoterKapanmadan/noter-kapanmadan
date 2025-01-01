@@ -2,17 +2,17 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Check, CircleDollarSign, X } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getOffers } from "@/app/actions"
 import OfferActions from "@/components/layout/OfferActions"
 import Link from "next/link"
 import CompletePayment from "@/components/layout/CompletePayment"
+import RateDialog from "@/components/layout/RateDialog"
+import Stars from "@/components/layout/Stars"
 
 export default async function OffersPage() {
   const offers = await getOffers()
-  console.log(offers)
-
+  
   return (
     <div className="bg-gray-50 min-h-screen">    
       <div className="container mx-auto p-4">
@@ -65,7 +65,7 @@ export default async function OffersPage() {
                         <Badge variant="destructive">Rejected</Badge>
                       </div>
                     ) : offer.status === "completed" ? (
-                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                      <div className="flex w-full items-start gap-2">
                         <Badge>Completed</Badge>
                       </div>
                     )
@@ -124,8 +124,13 @@ export default async function OffersPage() {
                         <Badge variant="destructive">Rejected</Badge>
                       </div>
                     ) : offer.status === "completed" ? (
-                      <div className="flex flex-col w-full justify-between items-start gap-2">
+                      <div className="flex w-full justify-between gap-2">
                         <Badge>Completed</Badge>
+                        {!offer.point ? (
+                          <RateDialog offer={offer} />
+                        ) : (
+                          <Stars point={offer.point} />  
+                        )}
                       </div>
                     ) : offer.status === "canceled" && (
                       <div className="flex flex-col w-full justify-between items-start gap-2">

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { SERVER_URL } from "@/utils/constants";
 import ProfileForm from "@/components/layout/ProfileForm";
-import { getAccountID } from "@/app/actions";
+import { getAccountID, getRatings } from "@/app/actions";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { formatDate } from "@/utils/date";
+import Ratings from "@/components/layout/Ratings";
 
 async function fetchUser(account_id) {
   const res = await fetch(`${SERVER_URL}/profile/${account_id}`, {
@@ -28,18 +29,20 @@ async function fetchUser(account_id) {
 export default async function ProfilePage({ params }) {
   const { account_id } = params;
   const user = await fetchUser(account_id);
-
-  const authorizationID = await getAccountID();
-
+  
   if (!user && user.status === "banned") {
     notFound();
   }
 
+  const ratings = await getRatings(account_id);
+
+  const authorizationID = await getAccountID();
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
         {account_id === authorizationID ? (
-          <ProfileForm user={user} accountId={account_id} />
+          <ProfileForm ratings={ratings} user={user} accountId={account_id} />
         ) : (
           <Card>
             <CardHeader>
@@ -55,6 +58,9 @@ export default async function ProfilePage({ params }) {
                     objectFit="cover"
                   />
                 </div>
+              </div>
+              <div className="w-full flex justify-center">
+                <Ratings fullname={`${user.forename} ${user.surname}`} ratings={ratings} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">

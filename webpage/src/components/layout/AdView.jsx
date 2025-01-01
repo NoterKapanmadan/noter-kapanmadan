@@ -23,8 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation";
+import Ratings from "@/components/layout/Ratings";
 
-export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData}) {
+export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData}) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
@@ -392,6 +393,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaul
               <p>{ad.phone_number || "Phone Number Not Specified"}</p>
               <p>{ad.email || "Email Not Specified"}</p>
             </Link>
+            <Ratings fullname={`${ad.name} ${ad.surname}`} ratings={ratings} />
           </CardContent>
         </Card>
 

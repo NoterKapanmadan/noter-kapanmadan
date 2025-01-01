@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS Evaluates (
     evaluated_ID UUID NOT NULL,
     comment TEXT,
     comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    point INTEGER,
+    point INTEGER CHECK (point >= 1 AND point <= 5) NOT NULL,
     PRIMARY KEY (evaluater_ID, evaluated_ID),
     FOREIGN KEY (evaluater_ID) REFERENCES Users(account_ID),
     FOREIGN KEY (evaluated_ID) REFERENCES Users(account_ID)
@@ -386,3 +386,25 @@ FOR EACH ROW
 EXECUTE FUNCTION update_bid_status_function();
 
 
+
+CREATE OR REPLACE FUNCTION validate_evaluation()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Check if a transaction exists between evaluater and evaluated
+    IF NOT EXISTS (
+        SELECT 1
+        FROM Transaction
+        WHERE (sender_ID = NEW.evaluater_ID AND receiver_ID = NEW.evaluated_ID)
+    ) THEN
+        RAISE EXCEPTION 'Evaluation not allowed. No transaction exists between the users.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE TRIGGER validate_evaluates_trigger
+BEFORE INSERT OR UPDATE ON Evaluates
+FOR EACH ROW
+EXECUTE FUNCTION validate_evaluation();
