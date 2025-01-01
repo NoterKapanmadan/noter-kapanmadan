@@ -27,6 +27,8 @@ export async function GET(request) {
     const latitude = url.searchParams.get('latitude');
     const longitude = url.searchParams.get('longitude');
     const maxDistance = url.searchParams.get('maxDistance');
+    const sortBy = url.searchParams.get('sortBy');
+    const order = url.searchParams.get('order');
 
     const page = parseInt(url.searchParams.get('page') || '1', 10);
 
@@ -126,9 +128,25 @@ export async function GET(request) {
         paramIndex += 3;
     }
 
+    // WHERE
     const whereClause = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
     const adsParams = [...params, limit, offset];
-    // console.log("where clause", whereClause);
+
+    // ORDER BY
+    const allowedSortColumns = ['date', 'price', 'year', 'km'];
+
+    let safeSortBy = 'date'
+    if (allowedSortColumns.includes(sortBy)) {
+        safeSortBy = sortBy;
+    }
+
+    let safeOrder = 'DESC';
+    if (order && order.toLowerCase() === 'asc') {
+        safeOrder = 'ASC';
+    }
+
+    const sortClause = `ORDER BY ${safeSortBy} ${safeOrder}`;
+
     try {
         const countRes = await query(`
             SELECT COUNT(*) as total_count
@@ -151,7 +169,7 @@ export async function GET(request) {
             LEFT JOIN AdImage ON Ad.ad_ID = AdImage.ad_ID
             ${whereClause}
             GROUP BY Ad.ad_ID, title, description, price, location, date, status, brand, model, year, Ad.vehicle_ID, km, gear_type, fuel_type
-            ORDER BY date DESC
+            ${sortClause}
             LIMIT $${paramIndex} OFFSET $${paramIndex + 1};`,
             adsParams
         );

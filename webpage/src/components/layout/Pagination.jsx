@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 
-export default function Pagination({ filters, totalPages, isPending, parentURL }) {
+export default function Pagination({ sort, filters, totalPages, isPending, parentURL }) {
   const router = useRouter()
   
   const pushWithFilters = (updatedFilters) => {
@@ -17,7 +17,7 @@ export default function Pagination({ filters, totalPages, isPending, parentURL }
   }
 
   const handlePagination = (newPage) => {
-    const newFilters = { ...filters, page: newPage }
+    const newFilters = { ...filters, ...sort, page: newPage }
     pushWithFilters(newFilters)
   }
   

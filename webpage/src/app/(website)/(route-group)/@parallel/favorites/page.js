@@ -40,10 +40,20 @@ export default function FavoritesParallel({ searchParams }) {
     maxDistance,
     page: Number(page),
   }
+
+  const {
+    sortBy = '',
+    order = ''
+  } = searchParams
+
+  const sort = {
+    sortBy,
+    order
+  } 
   
   return (
     <Suspense fallback={<LoadingSkeleton />}>
-      <Favorites filters={filters} />
+      <Favorites sort={sort} filters={filters} />
     </Suspense>
   )
 }

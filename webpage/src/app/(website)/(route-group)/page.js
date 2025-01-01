@@ -52,9 +52,6 @@ export default async function HomePageParallel({ searchParams }) {
 
   const brands = await getBrands();
 
-  console.log(sort)
-  console.log(searchParams)
-
   return (
     <AdFilters initialSort={sort} initialFilters={filters} brands={brands}/>
   )
