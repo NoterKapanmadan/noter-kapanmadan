@@ -133,7 +133,8 @@ export const getTransactions = async () => {
 export const getOffers = async () => {
   const response = await fetch(`${SERVER_URL}/offer/get-offers`, {
     method: "GET",
-    next: { revalidate: 60, tags: ["offers"] },
+    cache: "no-cache",
+    next: { tags: ["offers"] },
     headers: {
       "Content-Type": "application/json",
       Cookie: "Authorization=" + getAuthToken(),
