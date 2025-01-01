@@ -28,13 +28,15 @@ export async function GET(req, context) {
         [evaluated_id]
     );
 
-    if (evaluations.length === 0) {
-        return NextResponse.json({ message: 'No evaluations found for this user', evaluations: [], average_rating: 0 });
-    }
 
     console.log(evaluations);
     // Extract the average rating from the first row
-    const average_rating = evaluations.rows[0].average_rating;
+
+    if(evaluations.rows.length === 0){
+        return NextResponse.json({ message: 'No evaluations found for this user', evaluations: [], average_rating: null, status: 200 });
+    }
+
+    const average_rating = (evaluations.rows[0].average_rating || 0);
 
 
     // Format the response
