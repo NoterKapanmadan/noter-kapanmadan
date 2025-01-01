@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation";
 
-export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaultBrandModels}) {
+export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData}) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
@@ -138,6 +138,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaul
               images={ad.images || []}
               base64Images={ad.base64Images || []}
               dimensions={ad.dimensions || []}
+              metricsData={metricsData}
             />
           </CardContent>
         </Card>

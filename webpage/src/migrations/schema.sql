@@ -168,6 +168,7 @@ CREATE TABLE IF NOT EXISTS Ad (
     latitude DECIMAL(8,6) NOT NULL,
     longitude DECIMAL(9,6) NOT NULL,
     status ad_status DEFAULT 'active',
+    views_count INTEGER DEFAULT 0,
     FOREIGN KEY (vehicle_ID) REFERENCES Vehicle(vehicle_ID),
     FOREIGN KEY (user_ID) REFERENCES Users(account_ID)
 );
