@@ -4,12 +4,19 @@ import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid';
 import { query } from '@/lib/db';
 import { decrypt } from '@/lib/auth';
+import { isAdmin } from '@/app/actions';
 
 export async function POST(request) {
   const payload = await decrypt(request.cookies.get("Authorization")?.value);
 
   if (!payload?.account_id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const admin = await isAdmin();
+
+  if(admin) {
+    return NextResponse.json({ error: 'Admin cannot send ticket' }, { status: 403 });
   }
 
   try {
@@ -24,18 +31,6 @@ export async function POST(request) {
         { error: "Fields 'subject' and 'description' are required." },
         { status: 400 }
       );
-    }
-    const res = await query(
-      `
-      SELECT account_ID
-      FROM Admin
-      WHERE account_ID = $1
-      `,
-      [payload.account_id]
-    );
-
-    if (res.rows.length > 0) {
-      return NextResponse.json({ error: 'Admin cannot send ticket' }, { status: 403 });
     }
 
     const ticketID = uuidv4();
