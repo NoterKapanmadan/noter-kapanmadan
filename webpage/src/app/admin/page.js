@@ -14,6 +14,7 @@ export default function AdminHome() {
 
     if (response.ok) {
       const data =  await response.json()
+      console.log(data)
       setData(data)
     }
   }
@@ -90,7 +91,7 @@ export default function AdminHome() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `${value}`}
+                  tickFormatter={(value) => `${value}`}                  
                 />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Line

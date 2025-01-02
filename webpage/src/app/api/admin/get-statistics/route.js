@@ -32,7 +32,38 @@ export async function GET(req) {
             COUNT(*) as total_transactions
         FROM Transaction;
 
-        -- Combined Query for Monthly Counts
+        -- Query 4 : Total view counts for ads
+        SELECT
+            COUNT(views_count) as total_views
+            FROM Ad;
+
+        -- Query 5: Number of bids
+        SELECT
+            COUNT(*) as total_bids
+            FROM Bid;
+
+        -- Query 6: Number of tickets
+        SELECT
+            COUNT(*) as total_tickets
+            FROM Tickets;
+
+        -- Query 7: Number of messages
+        SELECT
+            COUNT(*) as total_messages
+            FROM Message;
+
+        -- Query 8: Average rating of users
+        WITH avg_user_rating AS (
+            SELECT
+                AVG(point) as average_user_rating
+            FROM Evaluates
+            GROUP BY evaluated_ID
+        )
+        SELECT
+            AVG(average_user_rating) as average_rating
+            FROM avg_user_rating;
+        
+        -- Query 9: Monthly counts for ads, users, and transactions
         (
             SELECT 
                 'ads' AS table_name,
@@ -76,7 +107,12 @@ export async function GET(req) {
         active_ads: res[1].rows[0].active_ads,
         total_users: res[2].rows[0].total_users,
         total_transactions: res[3].rows[0].total_transactions,
-        monthly_counts: res[4].rows
+        total_views: res[4].rows[0].total_views,
+        total_bids: res[5].rows[0].total_bids,
+        total_tickets: res[6].rows[0].total_tickets,
+        total_messages: res[7].rows[0].total_messages,
+        average_rating: res[8].rows[0].average_rating,
+        monthly_counts: res[9].rows
     }
     //concatinate all data into each individual month value if value do not exist, then assign zero
     let monthData = {};
