@@ -4,12 +4,18 @@ import { SERVER_URL } from "@/utils/constants"
 import { getAuthToken } from "@/lib/auth";
 import { getRecommendedAds } from "@/app/actions";
 
-export default async function Favorites({ filters }) {
+export default async function Favorites({ sort, filters }) {
   const filteredFilters = {};
   
   for (const key of Object.keys(filters)) {
     if (filters[key]) {
       filteredFilters[key] = filters[key]
+    }
+  }
+
+  for (const key of Object.keys(sort)) {
+    if (sort[key]) {
+      filteredFilters[key] = sort[key]
     }
   }
   
@@ -36,7 +42,7 @@ export default async function Favorites({ filters }) {
         initialFilters={filters}
         totalPages={totalPages}
       />
-      {totalPages > 1 && <Pagination filters={filters} totalPages={totalPages} parentURL={"/favorites"}/>}
+      {totalPages > 1 && <Pagination sort={sort} filters={filters} totalPages={totalPages} parentURL="/favorites" />}
     </>
   );
 }

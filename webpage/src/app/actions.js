@@ -133,7 +133,8 @@ export const getTransactions = async () => {
 export const getOffers = async () => {
   const response = await fetch(`${SERVER_URL}/offer/get-offers`, {
     method: "GET",
-    next: { revalidate: 60, tags: ["offers"] },
+    cache: "no-cache",
+    next: { tags: ["offers"] },
     headers: {
       "Content-Type": "application/json",
       Cookie: "Authorization=" + getAuthToken(),
@@ -230,4 +231,18 @@ export const getModels = async (brand) => {
 
   const res = await response.json();
   return res.models;
+}
+
+export const getRatings = async (account_id) => {
+  const response = await fetch(`${SERVER_URL}/rating/get-ratings/${account_id}`, {
+    method: "GET",
+    cache: "no-cache",
+    next: { tags: ["ratings"] },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const res = await response.json();
+  return res;
 }

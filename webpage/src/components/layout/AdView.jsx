@@ -23,8 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation";
+import Ratings from "@/components/layout/Ratings";
 
-export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaultBrandModels}) {
+export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData}) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
@@ -138,6 +139,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaul
               images={ad.images || []}
               base64Images={ad.base64Images || []}
               dimensions={ad.dimensions || []}
+              metricsData={metricsData}
             />
           </CardContent>
         </Card>
@@ -296,8 +298,115 @@ export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaul
                     <div>
                       <PlaceAutocomplete required defaultLocation={ad.location} oldLatitude={ad.latitude} oldLongitude={ad.longitude}/>
                     </div>
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Car" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Seat Count</p>
+                          <Input
+                            id="seatCount"
+                            name="seatCount"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.seatCount}
+                            placeholder="Number of seats"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Body Type</p>
+                          <Input
+                            id="bodyType"
+                            name="bodyType"
+                            type="text"
+                            defaultValue={ad.vehicleDetails.bodyType}
+                            placeholder="Car body type (e.g. sedan, hatchback...)"
+                          />
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Truck" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">
+                            Load Capacity (kg)
+                          </p>
+                          <Input
+                            id="loadCapacity"
+                            name="loadCapacity"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.loadCapacity}
+                            placeholder="Load capacity in kg"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Traction Type</p>
+                          <Select
+                            name="tractionType"
+                            id="tractionType"
+                            defaultValue={ad.vehicleDetails.tractionType}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Traction Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="2WD">2WD</SelectItem>
+                              <SelectItem value="4WD">4WD</SelectItem>
+                              <SelectItem value="6WD">6WD</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Van" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Roof Height (m)</p>
+                          <Input
+                            id="roofHeight"
+                            name="roofHeight"
+                            type="number"
+                            step="0.01"
+                            defaultValue={ad.vehicleDetails.roofHeight}
+                            placeholder="Roof height in meters"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Bed Capacity</p>
+                          <Input
+                            id="bedCapacity"
+                            name="bedCapacity"
+                            type="text"
+                            defaultValue={ad.vehicleDetails.bedCapacity}
+                            placeholder="Bed capacity"
+                          />
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Motorcycle" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">
+                            Engine Capacity (cc)
+                          </p>
+                          <Input
+                            id="engineCapacity"
+                            name="engineCapacity"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.engineCapacity}
+                            placeholder="Engine capacity in cc"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Cylinder Count</p>
+                          <Input
+                            id="cylinderCount"
+                            name="cylinderCount"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.cylinderCount}
+                            placeholder="Number of cylinders"
+                          />
+                        </div>
+                      </>
+                    )}
                   </div>
-
                   <div className="space-y-2">
                     <p className="text-sm font-semibold">Description</p>
                     <Input
@@ -358,6 +467,54 @@ export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaul
                       <p className="text-sm font-semibold">Location</p>
                       <p>{ad.location || "Location Not Specified"}</p>
                     </div>
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Car" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Seat Count</p>
+                          <p>{ad.vehicleDetails.seatCount || "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Body Type</p>
+                          <p>{capitalizeFirstLetters(ad.vehicleDetails.bodyType) || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Truck" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Load Capacity</p>
+                          <p>{ad.vehicleDetails.loadCapacity ? `${ad.vehicleDetails.loadCapacity} kg` : "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Traction Type</p>
+                          <p>{capitalizeFirstLetters(ad.vehicleDetails.tractionType) || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Van" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Roof Height</p>
+                          <p>{ad.vehicleDetails.roofHeight ? `${ad.vehicleDetails.roofHeight} m` : "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Bed Capacity</p>
+                          <p>{ad.vehicleDetails.bedCapacity || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Motorcycle" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Engine Capacity</p>
+                          <p>{ad.vehicleDetails.engineCapacity ? `${ad.vehicleDetails.engineCapacity} cc` : "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Cylinder Count</p>
+                          <p>{ad.vehicleDetails.cylinderCount || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="mt-4">
@@ -391,6 +548,7 @@ export default function AdViewClient({ ad, isAuth, currentUserID, brands, defaul
               <p>{ad.phone_number || "Phone Number Not Specified"}</p>
               <p>{ad.email || "Email Not Specified"}</p>
             </Link>
+            <Ratings fullname={`${ad.name} ${ad.surname}`} ratings={ratings} />
           </CardContent>
         </Card>
 

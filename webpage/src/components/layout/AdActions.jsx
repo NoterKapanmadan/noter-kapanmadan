@@ -48,7 +48,6 @@ export default function AdActions({ ad_ID, owner_ID, ad }) {
   }, []);
 
 
-
   const handleFavorite = async () => {
     startFavoriteTransition(async () => {
       try {

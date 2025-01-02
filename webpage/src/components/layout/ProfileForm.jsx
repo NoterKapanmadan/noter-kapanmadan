@@ -11,8 +11,9 @@ import { formatDate } from "@/utils/date";
 import { useTransition, useState, useRef } from "react";
 import { SERVER_URL } from "@/utils/constants";
 import { revalidateTagClient } from "@/app/actions";
+import Ratings from "@/components/layout/Ratings";
 
-export default function ProfileForm({ user, accountId }) {
+export default function ProfileForm({ ratings, user, accountId }) {
   const { toast } = useToast();
 
   const [pending, startTransition] = useTransition();
@@ -95,6 +96,9 @@ export default function ProfileForm({ user, accountId }) {
             onChange={handleFileChange}
             style={{ display: "none" }}
           />
+        </div>
+        <div className="w-full flex justify-center">
+          <Ratings fullname={`${user.forename} ${user.surname}`} ratings={ratings} />
         </div>
         <form action={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">

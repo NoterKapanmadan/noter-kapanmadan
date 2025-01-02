@@ -14,8 +14,8 @@ export default async function Layout({ children, parallel }) {
         <div className="flex flex-col lg:flex-row gap-4">
           {children}
           <div className="flex-1">
-            {isAuth ? <TabsArea parallel={parallel} isAuth={isAuth} /> : parallel}
-          </div>
+            {isAuth ? <TabsArea parallel={parallel} /> : parallel}
+          </div>  
         </div>
       </main>
     </div>

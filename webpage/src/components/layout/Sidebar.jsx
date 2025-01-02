@@ -7,11 +7,10 @@ import { logout } from '@/app/actions'
 import { cn } from '@/lib/utils'
 
 const menuItems = [
-  { name: 'Home', icon: Home, href: '/admin' },
+  { name: 'Statistics', icon: FileText, href: '/admin' },
   { name: 'Users', icon: Users, href: '/admin/users' },
   { name: 'Ads', icon: BarChart2, href: '/admin/ads' },
   { name: 'Transactions', icon: DollarSign, href: '/admin/transactions' },
-  { name: 'Statistics', icon: FileText, href: '/admin/statistics' },
   { name: 'Tickets', icon: Ticket, href: '/admin/tickets' },
 ]
 

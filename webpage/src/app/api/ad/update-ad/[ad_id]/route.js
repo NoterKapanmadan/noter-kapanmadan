@@ -70,8 +70,30 @@ export async function POST(request, context) {
       location,
       latitude,
       longitude,
-      description
+      description,
+      seatCount,
+      bodyType,
+      loadCapacity,
+      tractionType,
+      roofHeight,
+      bedCapacity,
+      engineCapacity,
+      cylinderCount,
     } = data;
+
+    const specializedQuery = await query(
+      `SELECT
+        (SELECT vehicle_id FROM Car         WHERE vehicle_id = $1) AS car_id,
+        (SELECT vehicle_id FROM Truck       WHERE vehicle_id = $1) AS truck_id,
+        (SELECT vehicle_id FROM Van         WHERE vehicle_id = $1) AS van_id,
+        (SELECT vehicle_id FROM Motorcycle  WHERE vehicle_id = $1) AS motorcycle_id
+       `,
+      [vehicleID]
+    );
+
+    const specialization = specializedQuery.rows[0];
+    const { car_id, truck_id, van_id, motorcycle_id } = specialization;
+
 
     await query("BEGIN");
 
@@ -88,6 +110,56 @@ export async function POST(request, context) {
       WHERE vehicle_ID = $7`,
       [brand, model, year, km, gear_type, fuel_type, vehicleID]
     );
+    
+    if (car_id) {
+      await query(
+        `UPDATE Car
+         SET seat_count = $1,
+             body_type = $2
+         WHERE vehicle_id = $3`,
+        [
+          seatCount,
+          bodyType,
+          vehicleID
+        ]
+      );
+    } else if (truck_id) {
+      await query(
+        `UPDATE Truck
+         SET load_capacity = $1,
+             traction_type = $2
+         WHERE vehicle_id = $3`,
+        [
+          loadCapacity,
+          tractionType,
+          vehicleID
+        ]
+      );
+    } else if (van_id) {
+      await query(
+        `UPDATE Van
+         SET roof_height = $1,
+             bed_capacity = $2
+         WHERE vehicle_id = $3`,
+        [
+          roofHeight,
+          bedCapacity,
+          vehicleID
+        ]
+      );
+    } else if (motorcycle_id) {
+      await query(
+        `UPDATE Motorcycle
+         SET engine_capacity = $1,
+             cylinder_count = $2
+         WHERE vehicle_id = $3`,
+        [
+          engineCapacity,
+          cylinderCount,
+          vehicleID
+        ]
+      );
+    }
 
     await query("COMMIT");
 
