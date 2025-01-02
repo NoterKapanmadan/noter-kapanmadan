@@ -12,10 +12,10 @@ export async function POST(request) {
   if (!payload?.account_id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  
+  const isAdmin = payload.isAdmin;
 
-  const admin = await isAdmin();
-
-  if(admin) {
+  if(isAdmin) {
     return NextResponse.json({ error: 'Admin cannot send ticket' }, { status: 403 });
   }
 
