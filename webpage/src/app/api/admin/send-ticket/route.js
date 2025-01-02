@@ -25,6 +25,18 @@ export async function POST(request) {
         { status: 400 }
       );
     }
+    const res = await query(
+      `
+      SELECT account_ID
+      FROM Admin
+      WHERE account_ID = $1
+      `,
+      [payload.account_id]
+    );
+
+    if (res.rows.length > 0) {
+      return NextResponse.json({ error: 'Admin cannot send ticket' }, { status: 403 });
+    }
 
     const ticketID = uuidv4();
 
