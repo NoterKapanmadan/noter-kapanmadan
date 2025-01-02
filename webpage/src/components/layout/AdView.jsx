@@ -360,6 +360,54 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                       <p className="text-sm font-semibold">Location</p>
                       <p>{ad.location || "Location Not Specified"}</p>
                     </div>
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Car" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Seat Count</p>
+                          <p>{ad.vehicleDetails.seatCount || "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Body Type</p>
+                          <p>{capitalizeFirstLetters(ad.vehicleDetails.bodyType) || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Truck" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Load Capacity</p>
+                          <p>{ad.vehicleDetails.loadCapacity ? `${ad.vehicleDetails.loadCapacity} kg` : "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Traction Type</p>
+                          <p>{capitalizeFirstLetters(ad.vehicleDetails.tractionType) || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Van" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Roof Height</p>
+                          <p>{ad.vehicleDetails.roofHeight ? `${ad.vehicleDetails.roofHeight} m` : "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Bed Capacity</p>
+                          <p>{ad.vehicleDetails.bedCapacity || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Motorcycle" && (
+                      <>
+                        <div>
+                          <p className="text-sm font-semibold">Engine Capacity</p>
+                          <p>{ad.vehicleDetails.engineCapacity ? `${ad.vehicleDetails.engineCapacity} cc` : "Not Specified"}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">Cylinder Count</p>
+                          <p>{ad.vehicleDetails.cylinderCount || "Not Specified"}</p>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <div className="mt-4">
