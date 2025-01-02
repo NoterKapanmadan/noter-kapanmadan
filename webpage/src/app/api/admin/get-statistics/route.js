@@ -124,7 +124,7 @@ export async function GET(req) {
                 transactions: 0
             }
         }
-        monthData[entry.month][entry.table_name] = entry.count;
+        monthData[entry.month][entry.table_name] = Number(entry.count);
     });
     data.monthly_counts = Object.keys(monthData).map((month) => {
         return {
