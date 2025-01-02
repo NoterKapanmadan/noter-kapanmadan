@@ -298,8 +298,115 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                     <div>
                       <PlaceAutocomplete required defaultLocation={ad.location} oldLatitude={ad.latitude} oldLongitude={ad.longitude}/>
                     </div>
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Car" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Seat Count</p>
+                          <Input
+                            id="seatCount"
+                            name="seatCount"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.seatCount}
+                            placeholder="Number of seats"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Body Type</p>
+                          <Input
+                            id="bodyType"
+                            name="bodyType"
+                            type="text"
+                            defaultValue={ad.vehicleDetails.bodyType}
+                            placeholder="Car body type (e.g. sedan, hatchback...)"
+                          />
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Truck" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">
+                            Load Capacity (kg)
+                          </p>
+                          <Input
+                            id="loadCapacity"
+                            name="loadCapacity"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.loadCapacity}
+                            placeholder="Load capacity in kg"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Traction Type</p>
+                          <Select
+                            name="tractionType"
+                            id="tractionType"
+                            defaultValue={ad.vehicleDetails.tractionType}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Traction Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="2WD">2WD</SelectItem>
+                              <SelectItem value="4WD">4WD</SelectItem>
+                              <SelectItem value="6WD">6WD</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Van" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Roof Height (m)</p>
+                          <Input
+                            id="roofHeight"
+                            name="roofHeight"
+                            type="number"
+                            step="0.01"
+                            defaultValue={ad.vehicleDetails.roofHeight}
+                            placeholder="Roof height in meters"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Bed Capacity</p>
+                          <Input
+                            id="bedCapacity"
+                            name="bedCapacity"
+                            type="text"
+                            defaultValue={ad.vehicleDetails.bedCapacity}
+                            placeholder="Bed capacity"
+                          />
+                        </div>
+                      </>
+                    )}
+                    {ad.vehicleDetails && ad.vehicleDetails.type === "Motorcycle" && (
+                      <>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">
+                            Engine Capacity (cc)
+                          </p>
+                          <Input
+                            id="engineCapacity"
+                            name="engineCapacity"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.engineCapacity}
+                            placeholder="Engine capacity in cc"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold">Cylinder Count</p>
+                          <Input
+                            id="cylinderCount"
+                            name="cylinderCount"
+                            type="number"
+                            defaultValue={ad.vehicleDetails.cylinderCount}
+                            placeholder="Number of cylinders"
+                          />
+                        </div>
+                      </>
+                    )}
                   </div>
-
                   <div className="space-y-2">
                     <p className="text-sm font-semibold">Description</p>
                     <Input
