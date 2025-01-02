@@ -28,7 +28,7 @@ export default async function AllAds({ sort, filters }) {
       Cookie: "Authorization=" + getAuthToken(),
     },
   });
-
+  
   const {vehicleAds, totalPages} = await res.json()
 
   return (

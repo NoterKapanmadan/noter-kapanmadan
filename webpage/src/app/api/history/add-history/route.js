@@ -13,22 +13,34 @@ export async function POST(request) {
         }
         //check if user has already seen the ad
         const history = await query(
-            `SELECT * FROM visits WHERE ad_id = $1 AND account_id = $2`,
+            `SELECT * FROM Visits WHERE ad_ID = $1 AND account_ID = $2`,
             [req.adID, account_id]
         );
+        console.log(history.rows)
         if (history.rows.length > 0) {
             //update the timestamp
             await query(
-                `UPDATE visits SET visit_date = CURRENT_TIMESTAMP WHERE ad_id = $1 AND account_id = $2`,
+                `UPDATE Visits SET visit_date = CURRENT_TIMESTAMP WHERE ad_ID = $1 AND account_ID = $2`,
                 [req.adID, account_id]
             );
         }
         else {
+            //we need to check whether this ad is owned by the visited user or not. If it is, we don't want to add it to the history
+            const ad = await query(
+                `SELECT * FROM Ad WHERE ad_ID = $1 AND user_ID = $2`,
+                [req.adID, account_id]
+            );
+            if (ad.rows.length > 0) {
+                console.log('Ad is owned by the user')
+                return NextResponse.json({ message: 'Ad is owned by the user' }, { status: 403 });
+            }
+            //add the ad to the history
             await query(
-                `INSERT INTO visits (ad_id, account_id)
+                `INSERT INTO visits (ad_ID, account_ID)
                 VALUES ($1, $2)`,
                 [req.adID, account_id]
             );
+            console.log('History added')
         }
         return NextResponse.json({ message: 'History added' }, { status: 200 });
     }
