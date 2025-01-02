@@ -87,7 +87,7 @@ export default function AdminHome() {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium flex gap-2">
               <HandCoins className="h-5 w-5" />
-              Total Bids
+              Total Offers
             </CardTitle>
           </CardHeader>
           <CardContent>
