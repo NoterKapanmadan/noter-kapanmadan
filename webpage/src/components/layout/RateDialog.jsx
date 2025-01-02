@@ -90,7 +90,7 @@ export default function RateDialog({ offer }) {
         <DialogHeader>
           <DialogTitle>Rate</DialogTitle>
           <DialogDescription>
-            How was your experience with {`${offer.bidder_forename} ${offer.bidder_surname}`}
+            How was your experience with {`${offer.owner_forename} ${offer.owner_surname}`}
           </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit}>
