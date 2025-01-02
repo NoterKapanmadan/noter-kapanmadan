@@ -11,7 +11,7 @@ export default async function middleware(req) {
       return NextResponse.next();
     }
 
-    const unprotectedRoutes = ["/api/auth/register", "/api/auth/login"];
+    const unprotectedRoutes = ["/api/auth/register", "/api/auth/login", "/api/ad/increment-views"];
     const isUnprotectedRoute = unprotectedRoutes.some(
       (route) => route === pathname
     );

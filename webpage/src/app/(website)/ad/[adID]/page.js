@@ -10,9 +10,6 @@ export default async function AdPage({ params }) {
 
   const resView = await fetch(`${SERVER_URL}/ad/increment-views`, {
     method: "POST",
-    headers: {
-      "Cookie": "Authorization=" + getAuthToken(),
-    },
     body: JSON.stringify({ adID: params.adID }),
   });
 
