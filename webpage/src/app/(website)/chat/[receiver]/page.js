@@ -2,7 +2,6 @@ import ChatComponent from "@/components/layout/ChatComponent";
 import { getAccountID, getChatRoom } from "@/app/actions";
 
 export default async function Chat({ params }) {
-  const account_ID = await getAccountID();
   const data = await getChatRoom(params.receiver);
 
   if(data.userDetails.length === 1) {
