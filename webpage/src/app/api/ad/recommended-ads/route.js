@@ -9,13 +9,11 @@ export async function GET(req) {
     try{
         const res = await query(
         `WITH user_interactions AS (
-            SELECT
-            ad_ID,
-            COUNT(*) AS interaction_count
+            SELECT ad_ID
             FROM (
             (SELECT ad_ID FROM Favorites WHERE account_ID = $1)
             UNION ALL
-            (SELECT ad_ID FROM Visits WHERE account_ID = $1 ORDER BY visit_date DESC LIMIT 20)
+            (SELECT ad_ID FROM Visits WHERE account_ID = $1 ORDER BY visit_date DESC LIMIT 10)
             UNION ALL
             (SELECT ad_ID FROM Bid WHERE user_ID = $1 ORDER BY date DESC LIMIT 20)
             ) user_data
@@ -53,13 +51,6 @@ export async function GET(req) {
             a.price,
             a.location,
             a.latitude,
-            (CASE 
-                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Car) THEN 'Car'
-                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Motorcycle) THEN 'Motorcycle'
-                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Truck) THEN 'Truck'
-                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Van)   THEN 'Van'
-                ELSE 'Other' 
-            END) AS vehicle_type,
             (CASE
                 WHEN v.gear_type = u.gear_type THEN 2 ELSE 0 END) +
             (CASE
@@ -67,7 +58,13 @@ export async function GET(req) {
             (CASE
                 WHEN ABS(a.price - u.price) < 5000 THEN 3 ELSE 0 END) +
             (CASE
-                WHEN vehicle_type = u.vehicle_type THEN 20 ELSE 0 END) +
+                WHEN (CASE 
+                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Car) THEN 'Car'
+                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Motorcycle) THEN 'Motorcycle'
+                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Truck) THEN 'Truck'
+                WHEN a.vehicle_ID in (SELECT vehicle_ID FROM Van)   THEN 'Van'
+                ELSE 'Other' 
+                END) = u.vehicle_type THEN 20 ELSE 0 END) +
             (CASE
                 WHEN v.brand = u.brand THEN 3 ELSE 0 END) +
             (CASE
@@ -78,10 +75,10 @@ export async function GET(req) {
                 WHEN ABS(v.km - u.km) < 70000 THEN 2 ELSE 0 END) +
             (CASE
                 WHEN (
-                6371 * ACOS(
-                    COS(RADIANS(u.latitude)) * COS(RADIANS(a.latitude)) * COS(RADIANS(a.longitude) - RADIANS(u.longitude)) +
-                    SIN(RADIANS(u.latitude)) * SIN(RADIANS(a.latitude))
-                )
+                    6371 * ACOS(
+                        COS(RADIANS(u.latitude)) * COS(RADIANS(a.latitude)) * COS(RADIANS(a.longitude) - RADIANS(u.longitude)) +
+                        SIN(RADIANS(u.latitude)) * SIN(RADIANS(a.latitude))
+                    )
                 ) < 400 THEN 6 ELSE 0 END
             ) AS similarity_score
             FROM Ad a
@@ -113,6 +110,7 @@ export async function GET(req) {
         [account_id]
         );
         let finalizedAds = res.rows;
+        console.log("finalizedAds: ", finalizedAds);
         try {
         finalizedAds = await extractImagesFromAds(res.rows);
         } catch (err) {
