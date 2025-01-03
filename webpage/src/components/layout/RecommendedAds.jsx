@@ -27,14 +27,15 @@ export default async function RecommendedAds() {
     console.log(ads);
     
     return (
-        <Carousel
+        <>
+            <h3 className="font-semibold text-xl mb-1">Recommended Ads</h3>
+            <Carousel
             responsive={responsive}
-            containerClass="w-full"
+            containerClass="w-full bg-red-500 rounded-lg mb-4 bg-white border shadow-sm"
             itemClass="p-2"
         >
         {ads.map(ad => (
-        <div>
-            <Card key={ad.ad_id} className="flex flex-col">
+            <Card key={ad.ad_id} className="flex flex-col bg-gray-50">
             <CardHeader className="p-3">
                 {ad.images ?
                 <Image
@@ -50,17 +51,12 @@ export default async function RecommendedAds() {
                 }
             </CardHeader>
             <CardContent className="flex-grow p-3">
-                <CardTitle className="mb-2">{ad.title}</CardTitle>
-                <div className="space-y-1">
-                <p className="text-2xl font-bold text-primary">${ad.price}</p>
-                <p className="text-sm text-muted-foreground">{formatDate(ad.date)}</p>
-                <p className="text-sm text-muted-foreground">
-                    {getTruncatedLocation(ad.location)}
-                </p>
-                <p className="text-sm">{ad.brand} - {ad.model}</p>
-                <p className="text-sm">{ad.year} - {ad.km} km</p>
-                <p className="text-sm">{ad.gear_type} - {ad.fuel_type}</p>
-                </div>
+                <h3 className="font-medium text-lg mb-1">{ad.title}</h3>
+                  <p className="font-bold text-base mb-2">{ad.price} TL</p>
+                  <p className="text-sm text-muted-foreground mb-2">{ad.location}</p>
+                  <p className="text-sm mb-3">
+                    {` ${ad.brand} ${ad.model} ${ad.year} • ${ad.km} `}
+                  </p>
             </CardContent>
             <CardFooter className="p-3">
                 <Button className="w-full" asChild>
@@ -68,8 +64,8 @@ export default async function RecommendedAds() {
                 </Button>
             </CardFooter>
             </Card>
-        </div> 
       ))}
         </Carousel>
+        </>
     );
 }
