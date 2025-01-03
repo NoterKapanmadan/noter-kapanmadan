@@ -33,9 +33,9 @@ export async function POST(request) {
         const images = formData.getAll("images");
         // console.log("images", images);
 
-        const { fileIds } = await uploadFilesServer(images);
+        const { imageIds } = await uploadFilesServer(images);
         const reportUpload = await uploadFilesServer([report]);
-        const reportId = reportUpload.fileIds[0];
+        const reportId = reportUpload.imageIds[0];
 
         
         let res;
@@ -61,8 +61,8 @@ export async function POST(request) {
         await query(
             `INSERT INTO AdImage (ad_ID, image)
             VALUES 
-            ${fileIds.map((_, index) => `($1, $${index + 2})`).join(', ')};`,
-            [adID, ...fileIds]
+            ${imageIds.map((_, index) => `($1, $${index + 2})`).join(', ')};`,
+            [adID, ...imageIds]
         );
 
         switch (vehicleType) {

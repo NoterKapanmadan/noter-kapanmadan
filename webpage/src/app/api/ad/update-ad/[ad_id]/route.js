@@ -99,7 +99,7 @@ export async function POST(request, context) {
 
     if(report && report.size > 0) {
       const reportUpload = await uploadFilesServer([report]);
-      reportId = reportUpload.fileIds[0];
+      reportId = reportUpload.imageIds[0];
     }
 
     await query("BEGIN");
