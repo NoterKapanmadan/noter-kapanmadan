@@ -82,7 +82,7 @@ export default async function TransactionsPage() {
                       )}
                     </TableCell>
                     <TableCell className={`text-right ${transaction.type === "Buy Vehicle"|| transaction.type === "Withdrawn from Balance" ? 'text-red-600': 'text-green-600' }`}>
-                      ${Math.abs(transaction.amount).toFixed(2)}
+                      {Math.abs(transaction.amount).toFixed(2)} TL
                     </TableCell>
                   </TableRow>
                 ))}
