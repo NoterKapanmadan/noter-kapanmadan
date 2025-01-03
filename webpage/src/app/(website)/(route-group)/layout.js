@@ -8,6 +8,8 @@ export default async function Layout({ children, parallel }) {
   if (isAuth) {
     const ads = await getRecommendedAds()
     finalizedAds = ads.finalizedAds
+
+    console.log(finalizedAds)
   }
   return (
     <div className="min-h-screen bg-gray-50">
