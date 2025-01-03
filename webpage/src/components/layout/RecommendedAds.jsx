@@ -14,7 +14,7 @@ export default function RecommendedAds({ads}) {
         tablet: { breakpoint: { max: 1024, min: 464 }, items: 3 },
         mobile: { breakpoint: { max: 464, min: 0 }, items: 2 },
     };
-
+    
     return (
         <>
             <h3 className="font-semibold text-xl mb-1">Recommended Ads</h3>
