@@ -196,7 +196,7 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                       name="price"
                       type="text"
                       defaultValue={ad.price}
-                      placeholder="Price ($)"
+                      placeholder="Price (TL)"
                       className="mb-4"
                     />
                   </div>
@@ -445,7 +445,7 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
               ) : (
                 <>
                   <p className="text-2xl font-bold text-primary mb-4">
-                    {ad.price ? `$${ad.price}` : "Price Not Available"}
+                    {ad.price ? `${ad.price} TL` : "Price Not Available"}
                   </p>
 
                   <div className="grid grid-cols-2 gap-3">

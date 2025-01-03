@@ -51,7 +51,7 @@ export default function BalancePage({ user_balance }) {
       setIsAddDialogOpen(false)
       return toast({
         title: "Balance added",
-        description: `$${amount} has been added to your account.`
+        description: `${amount} TL has been added to your account.`
       })
     })
   }
@@ -84,7 +84,7 @@ export default function BalancePage({ user_balance }) {
       setIsWithdrawDialogOpen(false)
       return toast({
         title: "Balance withdrawn",
-        description: `$${amount} has been withdrawn from your account.`
+        description: `${amount} TL has been withdrawn from your account.`
       })
     })
   }
@@ -98,7 +98,7 @@ export default function BalancePage({ user_balance }) {
           <CardContent className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="balance">Current Balance</Label>
-              <div className="text-2xl font-bold">${balance}</div>
+              <div className="text-2xl font-bold">{balance} TL</div>
             </div>
             <div className="flex gap-2">
               <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

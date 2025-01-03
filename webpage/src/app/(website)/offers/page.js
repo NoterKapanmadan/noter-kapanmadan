@@ -47,11 +47,11 @@ export default async function OffersPage() {
                     <div className="flex justify-between">
                       <div className="flex flex-col justify-center items-start gap-2">
                         <Badge variant="secondary">Offered Price</Badge>
-                        <p className="text-lg font-bold">${offer.amount}</p>
+                        <p className="text-lg font-bold">{offer.amount} TL</p>
                       </div>
                       <div className="flex flex-col justify-center items-start gap-2">
                         <Badge variant="secondary">Ad Price</Badge>
-                        <p className="text-lg font-bold">${offer.price}</p>
+                        <p className="text-lg font-bold">{offer.price} TL</p>
                       </div>
                     </div>
                   </CardContent>
@@ -106,11 +106,11 @@ export default async function OffersPage() {
                     <div className="flex justify-between">
                       <div className="flex flex-col justify-center items-start gap-2">
                         <Badge variant="secondary">Offered Price</Badge>
-                        <p className="text-lg font-bold">${offer.amount}</p>
+                        <p className="text-lg font-bold">{offer.amount} TL</p>
                       </div>
                       <div className="flex flex-col justify-center items-start gap-2">
                         <Badge variant="secondary">Ad Price</Badge>
-                        <p className="text-lg font-bold">${offer.price}</p>
+                        <p className="text-lg font-bold">{offer.price} TL</p>
                       </div>
                     </div>
                   </CardContent>
