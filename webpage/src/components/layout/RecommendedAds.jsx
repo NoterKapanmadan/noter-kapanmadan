@@ -25,7 +25,7 @@ export default async function RecommendedAds() {
     const res = await getRecommendedAds();
     const ads = res.finalizedAds
     console.log(ads);
-    
+
     return (
         <>
             <h3 className="font-semibold text-xl mb-1">Recommended Ads</h3>
@@ -53,7 +53,7 @@ export default async function RecommendedAds() {
             <CardContent className="flex-grow p-3">
                 <h3 className="font-medium text-lg mb-1">{ad.title}</h3>
                   <p className="font-bold text-base mb-2">{ad.price} TL</p>
-                  <p className="text-sm text-muted-foreground mb-2">{ad.location}</p>
+                  <p className="text-sm text-muted-foreground mb-2">{ad.location.length > 30 ? `${ad.location.slice(0, 35)}...` : ad.location}</p>
                   <p className="text-sm mb-3">
                     {` ${ad.brand} ${ad.model} ${ad.year} • ${ad.km} `}
                   </p>
