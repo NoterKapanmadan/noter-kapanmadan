@@ -41,12 +41,10 @@ export default function RecommendedAds({ads}) {
                 }
             </CardHeader>
             <CardContent className="flex-grow p-3">
-                <h3 className="font-medium text-lg mb-1">{ad.title.length > 20 ? `${ad.title.slice(0, 20)}...` : ad.title}</h3>
-                  <p className="font-bold text-base mb-2">{`${ad.price}`.length > 35 ? `${ad.price.slice(0, 35)}... TL` : ad.price}</p>
-                  <p className="text-sm text-muted-foreground mb-2">{ad.location.length > 35 ? `${ad.location.slice(0, 35)}...` : ad.location}</p>
-                  {`${ad.brand} ${ad.model} ${ad.year} • ${ad.km}`.length > 25 
-                    ? `${ad.brand} ${ad.model} ${ad.year} • ${ad.km}`.slice(0, 25) + '...' 
-                    : `${ad.brand} ${ad.model} ${ad.year} • ${ad.km}`}
+                <h3 className="font-medium text-lg mb-1 truncate">{ad.title}</h3>
+                  <p className="font-bold text-base mb-2 truncate">{ad.price}</p>
+                  <p className="text-sm text-muted-foreground mb-2  truncate">{ad.location}</p>
+                  <p className="text-sm text-muted-foreground truncate">{`${ad.brand} ${ad.model} ${ad.year} • ${ad.km}`}</p>
             </CardContent>
             <CardFooter className="p-3">
                 <Button className="w-full" asChild>

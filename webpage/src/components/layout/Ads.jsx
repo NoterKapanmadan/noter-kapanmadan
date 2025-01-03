@@ -26,11 +26,11 @@ export default function Ads({ ads }) {
               }
             </CardHeader>
             <CardContent className="flex-grow p-3">
-              <CardTitle className="mb-2">{ad.title}</CardTitle>
+              <CardTitle className="mb-2 truncate">{ad.title}</CardTitle>
               <div className="space-y-1">
                 <p className="text-2xl font-bold text-primary">{ad.price} TL</p>
                 <p className="text-sm text-muted-foreground">{formatDate(ad.date)}</p>
-                <p className="text-sm text-muted-foreground">{ad.location}</p>
+                <p className="text-sm text-muted-foreground truncate">{ad.location}</p>
                 <p className="text-sm">{ad.brand} - {ad.model}</p>
                 <p className="text-sm">{ad.year} - {ad.km} km</p>
                 <p className="text-sm">{ad.gear_type} - {ad.fuel_type}</p>
