@@ -27,7 +27,9 @@ export default async function OffersPage() {
               {offers.incomingOffers.length > 0 ? offers.incomingOffers.map((offer) => (
                 <Card className="flex flex-col" key={offer.bid_id}>
                   <CardHeader>
-                    <CardTitle>{offer.title}</CardTitle>
+                    <Link href={`/ad/${offer.ad_id}`}>
+                      <CardTitle>{offer.title}</CardTitle>
+                    </Link>
                     <CardDescription>Offer from {`${offer.bidder_forename} ${offer.bidder_surname}`}</CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1">
