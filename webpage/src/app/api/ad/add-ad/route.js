@@ -4,12 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { decrypt } from '@/lib/auth';
 import { uploadFilesServer } from '@/utils/file';
 
-// Remove size limit
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
+
 
 export async function POST(request) {
     try {
@@ -38,8 +33,11 @@ export async function POST(request) {
         const images = formData.getAll("images");
         // console.log("images", images);
 
-        const { imageIds } = await uploadFilesServer(images);
+        const { fileIds } = await uploadFilesServer(images);
+        const reportUpload = await uploadFilesServer([report]);
+        const reportId = reportUpload.fileIds[0];
 
+        
         let res;
 
         // Begin transaction
@@ -47,9 +45,9 @@ export async function POST(request) {
 
         // Insert into Vehicle table
         await query(
-            `INSERT INTO Vehicle(vehicle_ID, brand, model, year, km, gear_type, fuel_type)
-            VALUES ($1, $2, $3, $4, $5, $6::gear_type, $7::fuel_type);`,
-            [vehicleID, brand, model, year, km, transmission, fuelType]
+            `INSERT INTO Vehicle(vehicle_ID, brand, model, year, km, gear_type, fuel_type, expertise_report)
+            VALUES ($1, $2, $3, $4, $5, $6::gear_type, $7::fuel_type, $8);`,
+            [vehicleID, brand, model, year, km, transmission, fuelType, reportId]
         );
 
         // Insert into Ad table
@@ -63,8 +61,8 @@ export async function POST(request) {
         await query(
             `INSERT INTO AdImage (ad_ID, image)
             VALUES 
-            ${imageIds.map((_, index) => `($1, $${index + 2})`).join(', ')};`,
-            [adID, ...imageIds]
+            ${fileIds.map((_, index) => `($1, $${index + 2})`).join(', ')};`,
+            [adID, ...fileIds]
         );
 
         switch (vehicleType) {

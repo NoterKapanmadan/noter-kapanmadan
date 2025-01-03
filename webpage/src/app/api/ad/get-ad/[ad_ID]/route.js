@@ -42,7 +42,8 @@ export async function GET(req, context) {
                 Van.roof_height,
                 Van.bed_capacity,
                 Motorcycle.engine_capacity,
-                Motorcycle.cylinder_count
+                Motorcycle.cylinder_count,
+                Vehicle.expertise_report
             FROM Ad 
             JOIN Vehicle ON Ad.vehicle_ID = Vehicle.vehicle_ID
             LEFT JOIN AdImage ON Ad.ad_ID = AdImage.ad_ID
@@ -84,7 +85,9 @@ export async function GET(req, context) {
                 Van.roof_height,
                 Van.bed_capacity,
                 Motorcycle.engine_capacity,
-                Motorcycle.cylinder_count;`,
+                Motorcycle.cylinder_count,
+                Vehicle.expertise_report
+                ;`,
             [ad_ID]
         );
         
