@@ -3,14 +3,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import io from "socket.io-client";
-import { getImageSrc } from "@/utils/file"; 
+import { getImageSrc } from "@/utils/file";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SendHorizonal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import LocalTime from "@/components/layout/LocalTime";
+import { useRouter } from 'next/navigation'
 
 export default function ChatComponent({ receiver, chatRoom, userDetails }) {
+
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([
     ...chatRoom
@@ -23,8 +25,12 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
       .reverse(),
   ]);
   const [input, setInput] = useState("");
-
   const messagesEndRef = useRef(null);
+
+  const router = useRouter()
+  useEffect(() => {
+    router.refresh()
+  }, [router])
 
   const handleSend = (e) => {
     e.preventDefault();
@@ -104,18 +110,16 @@ export default function ChatComponent({ receiver, chatRoom, userDetails }) {
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`mb-4 p-3 rounded-lg max-w-lg flex flex-row whitespace-normal break-all justify-between shadow-l ${
-                message.sender === "user"
+              className={`mb-4 p-3 rounded-lg max-w-lg flex flex-row whitespace-normal break-all justify-between shadow-l ${message.sender === "user"
                   ? "bg-blue-500 text-white ml-auto"
                   : "bg-gray-100 text-black mr-auto"
-              }`}
+                }`}
             >
               <p className="text-base">{message.text}</p>
               <div className="flex flex-row pr-1 pl-1 items-end min-w-8">
                 <p
-                  className={`text-xs mt-1 text-right ${
-                    message.sender === "user" ? "text-white" : "text-gray-600"
-                  }`}
+                  className={`text-xs mt-1 text-right ${message.sender === "user" ? "text-white" : "text-gray-600"
+                    }`}
                 >
                   <LocalTime time={message.date} />
                 </p>

@@ -126,7 +126,7 @@ export default function AllChats({chatRooms, accountId}) {
 
 
           return(
-            <Link href={`/chat/${user.accountId}`} key={user.accountId} replace>
+            <Link href={`/chat/${user.accountId}`} key={user.accountId} replace prefetch={false}>
               <div
                 key={chatRoom.chatroom_id}
                 className={`flex items-center justify-between h-16 w-72 mb-4 cursor-pointer p-4 border rounded-md shadow-sm transition hover:bg-gray-100 ${

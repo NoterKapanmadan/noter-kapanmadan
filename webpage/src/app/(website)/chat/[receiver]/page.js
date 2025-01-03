@@ -1,12 +1,12 @@
 import ChatComponent from "@/components/layout/ChatComponent";
 import { getAccountID, getChatRoom } from "@/app/actions";
+import { revalidatePath } from "next/cache";
 
 export default async function Chat({ params }) {
 
-  const account_ID = await getAccountID();
-
 
   const data = await getChatRoom(params.receiver);
+  revalidatePath(`/chat/${params.receiver}`);
 
   if(data.userDetails.length === 1) {
     return (
