@@ -79,6 +79,7 @@ export async function POST(request, context) {
       bedCapacity,
       engineCapacity,
       cylinderCount,
+      report
     } = data;
 
     const specializedQuery = await query(
@@ -94,6 +95,12 @@ export async function POST(request, context) {
     const specialization = specializedQuery.rows[0];
     const { car_id, truck_id, van_id, motorcycle_id } = specialization;
 
+    let reportId = '';
+
+    if(report && report.size > 0) {
+      const reportUpload = await uploadFilesServer([report]);
+      reportId = reportUpload.fileIds[0];
+    }
 
     await query("BEGIN");
 
@@ -106,9 +113,10 @@ export async function POST(request, context) {
 
     await query(
       `UPDATE Vehicle
-      SET brand = $1, model = $2, year = $3, km = $4, gear_type = $5, fuel_type = $6
-      WHERE vehicle_ID = $7`,
-      [brand, model, year, km, gear_type, fuel_type, vehicleID]
+      SET brand = $1, model = $2, year = $3, km = $4, gear_type = $5, fuel_type = $6, 
+      expertise_report = CASE WHEN $7 = '' THEN expertise_report ELSE $7 END
+      WHERE vehicle_ID = $8`,
+      [brand, model, year, km, gear_type, fuel_type, reportId, vehicleID]
     );
     
     if (car_id) {

@@ -24,8 +24,10 @@ import {
 } from "@/components/ui/select"
 import { useRouter } from "next/navigation";
 import Ratings from "@/components/layout/Ratings";
+import { getReportUrl } from "@/utils/file";
+import slugify from "slugify";
 
-export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData}) {
+export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData }) {
   const [editMode, setEditMode] = useState(false);
   const { toast } = useToast()
 
@@ -60,15 +62,15 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
   const handleDelete = () => {
     startTransition(async () => {
       const res = await fetch(`${SERVER_URL}/ad/delete-ad/${ad.ad_id}`, {
-          method: "POST",
-          cache: 'no-cache',
+        method: "POST",
+        cache: 'no-cache',
       });
-      
-      
+
+
       if (!res.ok) {
         throw new Error("Failed to update ad");
       }
-    
+
       const { msg, error } = await res.json();
 
       if (error) {
@@ -92,16 +94,16 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
     startTransition(async () => {
 
       const res = await fetch(`${SERVER_URL}/ad/update-ad/${ad.ad_id}`, {
-          method: "POST",
-          body: formData,
-          cache: 'no-cache',
-        });
-      
-      
+        method: "POST",
+        body: formData,
+        cache: 'no-cache',
+      });
+
+
       if (!res.ok) {
         throw new Error("Failed to update ad");
       }
-    
+
       const { msg, error } = await res.json();
 
       if (error) {
@@ -146,7 +148,7 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
 
         {/* Ad Details */}
         <Card>
-        <form action={handleSubmit}>
+          <form action={handleSubmit}>
             <CardHeader>
               <div className="flex justify-between items-center">
                 {editMode ? (
@@ -161,33 +163,33 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                     {ad.title || "Ad Title"}
                   </CardTitle>
                 )}
-                  {!editMode && ad.user_id === currentUserID && (
-                    <div className="flex gap-1">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="text-blue-500 h-8 w-8"
-                        onClick={handleEditClick}
-                      >
-                        <Pencil size={18} />
-                      </Button>
-                      
-                      <Button 
-                        variant="outline" 
-                        size="icon" 
-                        className="text-red-500 h-8 w-8"
-                        onClick={handleDelete}
-                      >
-                        <Trash2 size={18} />
-                      </Button>
-                    </div>
-                  )}
+                {!editMode && ad.user_id === currentUserID && (
+                  <div className="flex gap-1">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="text-blue-500 h-8 w-8"
+                      onClick={handleEditClick}
+                    >
+                      <Pencil size={18} />
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="text-red-500 h-8 w-8"
+                      onClick={handleDelete}
+                    >
+                      <Trash2 size={18} />
+                    </Button>
+                  </div>
+                )}
               </div>
             </CardHeader>
             <CardContent>
               {editMode ? (
                 <>
-                  <div className="space-y-2">  
+                  <div className="space-y-2">
                     <p className="text-sm font-semibold">Price</p>
                     <Input
                       id="price"
@@ -207,12 +209,12 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                         onValueChange={(value) => handleBrandChange(value)}
                         required
                         defaultValue={ad.brand}
-                        >
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Brand" />
                         </SelectTrigger>
                         <SelectContent>
-                          {brands.map((brand) => 
+                          {brands.map((brand) =>
                             <SelectItem key={brand} value={brand}>{brand}</SelectItem>
                           )}
                         </SelectContent>
@@ -228,12 +230,12 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                         defaultValue={modelChanged ? undefined : ad.model}
                         onValueChange={(value) => handleModelChange(value)}
                         required
-                        >
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Model" />
                         </SelectTrigger>
                         <SelectContent>
-                          {models && models.map((model) => 
+                          {models && models.map((model) =>
                             <SelectItem key={model} value={model}>{model}</SelectItem>
                           )}
                         </SelectContent>
@@ -296,7 +298,7 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                       <p>{ad.date ? formatDate(ad.date) : "Date Not Available"}</p>
                     </div>
                     <div>
-                      <PlaceAutocomplete required defaultLocation={ad.location} oldLatitude={ad.latitude} oldLongitude={ad.longitude}/>
+                      <PlaceAutocomplete required defaultLocation={ad.location} oldLatitude={ad.latitude} oldLongitude={ad.longitude} />
                     </div>
                     {ad.vehicleDetails && ad.vehicleDetails.type === "Car" && (
                       <>
@@ -319,6 +321,22 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                             defaultValue={ad.vehicleDetails.bodyType}
                             placeholder="Car body type (e.g. sedan, hatchback...)"
                           />
+                        </div>
+                        <div className="space-y-2 mb-2">
+                        <p className="text-sm font-semibold">Report (PDF)</p>
+                          <div className="flex flex-col gap-1 w-full">
+                          { ad.expertise_report &&
+                            <div>
+                            <a className="text-blue-700 hover:underline" href={getReportUrl(ad.expertise_report)} download={`${slugify(ad.title)}.pdf`}>View Current Report</a>
+                          </div>
+                          }
+                          <Input
+                            id="report"
+                            name="report"
+                            type="file"
+                            accept=".pdf"
+                          />
+                          </div>
                         </div>
                       </>
                     )}
@@ -518,6 +536,16 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
                   </div>
 
                   <div className="mt-4">
+                    <p className="text-sm font-semibold">Expertise Report</p>
+                    {ad.expertise_report ?
+
+                      <a className="text-blue-700 hover:underline" href={getReportUrl(ad.expertise_report)} download={`${slugify(ad.title)}.pdf`}>View Report</a>
+                      :
+                      (<p>Expertise Report Not Available</p>)
+                    }
+                  </div>
+
+                  <div className="mt-4">
                     <p className="text-sm font-semibold">Description</p>
                     <p>{ad.description || "No Description Available"}</p>
                   </div>
@@ -540,7 +568,7 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
               <Avatar className="border w-16 h-16">
                 <AvatarImage
                   className="object-cover"
-                  src={ad.profilePhotoData || "/avatar.png"} 
+                  src={ad.profilePhotoData || "/avatar.png"}
                   alt={`${ad.name} ${ad.surname}`}
                 />
               </Avatar>
