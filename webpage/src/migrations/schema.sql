@@ -311,6 +311,9 @@ REFERENCING NEW TABLE AS new_table
 FOR EACH ROW
 EXECUTE FUNCTION update_balance_function();
 
+--Create view for active ads
+CREATE OR REPLACE VIEW active_ads_view AS
+SELECT * FROM Ad WHERE status = 'active';
 -- Create view for profile
 CREATE OR REPLACE VIEW user_profile_view AS
 SELECT 

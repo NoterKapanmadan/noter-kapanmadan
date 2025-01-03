@@ -6,8 +6,6 @@ import { decrypt } from '@/lib/auth';
 export async function GET(req) {
     const { account_id } = await decrypt(req.cookies.get("Authorization").value)
 
-
-    console.log(account_id);
     try{
         const res = await query(
         `WITH user_interactions AS (
@@ -115,7 +113,6 @@ export async function GET(req) {
         [account_id]
         );
         let finalizedAds = res.rows;
-        console.log(finalizedAds);
         try {
         finalizedAds = await extractImagesFromAds(res.rows);
         } catch (err) {
