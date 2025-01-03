@@ -39,7 +39,7 @@ export async function uploadFilesServer(files) {
     
     const data = await response.json(); // { filePaths: [string], imageIds: [string] }
     //console.log("data", data);
-    return { filePaths: data.filePaths, imageIds: data.imageIds };
+    return { filePaths: data.filePaths, fileIds: data.imageIds };
     
     }
 
@@ -105,4 +105,9 @@ export async function uploadFilesServer(files) {
         };
 
         return ad;
+    }
+
+
+    export const getReportUrl = (reportId) => {
+        return`${FILE_SERVER_URL}/public/${reportId}/original.pdf`;
     }
