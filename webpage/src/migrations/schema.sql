@@ -63,6 +63,18 @@ BEGIN
 END;
 $$;
 
+-- Create car brands table
+CREATE TABLE IF NOT EXISTS VehicleBrand (
+    brand VARCHAR(50) PRIMARY KEY UNIQUE NOT NULL
+);
+
+-- Create car models table
+CREATE TABLE IF NOT EXISTS VehicleModel (
+    brand VARCHAR(50) NOT NULL,
+    model VARCHAR(80) NOT NULL,
+    PRIMARY KEY (brand, model),
+    FOREIGN KEY (brand) REFERENCES vehiclebrand(brand) ON DELETE CASCADE
+);
 
 CREATE TABLE IF NOT EXISTS Account (
     account_ID UUID PRIMARY KEY UNIQUE NOT NULL,
@@ -248,18 +260,6 @@ CREATE TABLE IF NOT EXISTS Favorites (
     FOREIGN KEY (account_ID) REFERENCES Users(account_ID)
 );
 
--- Create car brands table
-CREATE TABLE IF NOT EXISTS VehicleBrand (
-    brand VARCHAR(50) PRIMARY KEY UNIQUE NOT NULL
-);
-
--- Create car models table
-CREATE TABLE IF NOT EXISTS VehicleModel (
-    brand VARCHAR(50) NOT NULL,
-    model VARCHAR(80) NOT NULL,
-    PRIMARY KEY (brand, model),
-    FOREIGN KEY (brand) REFERENCES vehiclebrand(brand) ON DELETE CASCADE
-);
 
 CREATE TABLE IF NOT EXISTS Tickets (
   ticket_ID UUID PRIMARY KEY UNIQUE NOT NULL,
