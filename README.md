@@ -1,1 +1,7 @@
 # noter-kapanmadan
+
+Live Demo: [noterkapanmadan.com](https://noterkapanmadan.com)
+
+NoterKapanmadan.com is an easy-to-use online platform where people can buy and sell second-hand vehicles like cars, trucks, vans and motorcycles securely. The system allows users to create and manage their profiles and list their vehicles for sale by providing detailed information such as title, description, price, and vehicle specifics. Buyers can search and filter listings based on various criteria like price, location, and vehicle type, and they also receive automatic recommendations tailored to their preferences. Additionally, users can compare different vehicles, view statistics about their ads, and keep track of their favorite ads and visiting history. The platform includes a real-time messaging system that lets buyers and sellers communicate directly.
+
+To ensure a great user experience, NoterKapanmadan is designed with a user-friendly and intuitive interface. Security is a top priority, with personal information protected through advanced database components like Views and passwords stored securely using hashing techniques. Admins have access to a comprehensive dashboard to manage users and ads, handle tickets, and maintain the overall statistics and integrity of the platform. By addressing the common issues found in current second-hand vehicle platforms, NoterKapanmadan offers a reliable, user-friendly, and feature-rich solution for anyone looking to buy or sell a second-hand vehicle.
