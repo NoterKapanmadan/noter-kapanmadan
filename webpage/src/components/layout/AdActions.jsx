@@ -28,9 +28,13 @@ import { SERVER_URL } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useTransition, useEffect } from "react";
 import { getAccountID, revalidateTagClient, revalidatePathClient } from "@/app/actions";
+import SocialShareModal from "./SocialShareModal";
+import { useCompare } from "@/components/layout/CompareContext";
+import { Scale } from "lucide-react";
 
 export default function AdActions({ ad_ID, owner_ID, ad }) {
   const { toast } = useToast();
+  const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const [offerOpen, setOfferOpen] = useState(false);
   const [pendingOffer, startOfferTransition] = useTransition()
   const [pendingFavorite, startFavoriteTransition] = useTransition()
@@ -183,6 +187,15 @@ export default function AdActions({ ad_ID, owner_ID, ad }) {
           <Heart fill={ad.is_favorited ? "black" : "transparent"} className={`mr-2 h-4 w-4 `} />
           {ad.is_favorited ? "Remove from Favorites" : "Add to Favorites"}
         </Button>
+        <Button 
+          onClick={() => isInCompare(ad.ad_id) ? removeFromCompare(ad.ad_id) : addToCompare(ad)}
+          variant="outline"
+          className="w-full"
+        >
+          <Scale className={`mr-2 h-4 w-4 ${isInCompare(ad.ad_id) ? "fill-current" : ""}`} />
+          {isInCompare(ad.ad_id) ? "Remove from Compare" : "Compare"}
+        </Button>
+        <SocialShareModal ad={ad} />
       </CardContent>
     </Card>
   );

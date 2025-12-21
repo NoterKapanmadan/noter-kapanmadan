@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
+import { CompareProvider } from "@/components/layout/CompareContext";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -22,8 +23,10 @@ export default function RootLayout({ children }) {
           fontSans.variable,
         )}
       > 
-        {children}
-        <Toaster />
+        <CompareProvider>
+          {children}
+          <Toaster />
+        </CompareProvider>
       </body>
     </html>
   );

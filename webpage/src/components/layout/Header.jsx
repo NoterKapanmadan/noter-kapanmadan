@@ -12,6 +12,7 @@ import { LogOut, ArrowLeftRight, HandCoins, User, Landmark, MessageCircleIcon, T
 import { logout, getCurrentUserInfo, isAdmin } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import AuthLink from "@/components/layout/AuthLink";
+import CompareBadge from "@/components/layout/CompareBadge";
 
 export default async function Header() {
   const currentUser = await getCurrentUserInfo();
@@ -24,6 +25,7 @@ export default async function Header() {
           <Link href="/">NoterKapanmadan</Link>
         </h1>
         <div className="flex justify-center gap-2">
+            <CompareBadge />
             {isAdminUser && (
               <Link href="/admin">
                 <Button variant="link" className="w-full text-white">
