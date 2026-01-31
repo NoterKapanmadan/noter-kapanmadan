@@ -1,0 +1,27 @@
+name: SonarCloud Scan
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          # We pass the keys directly here so no properties file is needed
+          args: >
+            -Dsonar.projectKey=MergentAI_mergent-mock-repo
+            -Dsonar.organization=mergentai
+            -Dsonar.sources=.
