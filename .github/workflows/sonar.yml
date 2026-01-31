@@ -25,6 +25,3 @@ jobs:
             -Dsonar.projectKey=MergentAI_mergent-mock-repo
             -Dsonar.organization=mergentai
             -Dsonar.sources=.
-
-
-            
