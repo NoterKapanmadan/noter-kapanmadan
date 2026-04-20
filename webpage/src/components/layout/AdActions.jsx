@@ -28,6 +28,7 @@ import { SERVER_URL } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useTransition, useEffect } from "react";
 import { getAccountID, revalidateTagClient, revalidatePathClient } from "@/app/actions";
+import SocialShareModal from "./SocialShareModal";
 
 export default function AdActions({ ad_ID, owner_ID, ad }) {
   const { toast } = useToast();
@@ -183,6 +184,7 @@ export default function AdActions({ ad_ID, owner_ID, ad }) {
           <Heart fill={ad.is_favorited ? "black" : "transparent"} className={`mr-2 h-4 w-4 `} />
           {ad.is_favorited ? "Remove from Favorites" : "Add to Favorites"}
         </Button>
+        <SocialShareModal ad={ad} />
       </CardContent>
     </Card>
   );

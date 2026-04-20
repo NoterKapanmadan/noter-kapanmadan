@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import Ratings from "@/components/layout/Ratings";
 import { getReportUrl } from "@/utils/file";
 import slugify from "slugify";
+import LoanCalculator from "@/components/layout/LoanCalculator";
 
 export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brands, defaultBrandModels, metricsData }) {
   const [editMode, setEditMode] = useState(false);
@@ -579,6 +580,9 @@ export default function AdViewClient({ ratings, ad, isAuth, currentUserID, brand
             <Ratings fullname={`${ad.name} ${ad.surname}`} ratings={ratings} />
           </CardContent>
         </Card>
+
+        {/* Loan Calculator */}
+        <LoanCalculator vehiclePrice={ad.price} />
 
         {/* Actions */}
         {isAuth && (
